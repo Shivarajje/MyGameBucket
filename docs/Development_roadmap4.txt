@@ -1,0 +1,380 @@
+# MyGameBucket
+
+# Document 09 — Development Roadmap
+
+## Part 4 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Testing Roadmap
+
+Testing should occur continuously throughout development.
+
+Testing is not a final phase.
+
+Instead:
+
+```text
+Implement
+
+↓
+
+Test
+
+↓
+
+Fix
+
+↓
+
+Review
+
+↓
+
+Merge
+```
+
+Every feature should be verified before the next one begins.
+
+---
+
+# Unit Testing
+
+Primary targets:
+
+Services
+
+↓
+
+Utility Functions
+
+↓
+
+Validation Logic
+
+↓
+
+Business Rules
+
+Examples:
+
+* GameService
+* LibraryService
+* JournalService
+* CollectionService
+* SearchService
+
+UI components generally do not require extensive unit testing.
+
+---
+
+# Integration Testing
+
+Integration tests verify communication between:
+
+Frontend
+
+↓
+
+API Routes
+
+↓
+
+Services
+
+↓
+
+Database
+
+Examples:
+
+* Add Game
+* Create Collection
+* Update Journal
+* Update Profile
+
+---
+
+# End-to-End Testing
+
+Critical user journeys should always be tested.
+
+Examples:
+
+User Registration
+
+↓
+
+Create Profile
+
+↓
+
+Search Game
+
+↓
+
+Open Game Page
+
+↓
+
+Add Game
+
+↓
+
+Update Hours
+
+↓
+
+Write Journal
+
+↓
+
+Create Collection
+
+↓
+
+View Public Profile
+
+If these flows work correctly, the application is functionally usable.
+
+---
+
+# Performance Optimization Roadmap
+
+Performance should be monitored throughout development.
+
+Optimization targets:
+
+Frontend
+
+✓ Lazy Loading
+
+✓ Next.js Image
+
+✓ Dynamic Imports
+
+✓ Server Components
+
+Backend
+
+✓ Efficient Queries
+
+✓ Caching
+
+✓ Pagination
+
+✓ Indexed Lookups
+
+Database
+
+✓ Proper Indexes
+
+✓ Query Optimization
+
+✓ Constraint Validation
+
+---
+
+# Security Roadmap
+
+Every release should verify:
+
+✓ Authentication
+
+✓ Authorization
+
+✓ Row Level Security
+
+✓ Input Validation
+
+✓ Input Sanitization
+
+✓ Environment Variables
+
+✓ API Key Protection
+
+✓ Rate Limiting
+
+Security reviews should happen before every major release.
+
+---
+
+# Documentation Roadmap
+
+The documentation evolves alongside the application.
+
+Whenever a feature changes:
+
+Update:
+
+* Architecture Documents
+* Database Schema
+* Decision Log
+* API Documentation
+* Roadmap (if affected)
+
+Documentation should always reflect the current implementation.
+
+---
+
+# Version Control Roadmap
+
+Recommended workflow:
+
+```text
+feature branch
+
+↓
+
+Pull Request
+
+↓
+
+Code Review
+
+↓
+
+develop
+
+↓
+
+Testing
+
+↓
+
+main
+
+↓
+
+Production
+```
+
+Direct commits to `main` should be avoided.
+
+---
+
+# Deployment Strategy
+
+Deployment environments:
+
+Development
+
+↓
+
+Local Machine
+
+---
+
+Staging
+
+↓
+
+Production-like Environment
+
+---
+
+Production
+
+↓
+
+Public Website
+
+Every deployment should be reproducible using version-controlled configuration.
+
+---
+
+# Monitoring Roadmap
+
+Version 1
+
+✓ Backend Logs
+
+✓ Admin Logs
+
+Future
+
+* Sentry
+* OpenTelemetry
+* Performance Dashboards
+* Error Analytics
+* User Analytics
+
+The architecture should remain compatible with these tools.
+
+---
+
+# Backup Strategy
+
+Production should support:
+
+* Daily Automated Backups
+* Point-in-Time Recovery
+* Versioned Migrations
+
+Backups should be tested periodically.
+
+A backup is only useful if restoration has been verified.
+
+---
+
+# Maintenance Strategy
+
+Regular maintenance includes:
+
+* Dependency Updates
+* Security Updates
+* Performance Reviews
+* Documentation Updates
+* Database Optimization
+
+Small maintenance tasks should be performed continuously rather than accumulated.
+
+---
+
+# Technical Debt Policy
+
+If technical debt is introduced intentionally:
+
+Record:
+
+* Reason
+* Impact
+* Planned Resolution
+
+Technical debt should be tracked using issues rather than memory.
+
+---
+
+# Success Metrics
+
+Version 1 is successful if users can:
+
+✓ Create an account
+
+✓ Search games
+
+✓ Build a personal library
+
+✓ Track hours
+
+✓ Track completion status
+
+✓ Write gaming memories
+
+✓ Organize collections
+
+✓ Discover other users
+
+✓ View public profiles
+
+✓ Enjoy a responsive experience
+
+These are the project's primary success criteria.
+
+---
+
+End of Part 4

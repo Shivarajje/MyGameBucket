@@ -1,0 +1,456 @@
+# MyGameBucket
+
+# Document 04 — Frontend Architecture
+
+## Part 4 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Service Layer
+
+The frontend never communicates directly with Supabase or external APIs.
+
+Instead, all data access passes through dedicated services.
+
+Architecture:
+
+```text
+React Component
+
+↓
+
+Feature Hook
+
+↓
+
+Feature Service
+
+↓
+
+API Route
+
+↓
+
+Backend
+
+↓
+
+Database / External API
+```
+
+This separation keeps components clean and business logic centralized.
+
+---
+
+# Approved Services
+
+The application includes the following services.
+
+GameService
+
+Responsibilities:
+
+* Search Games
+* Fetch Game Details
+* Cache Management
+* Game Synchronization
+
+---
+
+LibraryService
+
+Responsibilities:
+
+* Add Game
+* Remove Game
+* Update Hours
+* Update Rating
+* Update Status
+
+---
+
+JournalService
+
+Responsibilities:
+
+* Create Journal Entry
+* Update Journal Entry
+* Delete Journal Entry
+
+---
+
+CollectionService
+
+Responsibilities:
+
+* Create Collection
+* Delete Collection
+* Add Game
+* Remove Game
+* Rename Collection
+
+---
+
+ProfileService
+
+Responsibilities:
+
+* Update Profile
+* Update Avatar
+* Update Bio
+* Update Favorite Game
+* Update Favorite Genre
+
+---
+
+SearchService
+
+Responsibilities:
+
+* Game Search
+* User Search
+* Suggestions
+* Filtering
+
+---
+
+AdminService
+
+Responsibilities:
+
+* Review Manual Games
+* Manage Users
+* Moderate Content
+* System Statistics
+
+---
+
+# Component Communication
+
+Components should never directly manipulate another feature.
+
+Example:
+
+❌ Bad
+
+```text
+Library Component
+
+↓
+
+Journal Component
+
+↓
+
+Database
+```
+
+Correct:
+
+```text
+Library Component
+
+↓
+
+LibraryService
+
+↓
+
+JournalService
+
+↓
+
+Backend
+```
+
+Every feature communicates through services.
+
+---
+
+# Hooks
+
+Hooks exist only to simplify UI logic.
+
+Examples:
+
+Good hooks:
+
+* useLibrary()
+* useProfile()
+* useGame()
+* useJournal()
+* useCollection()
+
+Hooks should never contain complicated business logic.
+
+They coordinate data for the UI.
+
+---
+
+# Utilities
+
+Utilities remain pure.
+
+Examples:
+
+Date Formatting
+
+↓
+
+Input
+
+↓
+
+Output
+
+No side effects.
+
+No API calls.
+
+No database access.
+
+Utilities should always be deterministic.
+
+---
+
+# Constants
+
+Application-wide constants belong in one location.
+
+Examples:
+
+Animation Duration
+
+↓
+
+400ms
+
+Character Limits
+
+↓
+
+Bio = 100
+
+Journal = 280
+
+Collections = 10
+
+Items Per Page = 50
+
+Changing a value should require editing only one file.
+
+---
+
+# Configuration
+
+Configuration files contain values that may differ between environments.
+
+Examples:
+
+Development
+
+↓
+
+API URLs
+
+↓
+
+Feature Flags
+
+↓
+
+Environment Settings
+
+Business logic should never be placed inside configuration files.
+
+---
+
+# Error Boundaries
+
+Every major page should include an Error Boundary.
+
+Purpose:
+
+If one component fails,
+
+the rest of the application should continue functioning.
+
+Error pages should:
+
+* Explain the issue.
+* Offer a retry option.
+* Avoid exposing technical details.
+
+---
+
+# Suspense
+
+Where appropriate,
+
+React Suspense should be used for:
+
+* Lazy-loaded components
+* Heavy feature modules
+* Large dialogs
+* Dynamic imports
+
+This improves perceived performance.
+
+---
+
+# Lazy Loading
+
+Heavy components should be loaded only when needed.
+
+Examples:
+
+Admin Dashboard
+
+↓
+
+Loaded only when opened.
+
+Settings
+
+↓
+
+Loaded only when visited.
+
+Large dialogs
+
+↓
+
+Loaded on demand.
+
+Avoid loading every feature during initial page load.
+
+---
+
+# Infinite Scrolling
+
+Infinite scrolling should be implemented using reusable logic.
+
+Examples:
+
+Library
+
+Search Results
+
+User Lists
+
+Future Notification Lists
+
+Avoid duplicating infinite scrolling implementations.
+
+---
+
+# Forms
+
+Forms should follow a consistent structure.
+
+Fields
+
+↓
+
+Validation
+
+↓
+
+Submission
+
+↓
+
+Toast
+
+↓
+
+Refresh Data
+
+Every form should provide:
+
+* Validation
+* Helpful errors
+* Loading state
+* Success feedback
+
+---
+
+# Accessibility
+
+Every component should support:
+
+* Keyboard navigation
+* Screen readers
+* Focus indicators
+* Responsive layouts
+* Touch interaction
+
+Accessibility is mandatory.
+
+---
+
+# Responsive Components
+
+Every component must adapt gracefully.
+
+Desktop
+
+↓
+
+Tablet
+
+↓
+
+Mobile
+
+Examples:
+
+Game Cards
+
+Grid
+
+↓
+
+Two Columns
+
+↓
+
+Single Column
+
+Navigation
+
+Horizontal
+
+↓
+
+Drawer
+
+Dialogs
+
+Centered
+
+↓
+
+Bottom Sheet / Full Screen
+
+---
+
+# Responsive Philosophy
+
+The frontend should never hide core functionality because of screen size.
+
+Instead,
+
+components adapt,
+
+reflow,
+
+and resize naturally.
+
+---
+
+End of Part 4

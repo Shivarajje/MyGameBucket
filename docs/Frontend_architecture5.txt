@@ -1,0 +1,365 @@
+# MyGameBucket
+
+# Document 04 — Frontend Architecture
+
+## Part 5 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Frontend Engineering Principles
+
+The frontend follows a strict set of engineering principles.
+
+These principles are mandatory for every new feature.
+
+---
+
+# Principle 1 — Component Reuse First
+
+Before creating any new component, ask:
+
+Can an existing component be reused?
+
+If yes,
+
+reuse it.
+
+If no,
+
+create a reusable component.
+
+Avoid duplicate implementations.
+
+---
+
+# Principle 2 — Composition Over Duplication
+
+Large pages should be assembled from small reusable components.
+
+Example:
+
+```text
+Game Page
+
+↓
+
+GameHero
+
+↓
+
+GameInfo
+
+↓
+
+GameStats
+
+↓
+
+JournalCard
+
+↓
+
+Screenshots
+
+↓
+
+RelatedGames
+```
+
+Smaller components are easier to:
+
+* Test
+* Reuse
+* Maintain
+* Replace
+
+---
+
+# Principle 3 — Feature Independence
+
+Each feature should evolve independently.
+
+Example:
+
+Library
+
+↓
+
+Library Service
+
+↓
+
+Backend
+
+↓
+
+Database
+
+Library should never directly manipulate Profile or Journal internals.
+
+Communication happens through services and well-defined APIs.
+
+---
+
+# Principle 4 — Replace, Don't Rewrite
+
+The architecture should allow individual parts to be replaced.
+
+Examples:
+
+Today
+
+↓
+
+IGDB
+
+Tomorrow
+
+↓
+
+RAWG
+
+Only the GameService changes.
+
+Everything else remains untouched.
+
+Likewise:
+
+Supabase Auth
+
+↓
+
+Future Authentication Provider
+
+Only the authentication layer changes.
+
+---
+
+# Principle 5 — Thin Components
+
+Components should focus on presentation.
+
+Avoid:
+
+* Database queries
+* Business rules
+* Complex validation
+* API orchestration
+
+Components display data and trigger actions.
+
+Services perform the work.
+
+---
+
+# Principle 6 — Consistency Before Creativity
+
+The application should feel cohesive.
+
+If a visual idea conflicts with the design system,
+
+consistency wins.
+
+Users should learn the interface once and feel comfortable everywhere.
+
+---
+
+# Principle 7 — Delight Through Details
+
+Quality comes from many small interactions.
+
+Examples:
+
+* Smooth transitions
+* Skeleton loaders
+* Elegant empty states
+* Contextual loading messages
+* Consistent spacing
+* Responsive layouts
+* Soft hover effects
+* Predictable navigation
+
+Avoid flashy effects that sacrifice usability.
+
+---
+
+# Performance Guidelines
+
+Performance is part of the user experience.
+
+The frontend should:
+
+* Lazy-load heavy components.
+* Use Next.js Image.
+* Minimize unnecessary re-renders.
+* Prefer Server Components.
+* Keep Client Components lightweight.
+* Paginate large datasets.
+* Use infinite scrolling where appropriate.
+
+Optimize before performance becomes a problem.
+
+---
+
+# Accessibility Guidelines
+
+Every screen should support:
+
+* Keyboard navigation
+* Visible focus indicators
+* Screen readers
+* Reduced Motion
+* High contrast where appropriate
+* Touch-friendly controls
+
+Minimum touch target:
+
+44 × 44 pixels.
+
+Accessibility is a requirement, not an enhancement.
+
+---
+
+# Responsive Standards
+
+Supported devices:
+
+* Desktop
+* Laptop
+* Tablet
+* Mobile
+
+The application should adapt gracefully.
+
+Features are never removed because of screen size.
+
+Layouts should reflow rather than hide functionality.
+
+---
+
+# UI Consistency
+
+The following must remain consistent across the application:
+
+* Typography
+* Button styles
+* Card layouts
+* Icon usage
+* Animation timing
+* Border radius
+* Shadows
+* Spacing
+* Form behavior
+* Dialog behavior
+
+No page should introduce a completely different interaction style.
+
+---
+
+# Coding Standards
+
+Every frontend file should:
+
+* Have a single clear responsibility.
+* Avoid unnecessary complexity.
+* Prefer readable code.
+* Follow TypeScript strict mode.
+* Follow ESLint rules.
+* Follow Prettier formatting.
+
+Code should be understandable months later by a new developer.
+
+---
+
+# AI Development Expectations
+
+AI assistants contributing to the frontend should:
+
+* Read the documentation before coding.
+* Follow the approved architecture.
+* Reuse existing components.
+* Extend existing features before creating new ones.
+* Never bypass services.
+* Never duplicate UI.
+* Follow the design system.
+* Keep files modular and focused.
+
+If documentation and code conflict,
+
+documentation takes precedence until officially updated.
+
+---
+
+# Frontend Checklist
+
+Before merging a feature:
+
+✓ Responsive
+
+✓ Accessible
+
+✓ Uses shared components
+
+✓ Uses feature services
+
+✓ Uses design system
+
+✓ No duplicated logic
+
+✓ No duplicated UI
+
+✓ Type-safe
+
+✓ Linted
+
+✓ Formatted
+
+✓ Documentation updated
+
+---
+
+# Frontend Summary
+
+The frontend architecture is designed to be:
+
+* Modular
+* Maintainable
+* Performant
+* Accessible
+* Responsive
+* Scalable
+* AI-friendly
+
+Every decision aims to ensure MyGameBucket remains easy to extend and enjoyable to use as it grows.
+
+---
+
+# Document Status
+
+Document:
+
+04_Frontend_Architecture.md
+
+Version:
+
+0.1
+
+Status:
+
+Approved
+
+Related Documents:
+
+* 01_Project_Vision.md
+* 02_Product_Requirements.md
+* 03_Database_Architecture.md
+* 05_Backend_Architecture.md
+* 06_Development_Standards.md
+
+---
+
+End of Document 04

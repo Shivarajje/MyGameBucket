@@ -1,0 +1,325 @@
+# MyGameBucket
+
+# Document 02 — Product Requirements
+
+## Part 1 of 4
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Introduction
+
+This document defines the functional requirements for Version 1 of MyGameBucket.
+
+Every feature described here is considered approved unless marked as a future feature.
+
+The objective of Version 1 is to build a polished, scalable gaming journal rather than a feature-heavy social network.
+
+---
+
+# Core Product Identity
+
+MyGameBucket is a personal gaming journal.
+
+Players record:
+
+* Games they have played
+* Their personal experience
+* Hours played
+* Journal entries
+* Collections
+
+The platform is designed around preserving memories rather than publishing reviews.
+
+---
+
+# Authentication
+
+## Version 1 Authentication
+
+Supported:
+
+* Email
+* Password
+
+Not included:
+
+* Google
+* GitHub
+* Discord
+* Steam
+
+These providers may be added in future versions.
+
+---
+
+## Email Verification
+
+Disabled during development.
+
+Email verification will be enabled before public release.
+
+---
+
+## Password Recovery
+
+Supported.
+
+Users can reset forgotten passwords.
+
+---
+
+## Username
+
+Requirements:
+
+* Unique
+* Case insensitive
+* Checked during registration
+* Can be changed at any time
+
+Examples:
+
+Valid:
+
+Shivaraj
+
+Invalid:
+
+Another account using
+
+shivaraj
+
+---
+
+## Delete Account
+
+Users may permanently delete their account.
+
+Deleting an account removes:
+
+* Profile
+* Library
+* Journal Entries
+* Collections
+* Personal data
+
+Confirmation is required.
+
+---
+
+# User Profile
+
+Each user owns one profile.
+
+The profile acts as the public face of their gaming journey.
+
+---
+
+## Profile Contents
+
+Every profile contains:
+
+* Avatar
+* Username
+* Bio
+* Favorite Game
+* Favorite Genre
+* Statistics
+* Pinned Games
+* Collections
+* Journal Timeline
+* Library
+
+---
+
+## Avatar
+
+Users may:
+
+* Upload a custom avatar
+
+or
+
+* Choose from preset gaming avatars
+
+---
+
+## Banner
+
+Not included in Version 1.
+
+---
+
+## Bio
+
+Maximum:
+
+100 characters.
+
+---
+
+## Favorite Genre
+
+One favorite genre.
+
+Used to determine the profile theme.
+
+---
+
+## Favorite Game
+
+One favorite game.
+
+Stored as a reference to the Game Catalog.
+
+---
+
+## Pinned Games
+
+Maximum:
+
+3
+
+Pinned games appear near the top of the profile.
+
+---
+
+## Profile Visibility
+
+Supported:
+
+* Public
+* Private
+
+Future:
+
+* Friends Only
+
+---
+
+## Public Information
+
+If a profile is public, all approved public sections are visible.
+
+There are no per-section visibility controls in Version 1.
+
+---
+
+# Home Page
+
+After login the user is greeted by the Home Dashboard.
+
+The first section is:
+
+Continue Your Journey
+
+This section displays recently added or recently updated games.
+
+---
+
+# Empty Profile
+
+If a profile contains no games, visitors see:
+
+"This player hasn't started their gaming journal yet."
+
+instead of an empty page.
+
+---
+
+# Library
+
+The Library is the heart of MyGameBucket.
+
+Each game may exist only once inside a user's library.
+
+Duplicate entries are not allowed.
+
+Replay tracking is not included in Version 1.
+
+If a player revisits a game, they simply update:
+
+* Hours Played
+* Journal Entry
+* Rating
+* Finished Date
+
+---
+
+## Library Layout
+
+Users can switch between:
+
+Grid View
+
+and
+
+List View
+
+The default layout is Grid View.
+
+---
+
+## Library Search
+
+The library includes an instant search bar.
+
+Searching filters only the user's own library.
+
+---
+
+## Sorting
+
+Supported sorting:
+
+* Date Added
+* Started Date
+* Name (A–Z)
+
+Future sorting methods may be added.
+
+---
+
+## Game Cards
+
+Each card displays:
+
+* Cover
+* Title
+* Rating
+* Status
+* Hours Played
+
+Hovering gently expands the card to reveal additional information.
+
+Animations remain lightweight.
+
+---
+
+## Empty Library
+
+If the user has not added any games:
+
+Display a cinematic empty state encouraging them to begin their journey.
+
+---
+
+## Library Statistics
+
+The profile displays:
+
+* Total Games
+* Completed Games
+* Total Hours Played
+* Favorite Genre
+* Member Since
+
+Average Rating has intentionally been removed.
+
+---
+
+End of Part 1

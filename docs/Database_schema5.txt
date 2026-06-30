@@ -1,0 +1,525 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 5 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Table 6 — collection_games
+
+## Purpose
+
+The `collection_games` table creates the many-to-many relationship between collections and games.
+
+A collection may contain many games.
+
+A game may belong to many collections.
+
+This table stores only the relationship.
+
+No duplicate game information is stored.
+
+---
+
+## Primary Key
+
+```text id="8bkw0r"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="k9ws2d"
+collections
+
+1
+
+↓
+
+∞
+
+collection_games
+
+∞
+
+↓
+
+1
+
+game_catalog
+```
+
+---
+
+# Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+Automatically Generated
+
+---
+
+### collection_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="wh3d2n"
+collections.id
+```
+
+---
+
+### game_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="2rw7aq"
+game_catalog.id
+```
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+Purpose
+
+Records when the game was added to the collection.
+
+---
+
+# Unique Constraints
+
+Prevent duplicate games.
+
+Constraint
+
+```text id="0lwzk0"
+(collection_id, game_id)
+
+UNIQUE
+```
+
+A collection cannot contain the same game twice.
+
+---
+
+# Indexes
+
+Indexes should exist on:
+
+```text id="l6i2lb"
+collection_id
+
+game_id
+```
+
+Supports:
+
+* Loading collection contents
+* Finding all collections containing a game
+* Efficient joins
+
+---
+
+# Row Level Security
+
+Read
+
+Public Collections
+
+↓
+
+Everyone
+
+Private Profiles
+
+↓
+
+Owner
+
+Administrator
+
+---
+
+Insert
+
+Owner only.
+
+---
+
+Update
+
+Not Required
+
+Relationship records should not be edited.
+
+Instead:
+
+Delete
+
+↓
+
+Insert New
+
+---
+
+Delete
+
+Owner only.
+
+---
+
+# Validation Rules
+
+Collection
+
+Must exist.
+
+Game
+
+Must exist.
+
+Duplicate relationships are prevented by the unique constraint.
+
+---
+
+# Example Record
+
+```text id="m2tyrm"
+id
+
+7d11...
+
+collection_id
+
+4c2a...
+
+game_id
+
+93fd...
+
+created_at
+
+2026-06-25
+```
+
+---
+
+# Performance Notes
+
+Expected size:
+
+Small to Medium.
+
+Queries are simple joins.
+
+Proper indexing is sufficient.
+
+---
+
+# Design Notes
+
+This table intentionally stores only relationships.
+
+No game metadata belongs here.
+
+This reinforces the **Single Source of Truth** principle.
+
+---
+
+# Table 7 — settings
+
+## Purpose
+
+Stores personal application preferences for each user.
+
+Settings affect only the user's experience.
+
+They never modify global application behavior.
+
+---
+
+## Primary Key
+
+```text id="mru2u9"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="v4gcwd"
+profiles
+
+1
+
+↓
+
+1
+
+settings
+```
+
+Every user owns exactly one settings record.
+
+---
+
+# Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+---
+
+### profile_id
+
+Type
+
+UUID
+
+Required
+
+Unique
+
+Foreign Key
+
+References
+
+```text id="jzb10k"
+profiles.id
+```
+
+---
+
+### appearance
+
+Type
+
+ENUM
+
+Default
+
+```text id="rm8hhm"
+System
+```
+
+Allowed values
+
+* Light
+* Dark
+* System
+
+---
+
+### reduced_motion
+
+Type
+
+BOOLEAN
+
+Default
+
+False
+
+Purpose
+
+Disables non-essential animations.
+
+---
+
+### performance_mode
+
+Type
+
+BOOLEAN
+
+Default
+
+False
+
+Purpose
+
+Reduces expensive visual effects.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+### updated_at
+
+TIMESTAMP
+
+Automatically Updated
+
+---
+
+# Validation Rules
+
+One settings record per user.
+
+Constraint
+
+```text id="y6wst7"
+profile_id
+
+UNIQUE
+```
+
+---
+
+# Indexes
+
+Indexes:
+
+```text id="c7wphh"
+profile_id
+```
+
+---
+
+# Row Level Security
+
+Read
+
+Owner only.
+
+---
+
+Insert
+
+Owner only.
+
+---
+
+Update
+
+Owner only.
+
+---
+
+Delete
+
+Owner only.
+
+---
+
+# Future Expansion
+
+Potential settings:
+
+* Language
+* Notification Preferences
+* Accessibility Preferences
+* Privacy Controls
+* Experimental Features
+* Compact Mode
+* Font Size
+
+The table is intentionally designed for easy expansion.
+
+---
+
+# Example Record
+
+```text id="nggwrw"
+id
+
+2b83...
+
+profile_id
+
+f91d...
+
+appearance
+
+Dark
+
+reduced_motion
+
+False
+
+performance_mode
+
+True
+
+created_at
+
+2026-06-29
+
+updated_at
+
+2026-06-29
+```
+
+---
+
+# Performance Notes
+
+One record per user.
+
+Very low storage requirements.
+
+Simple indexed lookups.
+
+---
+
+# Design Notes
+
+Separating user preferences into a dedicated table prevents unnecessary columns from accumulating in the `profiles` table and keeps profile information focused on public identity rather than application configuration.
+
+---
+
+End of Part 5

@@ -1,0 +1,383 @@
+# MyGameBucket
+
+# Document 03 — Database Architecture
+
+## Part 5 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Database Constraints
+
+The database is the final guardian of data integrity.
+
+Every important rule must be enforced at the database level.
+
+Examples:
+
+* Unique usernames
+* One library entry per game
+* One journal entry per game
+* No duplicate games in collections
+* Valid ENUM values
+* Valid foreign keys
+
+Frontend validation improves user experience.
+
+Database constraints guarantee correctness.
+
+---
+
+# Transactions
+
+Operations affecting multiple tables must execute inside database transactions.
+
+Example:
+
+Add Game
+
+↓
+
+Insert into User Games
+
+↓
+
+Create Journal Entry
+
+↓
+
+Update Derived Statistics (Future)
+
+↓
+
+Commit Transaction
+
+If any step fails,
+
+↓
+
+Rollback Entire Transaction
+
+The database should never enter a partially updated state.
+
+---
+
+# Performance Strategy
+
+The database should be optimized for the most common user actions.
+
+Highest priority queries:
+
+* Search for games
+* Load a user's library
+* Open a profile
+* View collections
+* Open a game page
+* Search users
+
+Indexes should be created only where they provide measurable value.
+
+Avoid excessive indexing.
+
+---
+
+# Pagination
+
+Large datasets should never be loaded all at once.
+
+Examples:
+
+Libraries
+
+↓
+
+50 items per request
+
+Search Results
+
+↓
+
+50 items per request
+
+User Lists
+
+↓
+
+50 items per request
+
+Collections
+
+↓
+
+Load incrementally as required
+
+The frontend implements infinite scrolling while the backend provides paginated results.
+
+---
+
+# Data Flow
+
+Searching for a Game
+
+User
+
+↓
+
+Frontend
+
+↓
+
+API Route
+
+↓
+
+GameService
+
+↓
+
+Game Catalog
+
+↓
+
+Cache Check
+
+↓
+
+External Game API (if necessary)
+
+↓
+
+Response
+
+↓
+
+Frontend
+
+This minimizes external requests and improves perceived performance.
+
+---
+
+# Library Flow
+
+User clicks:
+
+Add to Library
+
+↓
+
+Backend validates request
+
+↓
+
+Check duplicate constraint
+
+↓
+
+Insert into User Games
+
+↓
+
+Create Journal Entry
+
+↓
+
+Return success
+
+No duplicate library entries can be created.
+
+---
+
+# Manual Game Workflow
+
+Game not found
+
+↓
+
+User submits game
+
+↓
+
+manual_game_submissions
+
+↓
+
+Pending Review
+
+↓
+
+Administrator Review
+
+↓
+
+Approved
+
+↓
+
+Game Catalog
+
+↓
+
+Available to all users
+
+Rejected submissions remain outside the public catalog.
+
+---
+
+# Synchronization Strategy
+
+The Game Catalog is refreshed only when necessary.
+
+Triggers for synchronization:
+
+* Cache expiration
+* Missing data
+* Manual refresh (future)
+* Scheduled background jobs (future)
+
+Every synchronization updates:
+
+last_synced_at
+
+---
+
+# Future Scalability
+
+The architecture is designed to support future additions without major restructuring.
+
+Examples:
+
+* Friends
+* Followers
+* Notifications
+* Comments
+* Journal Images
+* Steam Integration
+* Console Platforms
+* Mobile Applications
+* Public API
+* Recommendation Engine
+
+These features can be added through new tables and services without redesigning the existing schema.
+
+---
+
+# Database Design Principles Summary
+
+The MyGameBucket database follows these core principles:
+
+* Single Source of Truth
+* Separation of Data and Presentation
+* API Abstraction
+* Exception-First Design
+* Backend Owns Business Logic
+* Service Layer Architecture
+* Feature Independence
+* Performance by Default
+* Documentation is Code
+* Configuration Over Hardcoding
+* Fail Fast, Fail Clearly
+
+These principles should guide every future schema change.
+
+---
+
+# Version 1 Database Summary
+
+Authentication
+
+✓ Supabase Auth
+
+Profiles
+
+✓ Public / Private
+
+✓ Favorite Game
+
+✓ Favorite Genre
+
+Library
+
+✓ One Game per User
+
+✓ Manual Hours
+
+✓ Optional Rating
+
+✓ Status Tracking
+
+Journal
+
+✓ One Entry per Game
+
+✓ Text Only
+
+Collections
+
+✓ Maximum 10
+
+✓ Games Only
+
+Game Catalog
+
+✓ Shared
+
+✓ API-backed
+
+✓ Minimal Metadata
+
+Administration
+
+✓ Manual Game Approval
+
+✓ System Logs
+
+Performance
+
+✓ Caching
+
+✓ Pagination
+
+✓ Lazy Loading
+
+Security
+
+✓ RLS
+
+✓ UUIDs
+
+✓ Transactions
+
+✓ ENUMs
+
+✓ Constraints
+
+---
+
+# Document Status
+
+Document:
+
+03_Database_Architecture.md
+
+Version:
+
+0.1
+
+Status:
+
+Approved
+
+Related Documents:
+
+* 01_Project_Vision.md
+* 02_Product_Requirements.md
+* 04_Frontend_Architecture.md
+* 05_Backend_Architecture.md
+* 06_Development_Standards.md
+
+---
+
+End of Document 03

@@ -1,0 +1,341 @@
+# MyGameBucket
+
+# Document 02 — Product Requirements
+
+## Part 4 of 4
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Settings
+
+The Settings page allows users to customize their account and application experience.
+
+Settings are organized into categories for future scalability.
+
+Categories:
+
+* Account
+* Profile
+* Appearance
+* Privacy
+* Library
+* About
+
+---
+
+# Appearance
+
+## Theme
+
+Supported:
+
+* Dark Mode
+* Light Mode
+
+Users may switch between them at any time.
+
+---
+
+## Accent Colors
+
+Accent colors are **not** user selectable.
+
+Colors are automatically determined by:
+
+* Profile Theme
+* Game Theme
+
+This ensures a consistent visual identity.
+
+---
+
+## Reduced Motion
+
+Setting:
+
+Reduced Motion
+
+When enabled:
+
+* Decorative animations are removed.
+* Hover effects become simpler.
+* Transition durations are reduced.
+
+Purpose:
+
+Accessibility and lower hardware usage.
+
+---
+
+## Performance Mode
+
+Setting:
+
+Performance Mode
+
+When enabled:
+
+* Decorative background effects are disabled.
+* Blur effects are reduced.
+* Animation complexity is lowered.
+* Performance is prioritized.
+
+---
+
+# Notifications
+
+Version 1 contains no notification system.
+
+Future notifications may include:
+
+* Comments
+* Followers
+* Collection updates
+* Social interactions
+
+---
+
+# Search Experience
+
+Global search should feel instantaneous.
+
+Features include:
+
+* Live suggestions
+* Keyboard navigation
+* Filtering
+* Fast loading
+
+Recent searches are intentionally omitted.
+
+---
+
+# Delete Game
+
+Deleting a game removes:
+
+* Rating
+* Status
+* Hours Played
+* Started Date
+* Finished Date
+* Journal Entry
+* Collection references
+
+Before deletion, users must confirm the action.
+
+Example:
+
+Remove Elden Ring from your library?
+
+This will permanently remove all personal data associated with this game.
+
+[Cancel]
+
+[Remove]
+
+---
+
+# Home Dashboard
+
+The dashboard is the user's starting point after login.
+
+Primary section:
+
+Continue Your Journey
+
+Purpose:
+
+Surface games the player is actively engaged with or recently updated.
+
+Future widgets may include:
+
+* New Releases
+* Friends Activity
+* Recommendations
+
+These are not included in Version 1.
+
+---
+
+# User Experience Principles
+
+Every page should have one obvious primary action.
+
+Examples:
+
+Home
+
+Primary Action:
+
+Search Games
+
+---
+
+Library
+
+Primary Action:
+
+Add Game
+
+---
+
+Game Page
+
+Primary Action:
+
+Add to Library
+
+or
+
+Edit Personal Entry
+
+---
+
+Collections
+
+Primary Action:
+
+Create Collection
+
+---
+
+This approach reduces cognitive load and keeps navigation intuitive.
+
+---
+
+# Product Scope
+
+Version 1 focuses on building an exceptional personal gaming journal.
+
+It intentionally avoids unnecessary complexity.
+
+Included:
+
+* Authentication
+* Profiles
+* Library
+* Search
+* Game Pages
+* Journal Entries
+* Collections
+* Settings
+* Statistics
+* Theme System
+
+Excluded:
+
+* Messaging
+* Friends System
+* Notifications
+* Steam Integration
+* Seasonal Events
+* Mobile Applications
+* Journal Images
+* Reviews
+* Replay Tracking
+* AI Features
+
+These remain candidates for future releases.
+
+---
+
+# Product Principles
+
+Every new feature added to MyGameBucket should satisfy the following principles:
+
+## Simplicity
+
+Adding a game should take less than one minute.
+
+The interface should never overwhelm users.
+
+---
+
+## Performance
+
+Performance is a feature.
+
+Visual quality must never compromise responsiveness.
+
+---
+
+## Scalability
+
+Features should work equally well with:
+
+* 10 games
+* 1,000 games
+* 100,000 games
+
+Solutions requiring manual work per game should be avoided.
+
+---
+
+## Consistency
+
+One animation language.
+
+One design language.
+
+One interaction philosophy.
+
+The experience should feel cohesive throughout the application.
+
+---
+
+## Maintainability
+
+Code should be modular.
+
+Components should be reusable.
+
+Documentation should remain the single source of truth.
+
+All approved decisions should be reflected in the implementation.
+
+---
+
+# Version 1 Success Criteria
+
+Version 1 will be considered successful if users can:
+
+* Create an account
+* Build a gaming profile
+* Search for PC games
+* Add games to their library
+* Record Journal Entries
+* Organize games into collections
+* Browse other public profiles
+* Enjoy a smooth, polished experience on desktop devices
+
+---
+
+# Document Status
+
+Document Name:
+
+02_Product_Requirements.md
+
+Version:
+
+0.1
+
+Status:
+
+Approved
+
+Related Documents:
+
+* 01_Project_Vision.md
+* 03_Database_Architecture.md
+* 04_UI_UX_Guidelines.md
+* 05_AI_Context.md
+
+---
+
+End of Document 02

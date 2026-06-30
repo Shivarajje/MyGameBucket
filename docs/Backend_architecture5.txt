@@ -1,0 +1,370 @@
+# MyGameBucket
+
+# Document 05 — Backend Architecture
+
+## Part 5 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Repository Layer
+
+The Repository Layer is responsible for communicating with the database.
+
+Repositories should:
+
+* Read data
+* Write data
+* Execute queries
+* Return domain objects
+
+Repositories should **never** contain business logic.
+
+Business rules belong in the Service Layer.
+
+---
+
+# Repository Philosophy
+
+Services ask **what** should happen.
+
+Repositories determine **how** the database is accessed.
+
+Example:
+
+```text
+LibraryService
+
+↓
+
+LibraryRepository
+
+↓
+
+Supabase
+```
+
+This keeps the application modular and easier to test.
+
+---
+
+# Database Constraints
+
+The backend should rely on database constraints whenever possible.
+
+Examples:
+
+Unique Username
+
+↓
+
+Database Constraint
+
+Duplicate Library Entry
+
+↓
+
+Unique Constraint
+
+Duplicate Collection Entry
+
+↓
+
+Unique Constraint
+
+Valid Status
+
+↓
+
+ENUM
+
+Foreign Key Integrity
+
+↓
+
+Foreign Keys
+
+Business logic complements database rules but should not replace them.
+
+---
+
+# Future Background Jobs
+
+The architecture should support scheduled background jobs.
+
+Possible jobs include:
+
+* Refresh stale Game Catalog entries
+* Refresh cached API data
+* Clean expired cache
+* Aggregate analytics
+* Rebuild search indexes
+* Generate future recommendations
+
+Version 1 does not require background workers, but the architecture should allow them to be added without major changes.
+
+---
+
+# Future Public API
+
+The backend should be designed so that a future public API can reuse the same Service Layer.
+
+Architecture:
+
+```text
+Web Application
+
+↓
+
+API Routes
+
+↓
+
+Service Layer
+
+↓
+
+Database
+
+Future:
+
+Public API
+
+↓
+
+Same Service Layer
+
+↓
+
+Database
+```
+
+Business logic should never be duplicated.
+
+---
+
+# Mobile Compatibility
+
+Future mobile applications should communicate with the same backend.
+
+Architecture:
+
+```text
+Web Application
+
+↓
+
+Shared Backend
+
+↑
+
+Mobile Application
+```
+
+No mobile-specific backend should be required.
+
+---
+
+# Dependency Injection
+
+Services should receive their dependencies rather than creating them internally.
+
+Example:
+
+Good
+
+```text
+GameService
+
+↓
+
+GameRepository
+
+↓
+
+Injected
+```
+
+Avoid:
+
+```text
+GameService
+
+↓
+
+Creates Repository
+
+↓
+
+Internally
+```
+
+This improves:
+
+* Testability
+* Flexibility
+* Maintainability
+
+---
+
+# Backend Scalability
+
+The backend should scale horizontally.
+
+Stateless services are preferred.
+
+No request should rely on server memory for long-term storage.
+
+Persistent data belongs in:
+
+* Database
+* Cache
+* Storage
+
+Never inside application memory.
+
+---
+
+# Service Responsibilities
+
+Each service should have one clear responsibility.
+
+GameService
+
+↓
+
+Games
+
+LibraryService
+
+↓
+
+Library
+
+JournalService
+
+↓
+
+Journal
+
+CollectionService
+
+↓
+
+Collections
+
+Avoid "God Services" that handle unrelated features.
+
+---
+
+# Development Philosophy
+
+Backend development follows these principles:
+
+* Modular by Default
+* Single Source of Truth
+* API Abstraction
+* Service Layer
+* Feature Independence
+* Backend Owns Business Logic
+* Configuration Over Hardcoding
+* Fail Fast, Fail Clearly
+* Performance by Default
+* Documentation is Code
+
+Every backend feature should reinforce these principles.
+
+---
+
+# Backend Summary
+
+The backend architecture is designed to be:
+
+* Modular
+* Scalable
+* Secure
+* API-independent
+* Maintainable
+* Testable
+* Platform-ready
+
+The architecture supports:
+
+* Web
+* Future Mobile Apps
+* Future Public API
+* Future Background Jobs
+
+without requiring major redesign.
+
+---
+
+# Backend Deployment Checklist
+
+Before releasing a backend feature:
+
+✓ Service created
+
+✓ Repository implemented
+
+✓ Validation completed
+
+✓ Authorization implemented
+
+✓ Transactions used where required
+
+✓ Logging added
+
+✓ Rate limiting considered
+
+✓ Standard API responses
+
+✓ Tests added (where applicable)
+
+✓ Documentation updated
+
+---
+
+# Backend Readiness
+
+The backend is considered production-ready when:
+
+* All database constraints are enforced.
+* All RLS policies are active.
+* API responses are standardized.
+* Services are modular.
+* Error handling is complete.
+* Logging is operational.
+* Security review is complete.
+* Documentation matches implementation.
+
+---
+
+# Document Status
+
+Document:
+
+05_Backend_Architecture.md
+
+Version:
+
+0.1
+
+Status:
+
+Approved
+
+Related Documents:
+
+* 01_Project_Vision.md
+* 02_Product_Requirements.md
+* 03_Database_Architecture.md
+* 04_Frontend_Architecture.md
+* 06_Development_Standards.md
+
+---
+
+End of Document 05

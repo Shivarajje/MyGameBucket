@@ -1,0 +1,631 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 4 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Table 4 — journal_entries
+
+## Purpose
+
+The `journal_entries` table stores a player's personal memories for each game.
+
+Unlike reviews, these entries are intended to capture personal experiences, emotions, memorable moments, or milestones during a player's journey.
+
+Each user may create **one Journal Entry per game**.
+
+---
+
+## Primary Key
+
+```text id="6u4mha"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="vd7x2k"
+profiles
+
+1
+
+↓
+
+∞
+
+journal_entries
+
+∞
+
+↓
+
+1
+
+game_catalog
+```
+
+---
+
+## Philosophy
+
+Journal Entries are personal.
+
+They are **not** reviews.
+
+They are **not** comments.
+
+They are **not** public discussions.
+
+They exist to preserve a player's memories associated with a specific game.
+
+---
+
+# Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+Automatically Generated
+
+---
+
+### profile_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="rb61xj"
+profiles.id
+```
+
+---
+
+### game_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="lk6f5u"
+game_catalog.id
+```
+
+---
+
+### entry
+
+Type
+
+TEXT
+
+Required
+
+Maximum Length
+
+280 Characters
+
+Purpose
+
+Stores the user's journal entry.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+### updated_at
+
+TIMESTAMP
+
+Automatically Updated
+
+---
+
+# Unique Constraints
+
+Only one journal entry per game.
+
+Constraint
+
+```text id="lg6gbi"
+(profile_id, game_id)
+
+UNIQUE
+```
+
+---
+
+# Indexes
+
+Indexes should exist on:
+
+```text id="58vk0d"
+profile_id
+
+game_id
+
+updated_at
+```
+
+These improve:
+
+* Profile loading
+* Game page loading
+* Recent activity
+* Personal history
+
+---
+
+# Row Level Security
+
+Read
+
+If profile is public
+
+↓
+
+Everyone may view.
+
+If profile is private
+
+↓
+
+Owner
+
+Administrator
+
+---
+
+Insert
+
+Owner only.
+
+---
+
+Update
+
+Owner only.
+
+---
+
+Delete
+
+Owner only.
+
+---
+
+# Validation Rules
+
+Entry
+
+Required.
+
+Maximum
+
+280 Characters.
+
+No HTML.
+
+No executable content.
+
+Input should be sanitized before storage.
+
+---
+
+# Editing
+
+Users may edit their journal entry at any time.
+
+The original creation timestamp remains unchanged.
+
+Only:
+
+```text id="brtpnd"
+updated_at
+```
+
+is modified.
+
+---
+
+# Future Expansion
+
+Possible future additions:
+
+* Journal Images
+* Spoiler Toggle
+* Mood
+* Screenshot Attachments
+* Rich Text Support
+* Timeline Entries
+* Audio Memories
+
+These are intentionally excluded from Version 1.
+
+---
+
+# Example Record
+
+```text id="yofn2z"
+id
+
+6f73...
+
+profile_id
+
+8ac1...
+
+game_id
+
+e91a...
+
+entry
+
+"Finally defeated Malenia after dozens of attempts. One of my favorite gaming moments."
+
+created_at
+
+2026-06-10
+
+updated_at
+
+2026-06-11
+```
+
+---
+
+# Performance Notes
+
+Expected workload:
+
+* Moderate reads
+* Moderate writes
+
+Journal Entries are primarily accessed through:
+
+* User Profiles
+* Game Pages
+* Personal Library
+
+Simple indexing is sufficient.
+
+---
+
+# Design Notes
+
+Journal Entries intentionally avoid becoming a review system.
+
+The focus is:
+
+"My experience."
+
+rather than
+
+"My score."
+
+This distinction supports the core vision of MyGameBucket as a gaming journal rather than another review platform.
+
+---
+
+# Table 5 — collections
+
+## Purpose
+
+Collections allow users to organize games into custom groups.
+
+Examples:
+
+* Masterpieces
+* Horror Games
+* Childhood Favorites
+* Games to Replay
+* Best Co-op Games
+
+Collections contain metadata only.
+
+Games are linked through the `collection_games` table.
+
+---
+
+## Primary Key
+
+```text id="b77w8u"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="vs30lm"
+profiles
+
+1
+
+↓
+
+∞
+
+collections
+
+1
+
+↓
+
+∞
+
+collection_games
+```
+
+---
+
+# Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+---
+
+### profile_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="0pwgv9"
+profiles.id
+```
+
+---
+
+### name
+
+Type
+
+TEXT
+
+Required
+
+Maximum Length
+
+100 Characters
+
+Purpose
+
+Collection title.
+
+Examples
+
+```text id="4bsl0n"
+Masterpieces
+
+Souls Games
+
+Games I'll Never Forget
+```
+
+---
+
+### description
+
+Type
+
+TEXT
+
+Nullable
+
+Maximum Length
+
+250 Characters
+
+Purpose
+
+Optional description for the collection.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+### updated_at
+
+TIMESTAMP
+
+Automatically Updated
+
+---
+
+# Validation Rules
+
+Collection Name
+
+Required.
+
+Maximum
+
+100 Characters.
+
+---
+
+Description
+
+Optional.
+
+Maximum
+
+250 Characters.
+
+---
+
+Maximum Collections Per User
+
+```text id="ujw14v"
+10
+```
+
+Enforced by backend business logic.
+
+---
+
+# Indexes
+
+Indexes should exist on:
+
+```text id="uxaqt0"
+profile_id
+
+name
+```
+
+---
+
+# Row Level Security
+
+Read
+
+Public Profiles
+
+↓
+
+Everyone
+
+Private Profiles
+
+↓
+
+Owner
+
+Administrator
+
+---
+
+Insert
+
+Owner only.
+
+---
+
+Update
+
+Owner only.
+
+---
+
+Delete
+
+Owner only.
+
+---
+
+# Future Expansion
+
+Possible additions:
+
+* Cover Image
+* Featured Collection
+* Collection Theme
+* Collection Order
+* Collaborative Collections
+
+These features are outside Version 1.
+
+---
+
+# Example Record
+
+```text id="ldnxtg"
+id
+
+94bc...
+
+profile_id
+
+81fa...
+
+name
+
+Masterpieces
+
+description
+
+"Games that left a lasting impact on me."
+
+created_at
+
+2026-06-18
+
+updated_at
+
+2026-06-22
+```
+
+---
+
+# Performance Notes
+
+Collections are expected to remain relatively small.
+
+Maximum:
+
+10 collections per user.
+
+Performance impact is negligible.
+
+---
+
+End of Part 4

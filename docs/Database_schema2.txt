@@ -1,0 +1,475 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 2 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Table 2 — game_catalog
+
+## Purpose
+
+Stores one shared record for every game known to MyGameBucket.
+
+Every user references the same game.
+
+This eliminates duplicate game information across user libraries.
+
+The Game Catalog acts as the local index of all games that have been searched or manually approved.
+
+---
+
+## Primary Key
+
+```text id="tgvd5r"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="8clu4n"
+game_catalog
+
+↓
+
+user_games
+
+↓
+
+journal_entries
+
+↓
+
+collection_games
+
+↓
+
+profiles.favorite_game_id
+```
+
+One game may be referenced by thousands or even millions of users.
+
+---
+
+## Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+Automatically Generated
+
+---
+
+### external_api_id
+
+Type
+
+TEXT
+
+Required
+
+Unique
+
+Purpose
+
+Stores the game's identifier from the external Game API.
+
+Example:
+
+```text id="gtqg8k"
+IGDB ID
+
+RAWG ID
+```
+
+This allows API providers to change in the future.
+
+---
+
+### slug
+
+Type
+
+TEXT
+
+Required
+
+Unique
+
+Purpose
+
+SEO-friendly URL identifier.
+
+Example
+
+```text id="vnd2lk"
+elden-ring
+```
+
+Used for:
+
+```text id="gbl8b8"
+/game/elden-ring
+```
+
+---
+
+### title
+
+Type
+
+TEXT
+
+Required
+
+Purpose
+
+Official game title.
+
+Example
+
+```text id="uup1q4"
+Elden Ring
+```
+
+---
+
+### cover_url
+
+Type
+
+TEXT
+
+Required
+
+Purpose
+
+Stores the official cover artwork URL.
+
+Images remain hosted by the external provider.
+
+The application does not download or duplicate artwork.
+
+---
+
+### genre
+
+Type
+
+TEXT
+
+Required
+
+Purpose
+
+Primary genre used by:
+
+* Theme Engine
+* Search
+* Filtering
+
+Example
+
+```text id="b11hk9"
+Soulslike
+```
+
+---
+
+### platform
+
+Type
+
+TEXT
+
+Required
+
+Purpose
+
+Primary platform.
+
+Examples
+
+PC
+
+PlayStation
+
+Xbox
+
+Nintendo Switch
+
+Multi-platform titles may store the primary platform in Version 1.
+
+Future versions may normalize platforms into separate tables.
+
+---
+
+### release_year
+
+Type
+
+INTEGER
+
+Nullable
+
+Purpose
+
+Used for search and filtering.
+
+---
+
+### last_synced_at
+
+Type
+
+TIMESTAMP
+
+Required
+
+Purpose
+
+Stores the last successful synchronization with the external Game API.
+
+Used to determine cache freshness.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+### updated_at
+
+TIMESTAMP
+
+Automatically Updated
+
+---
+
+## Unique Constraints
+
+external_api_id
+
+Unique
+
+slug
+
+Unique
+
+---
+
+## Indexes
+
+Indexes should exist for:
+
+slug
+
+title
+
+genre
+
+release_year
+
+These are the most common search fields.
+
+---
+
+## Row Level Security
+
+Readable by:
+
+Everyone
+
+Insert:
+
+Backend Services Only
+
+Update:
+
+Backend Services
+
+Administrators
+
+Delete:
+
+Administrators Only
+
+Users should never modify Game Catalog records.
+
+---
+
+## Validation Rules
+
+Title
+
+Required
+
+Slug
+
+Required
+
+Unique
+
+Cover URL
+
+Required
+
+Genre
+
+Required
+
+Platform
+
+Required
+
+External API ID
+
+Required
+
+Unique
+
+---
+
+## Synchronization Rules
+
+Game data should only be refreshed when:
+
+* Cache expires
+* Data is missing
+* Administrator requests refresh
+* Future scheduled synchronization jobs
+
+Every successful synchronization updates:
+
+```text id="5l1zaj"
+last_synced_at
+```
+
+---
+
+## Performance Notes
+
+The Game Catalog is expected to become one of the largest tables.
+
+Expected characteristics:
+
+* High read frequency
+* Low write frequency
+* Shared across every user
+
+Optimization priorities:
+
+* Search speed
+* Lookup by slug
+* Lookup by external API ID
+* Fast joins with user_games
+
+---
+
+## Future Columns
+
+Potential additions:
+
+* ESRB Rating
+* PEGI Rating
+* Metacritic Score
+* OpenCritic Score
+* Steam App ID
+* Franchise
+* Series
+* DLC Indicator
+* Multiplayer Support
+
+These are intentionally omitted from Version 1 to keep the catalog lightweight.
+
+---
+
+## Example Record
+
+```text id="5e9gcj"
+id
+
+a73d...
+
+external_api_id
+
+119133
+
+slug
+
+elden-ring
+
+title
+
+Elden Ring
+
+cover_url
+
+https://...
+
+genre
+
+Soulslike
+
+platform
+
+PC
+
+release_year
+
+2022
+
+last_synced_at
+
+2026-06-29
+
+created_at
+
+2026-06-29
+
+updated_at
+
+2026-06-29
+```
+
+---
+
+## Design Notes
+
+The Game Catalog is intentionally minimal.
+
+Detailed information such as:
+
+* Description
+* Screenshots
+* Videos
+* Developer
+* Publisher
+
+is fetched through the GameService when needed.
+
+This keeps the database compact while still allowing fast searches and profile rendering.
+
+---
+
+End of Part 2

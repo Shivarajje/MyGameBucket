@@ -1,0 +1,383 @@
+# MyGameBucket
+
+# Document 07 — Development Standards & AI Development Guide
+
+## Part 1 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Purpose
+
+This document defines the engineering standards for the MyGameBucket project.
+
+Unlike the architecture documents, this document describes **how development should happen**.
+
+It is intended for:
+
+* Human developers
+* AI coding assistants
+* Future contributors
+
+Every code change should follow the standards described here.
+
+---
+
+# Project Philosophy
+
+MyGameBucket is not a prototype.
+
+It is intended to be a maintainable, scalable production-quality web application.
+
+Every engineering decision should prioritize:
+
+* Readability
+* Maintainability
+* Scalability
+* Consistency
+* Simplicity
+
+---
+
+# Core Engineering Principles
+
+Every developer working on the project should understand these principles before writing code.
+
+---
+
+## Single Source of Truth
+
+Every piece of information should exist in one authoritative location.
+
+Examples
+
+Username
+
+↓
+
+profiles
+
+Game Title
+
+↓
+
+game_catalog
+
+Journal Entry
+
+↓
+
+journal_entries
+
+Never duplicate data unless there is a compelling architectural reason.
+
+---
+
+## Separation of Concerns
+
+Every layer has a single responsibility.
+
+Frontend
+
+↓
+
+Presentation
+
+Backend
+
+↓
+
+Business Logic
+
+Database
+
+↓
+
+Persistence
+
+Mixing responsibilities should be avoided.
+
+---
+
+## API Abstraction
+
+The frontend never communicates directly with external APIs.
+
+Instead
+
+Frontend
+
+↓
+
+API Route
+
+↓
+
+GameService
+
+↓
+
+External API
+
+Changing providers should require modifications only inside the GameService.
+
+---
+
+## Service Layer
+
+Business logic belongs inside Services.
+
+Never inside:
+
+* Components
+* API Routes
+* Database Queries
+
+Services are responsible for making decisions.
+
+---
+
+## Feature Independence
+
+Every feature should evolve independently.
+
+Examples
+
+Library
+
+↓
+
+LibraryService
+
+↓
+
+Repository
+
+↓
+
+Database
+
+A feature should never depend on another feature's internal implementation.
+
+---
+
+## Backend Owns Business Logic
+
+The frontend may validate input for user experience.
+
+The backend performs the final validation.
+
+The database enforces integrity.
+
+---
+
+## Performance by Default
+
+Performance is treated as a feature.
+
+Examples
+
+* Lazy Loading
+* Pagination
+* Caching
+* Optimized Queries
+* Skeleton Loaders
+
+Optimize before performance becomes a problem.
+
+---
+
+## Documentation is Code
+
+Documentation is considered part of the project.
+
+Changing implementation without updating documentation is considered an incomplete change.
+
+---
+
+## Configuration Over Hardcoding
+
+Magic numbers are prohibited.
+
+Instead of
+
+```text id="oz11pl"
+if (bio.length > 100)
+```
+
+Use
+
+```text id="zjlwm6"
+MAX_BIO_LENGTH
+```
+
+Configuration should exist in a single location.
+
+---
+
+## Fail Fast, Fail Clearly
+
+Errors should be detected as early as possible.
+
+Return meaningful messages.
+
+Log unexpected failures.
+
+Never silently ignore problems.
+
+---
+
+## Convention Over Configuration
+
+Prefer established conventions.
+
+Examples
+
+Next.js
+
+React
+
+TypeScript
+
+Supabase
+
+Tailwind
+
+Avoid creating custom patterns unless they provide a clear benefit.
+
+---
+
+# Development Workflow
+
+Every feature follows the same lifecycle.
+
+```text id="pxrjlwm"
+Idea
+
+↓
+
+Documentation
+
+↓
+
+Architecture Review
+
+↓
+
+Implementation
+
+↓
+
+Testing
+
+↓
+
+Documentation Update
+
+↓
+
+Merge
+```
+
+Skipping documentation is not allowed.
+
+---
+
+# Feature Workflow
+
+Every feature should progress through these stages.
+
+Planning
+
+↓
+
+Design
+
+↓
+
+Implementation
+
+↓
+
+Testing
+
+↓
+
+Documentation
+
+↓
+
+Release
+
+Each stage should be completed before moving to the next.
+
+---
+
+# AI Development Philosophy
+
+AI is treated as a development assistant.
+
+AI should:
+
+* Accelerate development
+* Reduce repetitive work
+* Generate boilerplate
+* Explain code
+* Suggest improvements
+
+AI should never make architectural decisions independently.
+
+---
+
+# AI Rule 1
+
+Before generating code:
+
+Read:
+
+* Project Vision
+* Product Requirements
+* Architecture Documents
+* Decision Log
+
+Never generate code without understanding the project context.
+
+---
+
+# AI Rule 2
+
+When multiple solutions exist:
+
+Choose the one that best aligns with the documented architecture.
+
+Do not invent new patterns.
+
+---
+
+# AI Rule 3
+
+If documentation and code disagree,
+
+Documentation wins.
+
+The documentation should be updated only after architectural approval.
+
+---
+
+# AI Rule 4
+
+Never duplicate:
+
+* Components
+* Services
+* Types
+* Utility Functions
+
+Always search for an existing implementation first.
+
+---
+
+End of Part 1

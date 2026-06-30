@@ -1,0 +1,311 @@
+# MyGameBucket
+
+# Document 02 — Product Requirements
+
+## Part 3 of 4
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# User Library
+
+The Library represents the player's complete gaming history.
+
+Every game can exist only once inside the user's library.
+
+---
+
+## Library Entry
+
+Each library entry contains:
+
+* Game Reference
+* Rating
+* Status
+* Hours Played
+* Started Date
+* Finished Date
+* Date Added
+* Journal Entry
+* Pinned Status
+
+All game metadata comes from the shared Game Catalog.
+
+---
+
+## Hours Played
+
+Hours Played:
+
+* Optional
+* Supports decimal values
+* Entered manually by the user
+
+Examples:
+
+* 3
+* 12.5
+* 154.2
+
+Automatic tracking is not included.
+
+---
+
+## Rating
+
+Rating Scale:
+
+1.0–10.0
+
+Decimal values are supported.
+
+Example:
+
+* 8.5
+* 9.0
+* 10.0
+
+---
+
+## Game Status
+
+Version 1 supports:
+
+* Playing
+* Completed
+* On Hold
+* Dropped
+
+The "Backlog" status has intentionally been removed.
+
+---
+
+## Started Date
+
+Optional.
+
+Users may leave it blank.
+
+---
+
+## Finished Date
+
+Optional.
+
+Users may update it later.
+
+---
+
+# Journal Entries
+
+Journal Entries are the defining feature of MyGameBucket.
+
+The goal is to preserve a player's personal experiences rather than publish reviews.
+
+Each game has one Journal Entry in Version 1.
+
+---
+
+## Journal Entry Contents
+
+Each Journal Entry contains:
+
+* Date Created
+* Last Edited
+* Text
+
+Version 1 does not include images.
+
+---
+
+## Character Limit
+
+Maximum:
+
+280 characters.
+
+The Journal Entry should feel like a short personal note.
+
+---
+
+## Editing
+
+Users may edit their Journal Entry at any time.
+
+The application stores:
+
+* Created Date
+* Last Edited Date
+
+---
+
+## Comments
+
+Comments are planned for a future version.
+
+The database architecture should remain compatible with this feature.
+
+---
+
+## Likes
+
+Not included in Version 1.
+
+---
+
+## Visibility
+
+Every Journal Entry appears in:
+
+* Game Page
+* Profile Timeline
+
+The same Journal Entry is reused rather than duplicated.
+
+---
+
+# Collections
+
+Collections help users organize games into custom groups.
+
+Examples:
+
+* Masterpieces
+* Souls Games
+* Childhood Favorites
+* Horror Games
+* Comfort Games
+
+---
+
+## Collection Limit
+
+Maximum:
+
+10 collections per user.
+
+---
+
+## Collection Contents
+
+Collections contain games only.
+
+Future versions may expand this.
+
+---
+
+## Collection Information
+
+Each collection contains:
+
+* Name
+* Automatically generated cover collage
+
+Descriptions are not included.
+
+---
+
+## Collection Visibility
+
+Version 1 supports:
+
+* Public
+* Private
+
+Future:
+
+* Friends Only
+
+---
+
+## Collection Interaction
+
+Visitors may:
+
+* View collections
+
+Visitors cannot:
+
+* Like collections
+* Comment on collections
+
+---
+
+## Multiple Collections
+
+A single game may belong to multiple collections.
+
+Example:
+
+Elden Ring
+
+* Masterpieces
+* Souls Games
+* Favorite RPGs
+
+---
+
+# Profile Statistics
+
+The profile displays:
+
+* Total Games
+* Completed Games
+* Total Hours Played
+* Favorite Genre
+* Member Since
+
+Average Rating has intentionally been excluded.
+
+---
+
+# Statistics Page
+
+Version 1 does not include charts.
+
+Statistics remain simple and readable.
+
+Future versions may include:
+
+* Genre Distribution
+* Completion Timeline
+* Rating Distribution
+
+---
+
+# User Comparison
+
+Planned for a future release.
+
+Possible comparison metrics:
+
+* Games Played
+* Hours Played
+* Completed Games
+
+No leaderboards are planned.
+
+---
+
+# Empty States
+
+The application should avoid blank pages.
+
+Examples include:
+
+Empty Library
+
+"Your journey hasn't begun yet."
+
+Empty Profile
+
+"This player hasn't started their gaming journal yet."
+
+Every empty state should encourage exploration rather than simply stating that no content exists.
+
+---
+
+End of Part 3

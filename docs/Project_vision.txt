@@ -1,0 +1,252 @@
+# MyGameBucket
+
+## Document 01 — Project Vision
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Project Overview
+
+**MyGameBucket** is a premium gaming journal where players can document, organize, and share their gaming journey.
+
+Unlike traditional game tracking websites that focus on statistics, reviews, or completion percentages, MyGameBucket focuses on preserving the player's personal journey through games.
+
+The website combines a beautiful cinematic interface with lightweight interactions to create an experience that feels more like opening a premium gaming journal than browsing another database.
+
+The long-term vision is to become the definitive place where players remember the games that shaped them.
+
+---
+
+# Vision Statement
+
+Create the most beautiful and immersive gaming journal on the web.
+
+Every player should have a place where they can preserve their gaming history, revisit their favorite experiences, and discover the journeys of other players.
+
+The website should feel cinematic, modern, elegant, and highly polished while remaining fast, lightweight, and accessible.
+
+---
+
+# Mission Statement
+
+Provide gamers with a premium platform to:
+
+* Track every game they have played.
+* Record meaningful journal entries for each game.
+* Organize their library into collections.
+* Share their gaming journey with others.
+* Build a lasting personal gaming archive.
+
+---
+
+# Target Audience
+
+The platform is designed for anyone who enjoys video games.
+
+Version 1 focuses on PC gamers.
+
+Future versions may include support for:
+
+* PlayStation
+* Xbox
+* Nintendo
+* Mobile
+
+---
+
+# Core Philosophy
+
+The product is guided by three pillars:
+
+## 1. Immersion
+
+Every page should feel crafted.
+
+Animations should enhance the experience without becoming distracting.
+
+The interface should never feel like a CRUD application.
+
+---
+
+## 2. Community
+
+Players should eventually be able to:
+
+* Discover other players
+* Browse their libraries
+* Read their journal entries
+* Interact through comments
+
+Community features will be introduced gradually.
+
+---
+
+## 3. Nostalgia
+
+The website exists to preserve memories.
+
+Every game represents a chapter in the player's gaming life.
+
+The focus is not on writing reviews.
+
+The focus is remembering experiences.
+
+---
+
+# Product Identity
+
+MyGameBucket is **not** intended to compete directly with Steam, IGN, or Metacritic.
+
+Instead, it occupies a unique position:
+
+"A personal gaming journal with social features."
+
+---
+
+# Design Goals
+
+The interface should be:
+
+* Beautiful
+* Cinematic
+* Modern
+* Responsive
+* Minimal
+* Premium
+
+Every interaction should feel smooth.
+
+The website should remain performant even on average hardware.
+
+---
+
+# Animation Philosophy
+
+Animations exist to improve the experience—not distract from it.
+
+Approved principles:
+
+* One universal animation language.
+* Consistent transitions throughout the application.
+* Genre-specific visual themes instead of game-specific animations.
+* Smooth transitions (approximately 500–700 ms).
+* Performance always takes priority over visual effects.
+
+Users can enable:
+
+* Reduced Motion
+* Performance Mode
+
+to reduce animation complexity.
+
+---
+
+# Theme Philosophy
+
+Themes are determined by game genre rather than individual games.
+
+Examples include:
+
+* Soulslike
+* Fantasy RPG
+* Pixel / Retro
+* Cyberpunk
+* Racing
+* Horror
+
+Each theme controls:
+
+* Color palette
+* Typography
+* Decorative UI elements
+* Background accents
+
+The animation system remains consistent across all themes.
+
+---
+
+# Performance Philosophy
+
+Performance is a first-class feature.
+
+The website should:
+
+* Feel smooth on mid-range hardware.
+* Avoid unnecessary JavaScript.
+* Prefer lightweight CSS animations.
+* Lazy-load images where appropriate.
+* Limit expensive visual effects.
+
+A beautiful interface should never come at the cost of usability.
+
+---
+
+# Version 1 Scope
+
+Version 1 includes:
+
+* User authentication
+* Profiles
+* Personal library
+* Search
+* Game pages
+* Journal entries
+* Collections
+* Profile statistics
+* Theme system
+* Settings
+
+Version 1 intentionally excludes:
+
+* Notifications
+* Messaging
+* Steam integration
+* Seasonal events
+* Journal image uploads
+* Leaderboards
+* Mobile applications
+
+These will be considered after the MVP is complete.
+
+---
+
+# Guiding Principles
+
+Every new feature should satisfy the following questions:
+
+1. Does it improve the gaming journal experience?
+2. Does it keep the interface simple?
+3. Can it scale to thousands of games?
+4. Does it maintain good performance?
+5. Does it align with the core pillars of Immersion, Community, and Nostalgia?
+
+If the answer to these questions is "no," the feature should be reconsidered or postponed.
+
+---
+
+# Current Product Status
+
+Project Stage:
+
+Planning
+
+Documentation Version:
+
+0.1
+
+Estimated Completion of Planning:
+
+Approximately 50%
+
+Current Focus:
+
+* Database Architecture
+* Technical Design
+* Development Documentation
+
+---
+
+End of Document 01

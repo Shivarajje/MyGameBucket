@@ -1,0 +1,391 @@
+# MyGameBucket
+
+# Document 07 — Development Standards & AI Development Guide
+
+## Part 4 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# AI Code Generation Rules
+
+Every AI assistant working on MyGameBucket must follow these rules.
+
+These rules apply to:
+
+* Antigravity
+* Claude Code
+* Cursor
+* GitHub Copilot
+* ChatGPT
+* Future AI coding assistants
+
+---
+
+## Rule 1
+
+Read the documentation first.
+
+Minimum required reading:
+
+* Project Vision
+* Product Requirements
+* Database Architecture
+* Frontend Architecture
+* Backend Architecture
+* Database Schema
+* Decision Log
+
+Never start coding blindly.
+
+---
+
+## Rule 2
+
+Never change approved architecture without approval.
+
+If a better solution is discovered:
+
+Explain:
+
+* Problem
+* Benefits
+* Drawbacks
+
+Wait for approval before changing the architecture.
+
+---
+
+## Rule 3
+
+Never bypass the Service Layer.
+
+Forbidden:
+
+```text id="ozmvlm"
+Component
+
+↓
+
+Supabase
+```
+
+Correct:
+
+```text id="t8e6nk"
+Component
+
+↓
+
+Hook
+
+↓
+
+Service
+
+↓
+
+API Route
+
+↓
+
+Backend
+```
+
+---
+
+## Rule 4
+
+Never duplicate existing code.
+
+Always search for:
+
+* Components
+* Hooks
+* Services
+* Utilities
+* Types
+* Constants
+
+before creating new ones.
+
+---
+
+## Rule 5
+
+Keep implementations modular.
+
+Every feature should remain independent.
+
+Avoid tightly coupling unrelated features.
+
+---
+
+## Rule 6
+
+Prefer extending existing systems.
+
+Avoid replacing working systems unless absolutely necessary.
+
+Examples:
+
+Good
+
+↓
+
+Add a new Button variant.
+
+Bad
+
+↓
+
+Create a second Button component.
+
+---
+
+## Rule 7
+
+Always generate production-quality code.
+
+Avoid placeholder implementations such as:
+
+```typescript id="6rjlwm"
+TODO
+
+Mock Data
+
+Hardcoded Values
+```
+
+unless explicitly requested.
+
+---
+
+## Rule 8
+
+Every generated file should:
+
+* Compile successfully
+* Follow ESLint
+* Follow Prettier
+* Follow TypeScript Strict Mode
+
+Code should be ready for production.
+
+---
+
+# Documentation Workflow
+
+Whenever implementation changes:
+
+Update documentation first.
+
+Preferred workflow:
+
+```text id="jlwm71"
+Documentation
+
+↓
+
+Implementation
+
+↓
+
+Testing
+
+↓
+
+Merge
+```
+
+Avoid undocumented architectural changes.
+
+---
+
+# Feature Completion Checklist
+
+A feature is complete only when:
+
+✓ UI implemented
+
+✓ Backend implemented
+
+✓ Validation complete
+
+✓ Authorization complete
+
+✓ Error handling complete
+
+✓ Responsive
+
+✓ Accessible
+
+✓ Documented
+
+✓ Tested
+
+✓ Reviewed
+
+Missing any of these means the feature is still incomplete.
+
+---
+
+# Performance Standards
+
+Every new feature should consider:
+
+* Bundle size
+* Database queries
+* API requests
+* Render count
+* Lazy loading
+* Caching
+
+Performance regressions should be treated as bugs.
+
+---
+
+# Accessibility Standards
+
+Every feature must support:
+
+Keyboard Navigation
+
+↓
+
+Focus Indicators
+
+↓
+
+Reduced Motion
+
+↓
+
+Responsive Layouts
+
+↓
+
+Touch Interaction
+
+Accessibility should be verified before release.
+
+---
+
+# Security Checklist
+
+Before deployment verify:
+
+✓ Authentication
+
+✓ Authorization
+
+✓ Input Validation
+
+✓ Input Sanitization
+
+✓ Rate Limiting
+
+✓ Environment Variables
+
+✓ Secret Management
+
+✓ RLS Policies
+
+✓ Secure API Responses
+
+---
+
+# Release Checklist
+
+Every release should satisfy:
+
+Architecture
+
+✓
+
+Documentation
+
+✓
+
+TypeScript
+
+✓
+
+ESLint
+
+✓
+
+Prettier
+
+✓
+
+Testing
+
+✓
+
+Security
+
+✓
+
+Performance
+
+✓
+
+Accessibility
+
+✓
+
+Responsive Design
+
+✓
+
+No release should bypass this checklist.
+
+---
+
+# Future Contributor Guide
+
+New contributors should:
+
+1. Read documentation.
+2. Read Decision Log.
+3. Understand project philosophy.
+4. Follow existing architecture.
+5. Prefer consistency over personal preference.
+
+Architecture should remain cohesive over time.
+
+---
+
+# Knowledge Transfer
+
+The project should never depend on one developer's memory.
+
+Everything important should exist in:
+
+* Documentation
+* Code
+* Decision Log
+
+This ensures future maintainability.
+
+---
+
+# Long-Term Maintenance
+
+As MyGameBucket grows:
+
+* Continue using feature modules.
+* Continue using services.
+* Continue documenting architectural decisions.
+* Continue avoiding duplication.
+* Continue prioritizing maintainability.
+
+The architecture should become stronger over time, not weaker.
+
+---
+
+End of Part 4

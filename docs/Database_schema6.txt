@@ -1,0 +1,643 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 6 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Table 8 — manual_game_submissions
+
+## Purpose
+
+Stores games submitted by users that are not found through the external Game API.
+
+These submissions remain private until reviewed by an administrator.
+
+Approved submissions become part of the shared `game_catalog`.
+
+---
+
+## Primary Key
+
+```text id="3m9suy"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="yw0p9v"
+profiles
+
+1
+
+↓
+
+∞
+
+manual_game_submissions
+```
+
+---
+
+# Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+Automatically Generated
+
+---
+
+### profile_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="1r2lxs"
+profiles.id
+```
+
+Purpose
+
+Stores the user who submitted the game.
+
+---
+
+### title
+
+Type
+
+TEXT
+
+Required
+
+Maximum Length
+
+200 Characters
+
+Purpose
+
+Game title submitted by the user.
+
+---
+
+### platform
+
+Type
+
+TEXT
+
+Nullable
+
+Purpose
+
+Platform the game is available on.
+
+Example
+
+```text id="k9z11l"
+PC
+
+PlayStation
+
+Xbox
+```
+
+---
+
+### release_year
+
+Type
+
+INTEGER
+
+Nullable
+
+---
+
+### notes
+
+Type
+
+TEXT
+
+Nullable
+
+Maximum
+
+500 Characters
+
+Purpose
+
+Additional information for administrators.
+
+Example
+
+```text id="nv0mbe"
+"This game is available on itch.io."
+```
+
+---
+
+### status
+
+Type
+
+ENUM
+
+Required
+
+Default
+
+```text id="9k98vz"
+Pending
+```
+
+Allowed values
+
+* Pending
+* Approved
+* Rejected
+
+---
+
+### reviewed_by
+
+Type
+
+UUID
+
+Nullable
+
+Foreign Key
+
+References
+
+```text id="q7v75m"
+profiles.id
+```
+
+Stores the administrator who reviewed the submission.
+
+---
+
+### reviewed_at
+
+Type
+
+TIMESTAMP
+
+Nullable
+
+---
+
+### rejection_reason
+
+Type
+
+TEXT
+
+Nullable
+
+Maximum
+
+500 Characters
+
+Only populated when the submission is rejected.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+### updated_at
+
+TIMESTAMP
+
+Automatically Updated
+
+---
+
+# Indexes
+
+Indexes should exist on:
+
+```text id="bc1sja"
+profile_id
+
+status
+
+created_at
+```
+
+---
+
+# Row Level Security
+
+Read
+
+Owner
+
+Administrator
+
+---
+
+Insert
+
+Authenticated Users
+
+---
+
+Update
+
+Administrators Only
+
+---
+
+Delete
+
+Administrators Only
+
+---
+
+# Validation Rules
+
+Title
+
+Required
+
+Status
+
+ENUM
+
+Review fields
+
+Only editable by administrators.
+
+---
+
+# Workflow
+
+User submits game
+
+↓
+
+Status = Pending
+
+↓
+
+Administrator reviews
+
+↓
+
+Approved
+
+↓
+
+Game inserted into `game_catalog`
+
+OR
+
+↓
+
+Rejected
+
+↓
+
+Reason stored
+
+---
+
+# Future Expansion
+
+Potential additions:
+
+* Cover Image Upload
+* Evidence Links
+* Community Voting
+* Duplicate Detection
+* Auto-Approval Rules
+
+Not included in Version 1.
+
+---
+
+# Example Record
+
+```text id="nwvnl6"
+id
+
+6ac2...
+
+profile_id
+
+1fa2...
+
+title
+
+Half-Life: Decay
+
+platform
+
+PC
+
+release_year
+
+2001
+
+notes
+
+"Standalone fan port."
+
+status
+
+Pending
+
+reviewed_by
+
+NULL
+
+reviewed_at
+
+NULL
+
+rejection_reason
+
+NULL
+
+created_at
+
+2026-06-29
+
+updated_at
+
+2026-06-29
+```
+
+---
+
+# Performance Notes
+
+Expected workload:
+
+Very low.
+
+Mostly administrative.
+
+Simple indexing is sufficient.
+
+---
+
+# Table 9 — admin_logs
+
+## Purpose
+
+Records important administrative actions.
+
+These logs improve accountability and simplify troubleshooting.
+
+They are not visible to regular users.
+
+---
+
+## Primary Key
+
+```text id="yub5dn"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="g9q6be"
+profiles (Admin)
+
+1
+
+↓
+
+∞
+
+admin_logs
+```
+
+---
+
+# Columns
+
+### id
+
+UUID
+
+Primary Key
+
+---
+
+### admin_id
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="kr69wz"
+profiles.id
+```
+
+---
+
+### action
+
+TEXT
+
+Required
+
+Maximum
+
+100 Characters
+
+Examples
+
+```text id="5lwyhz"
+Approved Game
+
+Rejected Game
+
+Removed Content
+
+Updated User
+```
+
+---
+
+### target_type
+
+TEXT
+
+Required
+
+Examples
+
+```text id="e8ggte"
+User
+
+Game
+
+Collection
+
+Journal
+```
+
+---
+
+### target_id
+
+UUID
+
+Nullable
+
+Stores the affected record.
+
+---
+
+### details
+
+JSONB
+
+Nullable
+
+Purpose
+
+Stores structured metadata about the action.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+# Indexes
+
+Indexes should exist on:
+
+```text id="zicn7f"
+admin_id
+
+created_at
+
+action
+```
+
+---
+
+# Row Level Security
+
+Read
+
+Administrators Only
+
+Insert
+
+Backend Only
+
+Update
+
+Not Allowed
+
+Delete
+
+Not Allowed
+
+Administrative logs should be immutable.
+
+---
+
+# Example Record
+
+```text id="ydh3i8"
+id
+
+81af...
+
+admin_id
+
+3d9c...
+
+action
+
+Approved Game
+
+target_type
+
+Manual Submission
+
+target_id
+
+12bc...
+
+details
+
+{
+ "title":"Example Game"
+}
+
+created_at
+
+2026-06-29
+```
+
+---
+
+# Performance Notes
+
+Expected workload:
+
+Low write frequency.
+
+Rarely queried.
+
+Optimized for audit history.
+
+---
+
+End of Part 6

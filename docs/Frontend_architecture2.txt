@@ -1,0 +1,371 @@
+# MyGameBucket
+
+# Document 04 — Frontend Architecture
+
+## Part 2 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Feature Modules
+
+Every major feature is isolated inside its own module.
+
+Version 1 includes:
+
+```text
+features/
+
+auth/
+games/
+library/
+profile/
+journal/
+collections/
+search/
+settings/
+admin/
+```
+
+Every feature follows exactly the same internal structure.
+
+This consistency is intentional.
+
+---
+
+# Example Feature Structure
+
+Example:
+
+```text
+features/library/
+
+components/
+hooks/
+services/
+types/
+utils/
+constants/
+api/
+```
+
+Every folder has a single responsibility.
+
+No feature should depend on another feature's internal implementation.
+
+---
+
+# Component Philosophy
+
+Components should be:
+
+* Small
+* Focused
+* Reusable
+* Easy to understand
+
+A component should generally solve one problem.
+
+Examples:
+
+Good
+
+```text
+GameCard
+
+GameCover
+
+GameActions
+
+GameStats
+
+GameHeader
+```
+
+Avoid giant components that try to render an entire page.
+
+---
+
+# Composition Over Duplication
+
+Large pages should be assembled from reusable building blocks.
+
+Example:
+
+```text
+Game Page
+
+↓
+
+GameHero
+
+↓
+
+GameInformation
+
+↓
+
+ScreenshotGallery
+
+↓
+
+PersonalGameSection
+
+↓
+
+JournalCard
+
+↓
+
+RelatedGames
+```
+
+Each section remains independently reusable.
+
+---
+
+# Component Reuse
+
+Before creating a component, always ask:
+
+Can an existing component solve this problem?
+
+If yes,
+
+reuse it.
+
+If no,
+
+create a reusable solution.
+
+Never create duplicate components for small visual differences.
+
+Variants should be preferred.
+
+Example:
+
+```tsx
+<Button variant="primary" />
+
+<Button variant="secondary" />
+
+<Button variant="danger" />
+```
+
+instead of separate button components.
+
+---
+
+# State Management
+
+State should exist at the lowest reasonable level.
+
+Hierarchy:
+
+Local Component State
+
+↓
+
+Feature State
+
+↓
+
+Global State (only when necessary)
+
+Avoid global state unless multiple features genuinely need the same information.
+
+---
+
+# Global State
+
+Global state should remain minimal.
+
+Good candidates:
+
+* Authentication
+* Theme
+* User Session
+* Global Toasts
+
+Poor candidates:
+
+* Form inputs
+* Dialog visibility
+* Temporary component state
+
+Keep state close to where it is used.
+
+---
+
+# Server vs Client Components
+
+Use Server Components whenever possible.
+
+Use Client Components only when required.
+
+Examples requiring Client Components:
+
+* Forms
+* Interactive buttons
+* Search inputs
+* Infinite scrolling
+* Theme switching
+
+Static content should remain server-rendered.
+
+---
+
+# Routing Philosophy
+
+Every page should have a predictable URL.
+
+Examples:
+
+```text
+/
+
+Home
+
+/profile/shivaraj
+
+/library
+
+/game/elden-ring
+
+/search
+
+/settings
+
+/admin
+```
+
+URLs should remain clean, readable and SEO-friendly.
+
+---
+
+# Dynamic Routes
+
+Dynamic pages should use slugs instead of IDs whenever possible.
+
+Good:
+
+```text
+/game/elden-ring
+```
+
+Avoid:
+
+```text
+/game/19482
+```
+
+Internally, slugs resolve to UUIDs.
+
+---
+
+# Error Handling
+
+Every route should support:
+
+* loading.tsx
+* error.tsx
+* not-found.tsx
+
+This ensures graceful handling of:
+
+* Loading
+* Exceptions
+* Missing resources
+
+---
+
+# Loading Experience
+
+Never display blank pages while waiting.
+
+Preferred order:
+
+Skeleton Loader
+
+↓
+
+Loading Message
+
+↓
+
+Content
+
+Spinners should only be used when skeletons are impractical.
+
+---
+
+# Empty States
+
+Every major feature should define an intentional empty state.
+
+Examples:
+
+Library
+
+"Your journey hasn't begun yet."
+
+Collections
+
+"No collections yet."
+
+Search
+
+"Search for your next adventure."
+
+Empty states should guide users rather than simply stating that nothing exists.
+
+---
+
+# Toast Notifications
+
+Short-lived toast notifications confirm successful actions.
+
+Examples:
+
+✓ Game Added
+
+✓ Journal Updated
+
+✓ Collection Created
+
+✓ Profile Saved
+
+Error toasts should clearly explain what went wrong.
+
+---
+
+# Dialog Philosophy
+
+Potentially destructive actions require confirmation.
+
+Examples:
+
+* Delete Game
+* Delete Collection
+* Delete Account
+
+Dialogs should be concise and clearly explain the consequences.
+
+---
+
+# Accessibility
+
+Every interactive component must support:
+
+* Keyboard navigation
+* Focus indicators
+* Screen readers where appropriate
+
+Accessibility is part of the design system, not an optional enhancement.
+
+---
+
+End of Part 2

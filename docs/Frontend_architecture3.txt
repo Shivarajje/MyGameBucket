@@ -1,0 +1,341 @@
+# MyGameBucket
+
+# Document 04 — Frontend Architecture
+
+## Part 3 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Design System Integration
+
+The frontend follows a single design system.
+
+Every component must follow the same:
+
+* Colors
+* Typography
+* Border Radius
+* Shadows
+* Animation Timing
+* Spacing
+* Interaction Patterns
+
+Individual pages should never invent their own styles.
+
+---
+
+# Theme Engine
+
+The application supports:
+
+* Light Mode
+* Dark Mode
+
+The visual identity of each game and profile is determined dynamically by the Theme Engine.
+
+The database stores only:
+
+Favorite Genre
+
+↓
+
+Theme Engine
+
+↓
+
+Color Palette
+
+↓
+
+Typography
+
+↓
+
+Decorative Elements
+
+The database never stores UI themes.
+
+---
+
+# Genre Themes
+
+Approved genres may include:
+
+* Fantasy RPG
+* Soulslike
+* Horror
+* Racing
+* Cyberpunk
+* Pixel / Retro
+* Sci-Fi
+* Adventure
+* Simulation
+* Strategy
+
+Each theme changes:
+
+* Accent Colors
+* Decorative Background
+* Typography Accent
+* Small UI Details
+
+The animation language remains identical across all genres.
+
+---
+
+# Animation System
+
+The application follows one universal animation language.
+
+Examples:
+
+* Fade
+* Slide
+* Scale
+* Blur
+* Stagger
+
+Animation Duration:
+
+350–500ms
+
+Animations should feel smooth, responsive, and consistent.
+
+---
+
+# Motion Rules
+
+Animations should:
+
+* Never block interaction.
+* Never delay navigation unnecessarily.
+* Never become distracting.
+
+Purpose:
+
+Support the experience rather than dominate it.
+
+---
+
+# Reduced Motion
+
+When enabled:
+
+* Decorative animations are removed.
+* Transition durations are reduced.
+* Motion-heavy effects are disabled.
+
+Functionality remains identical.
+
+---
+
+# Performance Mode
+
+Performance Mode disables expensive visual effects.
+
+Examples:
+
+* Heavy blur
+* Decorative particles
+* Large background effects
+* Complex gradients (where appropriate)
+
+Performance always takes priority.
+
+---
+
+# Card Design
+
+Cards represent the primary content container throughout the application.
+
+Examples:
+
+Game Card
+
+Collection Card
+
+Profile Card
+
+Journal Card
+
+Cards share:
+
+* Radius
+* Shadows
+* Borders
+* Padding
+* Hover Behavior
+
+---
+
+# Card Hover
+
+Approved behavior:
+
+* Slight scale (~1.02x)
+* Slight elevation
+* Slight shadow increase
+
+No excessive glow.
+
+No exaggerated movement.
+
+---
+
+# Buttons
+
+Button hierarchy:
+
+Primary
+
+↓
+
+Filled
+
+Secondary
+
+↓
+
+Outlined
+
+Danger
+
+↓
+
+Filled Danger Variant
+
+Buttons should always communicate importance through visual hierarchy.
+
+---
+
+# Typography
+
+Typography should prioritize readability.
+
+Suggested hierarchy:
+
+Display
+
+↓
+
+Heading
+
+↓
+
+Subheading
+
+↓
+
+Body
+
+↓
+
+Caption
+
+Spacing should remain consistent across all pages.
+
+---
+
+# Icons
+
+Official icon library:
+
+Lucide React
+
+No other icon libraries should be mixed into the project.
+
+Custom icons should be used only when absolutely necessary.
+
+---
+
+# Images
+
+Use Next.js Image whenever possible.
+
+Benefits:
+
+* Responsive loading
+* Automatic optimization
+* Lazy loading
+* Better Core Web Vitals
+
+Placeholder images should be displayed whenever loading fails.
+
+---
+
+# Skeleton Loaders
+
+Skeletons are preferred over spinners.
+
+Every major screen should define its own skeleton.
+
+Examples:
+
+Library Skeleton
+
+Game Page Skeleton
+
+Profile Skeleton
+
+Collection Skeleton
+
+Skeletons should closely resemble the final layout.
+
+---
+
+# Responsive Philosophy
+
+The application is responsive by design.
+
+Supported layouts:
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+No feature should exist only on desktop.
+
+Instead, layouts adapt gracefully.
+
+---
+
+# Mobile Design
+
+Mobile users should have access to all Version 1 functionality.
+
+Examples:
+
+* Search Games
+* Edit Library
+* Update Hours
+* Journal Entries
+* Collections
+* Profiles
+
+The mobile interface should prioritize touch interaction without sacrificing features.
+
+---
+
+# Navigation
+
+Desktop:
+
+Top Navigation
+
+Mobile:
+
+Drawer Navigation
+
+Navigation should remain predictable across the application.
+
+---
+
+End of Part 3

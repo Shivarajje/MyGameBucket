@@ -1,0 +1,555 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 3 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Table 3 — user_games
+
+## Purpose
+
+The `user_games` table represents a user's personal game library.
+
+It connects:
+
+One User
+
+↓
+
+One Game
+
+while storing only **user-specific** information.
+
+The official game information always remains inside the Game Catalog.
+
+---
+
+## Primary Key
+
+```text id="ntbjlwm"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text id="fsvt2m"
+profiles
+
+1
+
+↓
+
+∞
+
+user_games
+
+∞
+
+↓
+
+1
+
+game_catalog
+```
+
+---
+
+## Philosophy
+
+This table stores only information that belongs to the user.
+
+Examples:
+
+* Hours Played
+* Rating
+* Status
+* Started Date
+* Completed Date
+
+It intentionally does **not** store:
+
+* Game Title
+* Cover Image
+* Genre
+* Release Year
+
+Those belong to the Game Catalog.
+
+---
+
+# Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+Automatically Generated
+
+---
+
+### profile_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="x4kkes"
+profiles.id
+```
+
+Purpose
+
+Identifies the owner of this library entry.
+
+---
+
+### game_id
+
+Type
+
+UUID
+
+Required
+
+Foreign Key
+
+References
+
+```text id="ymgbg8"
+game_catalog.id
+```
+
+Purpose
+
+Identifies the game.
+
+---
+
+### status
+
+Type
+
+ENUM
+
+Required
+
+Default
+
+```text id="2msx2q"
+Playing
+```
+
+Allowed values:
+
+* Playing
+* Completed
+* On Hold
+* Dropped
+
+---
+
+### hours_played
+
+Type
+
+DECIMAL(6,1)
+
+Nullable
+
+Default
+
+0.0
+
+Purpose
+
+Stores manually entered playtime.
+
+Examples:
+
+```text id="6mjlwm"
+12.5
+
+85.0
+
+240.3
+```
+
+Automatically tracking hours is outside Version 1.
+
+---
+
+### rating
+
+Type
+
+DECIMAL(3,1)
+
+Nullable
+
+Allowed Range
+
+1.0
+
+↓
+
+10.0
+
+Purpose
+
+User's personal rating.
+
+Optional.
+
+---
+
+### started_at
+
+Type
+
+DATE
+
+Nullable
+
+Purpose
+
+When the user started playing.
+
+---
+
+### completed_at
+
+Type
+
+DATE
+
+Nullable
+
+Purpose
+
+When the user completed the game.
+
+---
+
+### added_at
+
+Type
+
+TIMESTAMP
+
+Automatically Generated
+
+Purpose
+
+When the game was added to the user's library.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+### updated_at
+
+TIMESTAMP
+
+Automatically Updated
+
+---
+
+# Unique Constraints
+
+Every user may own a game only once.
+
+Constraint:
+
+```text id="azqlp5"
+(profile_id, game_id)
+
+UNIQUE
+```
+
+Duplicate library entries are impossible.
+
+---
+
+# Indexes
+
+Indexes should exist on:
+
+```text id="5y3stq"
+profile_id
+
+game_id
+
+status
+
+added_at
+```
+
+These support:
+
+* Library loading
+* Sorting
+* Filtering
+* Statistics
+
+---
+
+# Row Level Security
+
+Read
+
+Public libraries:
+
+Readable by everyone.
+
+Private libraries:
+
+Readable only by:
+
+* Owner
+* Administrator
+
+---
+
+Insert
+
+Owner only.
+
+---
+
+Update
+
+Owner only.
+
+---
+
+Delete
+
+Owner only.
+
+---
+
+# Validation Rules
+
+Hours Played
+
+Minimum
+
+0
+
+Supports decimal values.
+
+---
+
+Rating
+
+Optional
+
+Minimum
+
+1.0
+
+Maximum
+
+10.0
+
+Supports decimal values.
+
+---
+
+Status
+
+Must match ENUM.
+
+---
+
+Game
+
+Must exist in Game Catalog.
+
+---
+
+Profile
+
+Must exist.
+
+---
+
+# Automatic Statistics
+
+The following values are **not stored**.
+
+They are calculated dynamically.
+
+Examples:
+
+Total Games
+
+↓
+
+COUNT()
+
+Completed Games
+
+↓
+
+COUNT(status = Completed)
+
+Total Hours
+
+↓
+
+SUM(hours_played)
+
+Completion Percentage
+
+↓
+
+Calculated
+
+Keeping statistics dynamic prevents synchronization problems.
+
+---
+
+# Sorting
+
+The backend should support:
+
+Sort by:
+
+* Date Added
+* Started Date
+* Game Title
+* Hours Played
+
+Future sorting may include:
+
+* Recently Updated
+* Rating
+
+---
+
+# Future Columns
+
+Possible future additions:
+
+* Replay Count
+* Physical / Digital
+* Purchase Platform
+* Purchase Date
+* Achievement Percentage
+* Cloud Save Status
+
+These are intentionally excluded from Version 1.
+
+---
+
+# Example Record
+
+```text id="z8q5l9"
+id
+
+d48b...
+
+profile_id
+
+4f3d...
+
+game_id
+
+9c81...
+
+status
+
+Completed
+
+hours_played
+
+186.4
+
+rating
+
+9.5
+
+started_at
+
+2026-05-11
+
+completed_at
+
+2026-06-02
+
+added_at
+
+2026-05-11
+
+created_at
+
+2026-05-11
+
+updated_at
+
+2026-06-03
+```
+
+---
+
+# Performance Notes
+
+The `user_games` table will become one of the largest tables in the application.
+
+Expected workload:
+
+* Extremely high read frequency
+* Moderate write frequency
+
+Optimization priorities:
+
+* Fast library loading
+* Fast profile rendering
+* Efficient filtering
+* Efficient sorting
+* Efficient joins with `game_catalog`
+
+This table should be heavily indexed on commonly queried fields.
+
+---
+
+# Design Notes
+
+The `user_games` table intentionally stores **only personal gameplay information**.
+
+Everything else is retrieved by joining with `game_catalog`.
+
+This follows the project's **Single Source of Truth** principle and avoids unnecessary data duplication.
+
+---
+
+End of Part 3

@@ -1,0 +1,492 @@
+# MyGameBucket
+
+# Document 04 — Frontend Architecture
+
+## Part 1 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Purpose
+
+This document defines the frontend architecture of MyGameBucket.
+
+The goal is to create a frontend that is:
+
+* Modular
+* Scalable
+* Easy to maintain
+* Easy for AI assistants to understand
+* Consistent across every feature
+
+The frontend is built using:
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* Lucide React
+
+---
+
+# Frontend Philosophy
+
+The frontend is responsible for:
+
+* User Interface
+* User Experience
+* Animations
+* Responsive Layouts
+* Client-side validation
+
+The frontend is **NOT** responsible for:
+
+* Business Logic
+* Authorization
+* Permissions
+* Database Rules
+* External API decisions
+
+Those belong to backend services.
+
+---
+
+# Architecture Philosophy
+
+The project follows Feature-Based Architecture.
+
+Instead of organizing files by type:
+
+❌
+
+```text
+components/
+pages/
+hooks/
+utils/
+```
+
+The application is organized by features.
+
+✓
+
+```text
+features/
+
+games/
+
+library/
+
+profile/
+
+journal/
+
+collections/
+
+search/
+
+settings/
+
+admin/
+```
+
+Every feature owns its own code.
+
+---
+
+# Recommended Project Structure
+
+```text
+src/
+
+app/
+
+features/
+
+components/
+
+services/
+
+lib/
+
+hooks/
+
+types/
+
+styles/
+
+config/
+
+constants/
+
+assets/
+
+public/
+```
+
+Each folder has a single responsibility.
+
+---
+
+# app/
+
+Contains:
+
+* App Router
+* Layouts
+* Route Groups
+* Metadata
+* Error Pages
+* Loading Pages
+
+Business logic should never live here.
+
+The App Router only composes pages.
+
+---
+
+# features/
+
+This is the heart of the application.
+
+Each feature is completely isolated.
+
+Example:
+
+```text
+features/
+
+library/
+
+profile/
+
+games/
+
+journal/
+
+collections/
+
+search/
+
+settings/
+
+admin/
+```
+
+Features should communicate only through services.
+
+---
+
+# Feature Structure
+
+Every feature follows the same layout.
+
+Example:
+
+```text
+library/
+
+components/
+
+hooks/
+
+services/
+
+types/
+
+utils/
+
+api/
+
+constants/
+```
+
+Benefits:
+
+* Predictable
+* Easy navigation
+* Easier onboarding
+* AI-friendly
+* Highly scalable
+
+---
+
+# Shared Components
+
+Reusable components belong in:
+
+```text
+components/ui/
+```
+
+Examples:
+
+Button
+
+Card
+
+Dialog
+
+Input
+
+Avatar
+
+Badge
+
+Toast
+
+Dropdown
+
+Skeleton
+
+Tooltip
+
+Tabs
+
+Separator
+
+Pagination
+
+Navbar
+
+Footer
+
+No feature should duplicate these components.
+
+---
+
+# Shared Layout Components
+
+Shared layouts belong in:
+
+```text
+components/layout/
+```
+
+Examples:
+
+Navigation
+
+Sidebar
+
+Top Bar
+
+Footer
+
+Container
+
+Section
+
+Hero
+
+Page Header
+
+Breadcrumb
+
+Loading Overlay
+
+---
+
+# Shared Hooks
+
+Global hooks belong in:
+
+```text
+hooks/
+```
+
+Examples:
+
+useDebounce
+
+useTheme
+
+useBreakpoint
+
+useInfiniteScroll
+
+useLocalStorage
+
+Hooks specific to a feature remain inside that feature.
+
+---
+
+# Shared Services
+
+Global services belong in:
+
+```text
+services/
+```
+
+Examples:
+
+GameService
+
+ProfileService
+
+LibraryService
+
+JournalService
+
+CollectionService
+
+AdminService
+
+SearchService
+
+These services contain business logic shared across features.
+
+---
+
+# Utility Functions
+
+Utility functions belong in:
+
+```text
+lib/
+```
+
+Examples:
+
+Date formatting
+
+Number formatting
+
+Slug generation
+
+String helpers
+
+Validation helpers
+
+These functions should remain pure and reusable.
+
+---
+
+# Configuration
+
+Configuration belongs in:
+
+```text
+config/
+```
+
+Examples:
+
+API URLs
+
+Animation settings
+
+Theme configuration
+
+Upload limits
+
+Pagination defaults
+
+Character limits
+
+Never hardcode configurable values.
+
+---
+
+# Constants
+
+Constants belong in:
+
+```text
+constants/
+```
+
+Examples:
+
+Route names
+
+Enum mappings
+
+Status labels
+
+Toast messages
+
+Application titles
+
+Frequently reused strings
+
+---
+
+# Types
+
+Global TypeScript types belong in:
+
+```text
+types/
+```
+
+Feature-specific types remain inside each feature.
+
+Examples:
+
+Game
+
+Profile
+
+LibraryEntry
+
+Collection
+
+JournalEntry
+
+Settings
+
+Avoid duplicate interfaces.
+
+---
+
+# Assets
+
+Static project assets belong in:
+
+```text
+assets/
+```
+
+Examples:
+
+Illustrations
+
+SVGs
+
+Logos
+
+Icons (if custom)
+
+Fonts (if self-hosted later)
+
+---
+
+# Public Folder
+
+Contains static files served directly.
+
+Examples:
+
+Default avatars
+
+Favicon
+
+Robots.txt
+
+Manifest
+
+Open Graph images
+
+Static promotional assets
+
+Large user-generated content should never live here.
+
+---
+
+End of Part 1

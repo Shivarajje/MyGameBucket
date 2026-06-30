@@ -1,0 +1,348 @@
+# MyGameBucket
+
+# Document 09 — Development Roadmap
+
+## Part 3 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Build Order
+
+The implementation should follow a strict order.
+
+Building features out of order increases complexity.
+
+Recommended order:
+
+```text id="roadmap03"
+Project Setup
+
+↓
+
+Authentication
+
+↓
+
+Database
+
+↓
+
+Game Service
+
+↓
+
+Game Search
+
+↓
+
+Game Pages
+
+↓
+
+Library
+
+↓
+
+Profile
+
+↓
+
+Journal
+
+↓
+
+Collections
+
+↓
+
+User Search
+
+↓
+
+Admin
+
+↓
+
+Polish
+
+↓
+
+Deployment
+```
+
+This minimizes blockers and dependency issues.
+
+---
+
+# Milestone 1 — Working Foundation
+
+Goal
+
+A functioning application skeleton.
+
+Deliverables
+
+✓ Next.js configured
+
+✓ TypeScript configured
+
+✓ Tailwind configured
+
+✓ shadcn/ui installed
+
+✓ Routing configured
+
+✓ Theme system working
+
+✓ Git repository initialized
+
+✓ CI checks passing
+
+Expected outcome:
+
+A deployable but mostly empty application.
+
+---
+
+# Milestone 2 — Authentication Complete
+
+Deliverables
+
+✓ Register
+
+✓ Login
+
+✓ Logout
+
+✓ Protected Routes
+
+✓ Session Persistence
+
+✓ Automatic Profile Creation
+
+Users should now be able to create accounts.
+
+---
+
+# Milestone 3 — Game Infrastructure
+
+Deliverables
+
+✓ External API connected
+
+✓ GameService complete
+
+✓ Game Catalog operational
+
+✓ Search working
+
+✓ Game pages rendering
+
+✓ Add to Library flow
+
+At this stage the application becomes a searchable game database.
+
+---
+
+# Milestone 4 — Personal Library
+
+Deliverables
+
+✓ User Library
+
+✓ Status Tracking
+
+✓ Hours Played
+
+✓ Rating
+
+✓ Sorting
+
+✓ Filtering
+
+✓ Infinite Scroll
+
+The application now becomes useful for personal tracking.
+
+---
+
+# Milestone 5 — Personal Identity
+
+Deliverables
+
+✓ Public Profiles
+
+✓ Private Profiles
+
+✓ Avatar
+
+✓ Bio
+
+✓ Favorite Game
+
+✓ Favorite Genre
+
+✓ Dynamic Profile Themes
+
+Users now have an identity inside the platform.
+
+---
+
+# Milestone 6 — Gaming Journal
+
+Deliverables
+
+✓ Journal Entries
+
+✓ Editing
+
+✓ Deleting
+
+✓ Public Display
+
+This milestone introduces the project's defining feature.
+
+---
+
+# Milestone 7 — Collections
+
+Deliverables
+
+✓ Create Collection
+
+✓ Rename
+
+✓ Delete
+
+✓ Add Games
+
+✓ Remove Games
+
+Users can now organize their libraries.
+
+---
+
+# Milestone 8 — Search System
+
+Deliverables
+
+✓ User Search
+
+✓ Game Search Improvements
+
+✓ Suggestions
+
+✓ Better Filtering
+
+Search becomes production-ready.
+
+---
+
+# Milestone 9 — Administration
+
+Deliverables
+
+✓ Admin Dashboard
+
+✓ Manual Game Approval
+
+✓ Moderation
+
+✓ Logging
+
+The platform can now be managed safely.
+
+---
+
+# Milestone 10 — Release Candidate
+
+Deliverables
+
+✓ Performance Optimization
+
+✓ Accessibility Review
+
+✓ Bug Fixes
+
+✓ Documentation Complete
+
+✓ Production Testing
+
+Version 1 is now feature complete.
+
+---
+
+# Development Priorities
+
+Highest Priority
+
+* Stable Architecture
+* Correct Database Design
+* Clean APIs
+* Modular Services
+
+Medium Priority
+
+* Visual Polish
+* Microinteractions
+* Animations
+
+Lower Priority
+
+* Cosmetic improvements
+* Additional themes
+* Minor UI refinements
+
+Correctness always takes priority over appearance.
+
+---
+
+# Definition of a Finished Milestone
+
+A milestone is complete only when:
+
+✓ Requirements implemented
+
+✓ Documentation updated
+
+✓ Responsive
+
+✓ Accessible
+
+✓ Error handling complete
+
+✓ Tested
+
+✓ Reviewed
+
+✓ Ready for production
+
+A partially implemented milestone is not considered complete.
+
+---
+
+# Parallel Development
+
+Once the foundation is complete, several areas can be developed simultaneously.
+
+Example:
+
+```text id="roadmap04"
+Library
+
+Profile
+
+Journal
+
+Collections
+```
+
+Each feature is isolated through the Service Layer, making parallel development safe.
+
+---
+
+End of Part 3

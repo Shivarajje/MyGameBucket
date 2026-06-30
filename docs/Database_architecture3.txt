@@ -1,0 +1,418 @@
+# MyGameBucket
+
+# Document 03 — Database Architecture
+
+## Part 3 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Primary Keys
+
+Every application table uses its own UUID.
+
+Examples:
+
+profiles
+
+↓
+
+id (UUID)
+
+game_catalog
+
+↓
+
+id (UUID)
+
+user_games
+
+↓
+
+id (UUID)
+
+journal_entries
+
+↓
+
+id (UUID)
+
+collections
+
+↓
+
+id (UUID)
+
+Using UUIDs provides:
+
+* Global uniqueness
+* Better scalability
+* Native Supabase compatibility
+* Easier future integrations
+
+Composite primary keys are intentionally avoided.
+
+Relationships are enforced using foreign keys and unique constraints.
+
+---
+
+# Foreign Keys
+
+Every relationship is explicitly defined.
+
+Examples:
+
+profiles.user_id
+
+↓
+
+auth.users.id
+
+---
+
+user_games.profile_id
+
+↓
+
+profiles.id
+
+---
+
+user_games.game_id
+
+↓
+
+game_catalog.id
+
+---
+
+journal_entries.profile_id
+
+↓
+
+profiles.id
+
+---
+
+journal_entries.game_id
+
+↓
+
+game_catalog.id
+
+---
+
+collections.profile_id
+
+↓
+
+profiles.id
+
+---
+
+collection_games.collection_id
+
+↓
+
+collections.id
+
+---
+
+collection_games.game_id
+
+↓
+
+game_catalog.id
+
+The database should never rely on implicit relationships.
+
+---
+
+# Unique Constraints
+
+To maintain data integrity, several uniqueness rules are enforced.
+
+## Usernames
+
+Unique.
+
+Case insensitive.
+
+Examples:
+
+Valid:
+
+Shivaraj
+
+Invalid:
+
+shivaraj
+
+---
+
+## User Library
+
+Each user can own a game only once.
+
+Constraint:
+
+(profile_id, game_id)
+
+UNIQUE
+
+---
+
+## Journal Entries
+
+Each user can have one Journal Entry per game.
+
+Constraint:
+
+(profile_id, game_id)
+
+UNIQUE
+
+---
+
+## Collection Contents
+
+A collection cannot contain duplicate games.
+
+Constraint:
+
+(collection_id, game_id)
+
+UNIQUE
+
+---
+
+# ENUM Types
+
+ENUMs are used wherever values come from a fixed list.
+
+This prevents invalid data and simplifies validation.
+
+---
+
+## Game Status
+
+Allowed values:
+
+Playing
+
+Completed
+
+On Hold
+
+Dropped
+
+Default:
+
+Playing
+
+---
+
+## Profile Visibility
+
+Allowed values:
+
+Public
+
+Private
+
+Future expansion:
+
+FriendsOnly
+
+can be added without redesigning the schema.
+
+---
+
+# Validation Rules
+
+The database is the final authority.
+
+Frontend validation exists only to improve user experience.
+
+Every important field is validated again before storage.
+
+---
+
+## Username
+
+* Required
+* Unique
+* Case insensitive
+* Length constrained
+
+---
+
+## Bio
+
+Maximum:
+
+100 characters.
+
+---
+
+## Journal Entry
+
+Maximum:
+
+280 characters.
+
+---
+
+## Rating
+
+Optional.
+
+Range:
+
+1.0
+
+↓
+
+10.0
+
+Supports decimal values.
+
+---
+
+## Hours Played
+
+Optional.
+
+Supports decimal values.
+
+Minimum:
+
+0
+
+---
+
+## Collections
+
+Maximum:
+
+10 collections per user.
+
+This limit should be enforced by backend business logic.
+
+---
+
+# Automatic Timestamps
+
+Every major table includes:
+
+created_at
+
+updated_at
+
+These timestamps are automatically managed.
+
+Benefits:
+
+* Sorting
+* Auditing
+* Analytics
+* Recently Updated sections
+* Easier debugging
+
+---
+
+# Cascade Deletes
+
+The database automatically removes dependent records.
+
+Example:
+
+Delete User
+
+↓
+
+Delete Profile
+
+↓
+
+Delete Library
+
+↓
+
+Delete Journal Entries
+
+↓
+
+Delete Collections
+
+↓
+
+Delete Collection Games
+
+The shared Game Catalog is never affected.
+
+---
+
+# Soft Deletes
+
+Version 1 does not use soft deletes.
+
+Deleted records are permanently removed.
+
+Reasons:
+
+* Simpler schema
+* Simpler queries
+* Less maintenance
+* Better performance
+
+A recycle bin may be introduced in a future version.
+
+---
+
+# Indexing Philosophy
+
+Indexes exist to optimize frequent queries.
+
+Priority should be given to:
+
+* Username lookups
+* Game searches
+* Library queries
+* Collection lookups
+* Recently updated items
+
+Indexes should improve performance without unnecessary duplication.
+
+---
+
+# Audit Fields
+
+Major tables include:
+
+created_at
+
+updated_at
+
+Examples:
+
+Profiles
+
+Game Catalog
+
+User Games
+
+Journal Entries
+
+Collections
+
+Settings
+
+These timestamps support future reporting, synchronization and maintenance.
+
+---
+
+End of Part 3

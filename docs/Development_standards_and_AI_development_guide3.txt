@@ -1,0 +1,345 @@
+# MyGameBucket
+
+# Document 07 — Development Standards & AI Development Guide
+
+## Part 3 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Git Workflow
+
+The project follows a structured Git workflow.
+
+Repository structure:
+
+```text
+main
+│
+develop
+│
+├── feature/auth
+├── feature/profile
+├── feature/library
+├── feature/game-search
+├── feature/journal
+├── feature/collections
+├── feature/settings
+├── feature/admin
+└── ...
+```
+
+---
+
+## main Branch
+
+Purpose:
+
+Production-ready code only.
+
+Rules:
+
+* Always stable
+* Fully tested
+* Deployable at any time
+
+No direct development should occur on `main`.
+
+---
+
+## develop Branch
+
+Purpose:
+
+Integration branch.
+
+Completed features are merged here first.
+
+After testing:
+
+```text
+develop
+
+↓
+
+main
+```
+
+---
+
+## Feature Branches
+
+Every major feature receives its own branch.
+
+Example:
+
+```text
+feature/library
+
+feature/profile
+
+feature/game-page
+
+feature/journal
+```
+
+This keeps work isolated and simplifies reviews.
+
+---
+
+# Commit Convention
+
+Every commit follows a consistent format.
+
+Examples:
+
+```text
+feat: add library search
+
+fix: prevent duplicate games
+
+docs: update database schema
+
+refactor: split GameService
+
+style: improve profile layout
+
+perf: optimize game search
+
+test: add LibraryService tests
+
+chore: update dependencies
+```
+
+Commit messages should be concise and descriptive.
+
+---
+
+# Pull Requests
+
+Before merging a feature:
+
+Confirm:
+
+✓ Builds successfully
+
+✓ TypeScript passes
+
+✓ ESLint passes
+
+✓ Documentation updated
+
+✓ No duplicated code
+
+✓ Feature tested
+
+A pull request should explain:
+
+* What changed
+* Why it changed
+* Any architectural considerations
+
+---
+
+# Documentation Standards
+
+Documentation is part of the project.
+
+Whenever a feature changes:
+
+Update:
+
+* Architecture
+* Schema
+* Decision Log
+* Roadmap (if applicable)
+
+Documentation should never lag behind implementation.
+
+---
+
+# Decision Log
+
+Significant architectural decisions should be recorded.
+
+Example:
+
+```text
+Decision
+
+Use API Abstraction Layer
+
+Reason
+
+Supports provider replacement.
+
+Date
+
+2026-06-29
+```
+
+Future contributors should understand **why** decisions were made.
+
+---
+
+# Code Review Checklist
+
+Before merging code, verify:
+
+Architecture
+
+✓ Follows Service Layer
+
+✓ Follows Feature Modules
+
+✓ No duplicated logic
+
+✓ Uses shared components
+
+Code Quality
+
+✓ Readable
+
+✓ Modular
+
+✓ Typed
+
+✓ Small functions
+
+Performance
+
+✓ Lazy loading considered
+
+✓ Pagination respected
+
+✓ No unnecessary API calls
+
+Security
+
+✓ Validation
+
+✓ Authorization
+
+✓ Sanitization
+
+Documentation
+
+✓ Updated
+
+Testing
+
+✓ Relevant tests completed
+
+---
+
+# Testing Strategy
+
+Version 1 testing includes:
+
+Unit Tests
+
+For:
+
+* Services
+* Utilities
+* Validation
+
+Manual Testing
+
+For:
+
+* UI Components
+* Layouts
+* Responsive behavior
+
+End-to-End Tests
+
+Critical user flows only.
+
+Examples:
+
+* Login
+* Register
+* Search Game
+* Add Game
+* Edit Library
+* Create Collection
+
+---
+
+# Code Formatting
+
+The project uses:
+
+* TypeScript Strict Mode
+* ESLint
+* Prettier
+
+Formatting should never be debated during reviews.
+
+The formatter is the source of truth.
+
+---
+
+# Dependency Management
+
+Before adding a dependency:
+
+Ask:
+
+Can this be solved using existing tools?
+
+If yes,
+
+avoid introducing another package.
+
+Every dependency increases:
+
+* Bundle size
+* Maintenance
+* Security surface
+* Update workload
+
+Choose dependencies carefully.
+
+---
+
+# Refactoring Philosophy
+
+Refactoring is encouraged.
+
+However,
+
+refactoring should not introduce behavioral changes.
+
+Goals:
+
+* Better readability
+* Smaller files
+* Improved reuse
+* Reduced complexity
+
+Behavior should remain unchanged unless explicitly intended.
+
+---
+
+# Technical Debt
+
+Technical debt should never be ignored.
+
+If immediate resolution is not practical:
+
+Create:
+
+* TODO
+* Issue
+* Documentation entry
+
+The debt should be tracked rather than forgotten.
+
+---
+
+End of Part 3

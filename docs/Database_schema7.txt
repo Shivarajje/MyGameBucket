@@ -1,0 +1,604 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 7 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Table 10 — system_logs
+
+## Purpose
+
+The `system_logs` table stores important backend and system events.
+
+Unlike `admin_logs`, these records are generated automatically by the application.
+
+They assist with:
+
+* Debugging
+* Monitoring
+* Security auditing
+* Performance analysis
+
+These logs are never visible to regular users.
+
+---
+
+## Primary Key
+
+```text id="qg7rkp"
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+System logs are independent.
+
+They generally do not require foreign key relationships.
+
+Where useful, optional references may be stored.
+
+---
+
+# Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+Automatically Generated
+
+---
+
+### level
+
+Type
+
+ENUM
+
+Required
+
+Allowed values
+
+```text id="7e0br7"
+Info
+
+Warning
+
+Error
+
+Critical
+```
+
+Purpose
+
+Represents log severity.
+
+---
+
+### source
+
+Type
+
+TEXT
+
+Required
+
+Maximum
+
+100 Characters
+
+Purpose
+
+Identifies the backend service.
+
+Examples
+
+```text id="6q7bkp"
+GameService
+
+LibraryService
+
+JournalService
+
+SearchService
+
+API
+```
+
+---
+
+### event
+
+Type
+
+TEXT
+
+Required
+
+Maximum
+
+200 Characters
+
+Purpose
+
+Short description of the event.
+
+Examples
+
+```text id="gh8g3g"
+API Timeout
+
+Database Connection Failed
+
+Cache Miss
+
+User Login
+
+Unhandled Exception
+```
+
+---
+
+### details
+
+Type
+
+JSONB
+
+Nullable
+
+Purpose
+
+Stores structured debugging information.
+
+Example
+
+```json id="mjlwm9"
+{
+  "endpoint": "/api/games/search",
+  "status": 504
+}
+```
+
+---
+
+### user_id
+
+Type
+
+UUID
+
+Nullable
+
+Foreign Key
+
+References
+
+```text id="mtjlwm"
+profiles.id
+```
+
+Purpose
+
+Stores the affected user when applicable.
+
+---
+
+### ip_address
+
+Type
+
+TEXT
+
+Nullable
+
+Purpose
+
+Useful for debugging and abuse detection.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+# Indexes
+
+Indexes should exist on:
+
+```text id="61mqpf"
+level
+
+source
+
+created_at
+```
+
+---
+
+# Row Level Security
+
+Read
+
+Administrators Only
+
+---
+
+Insert
+
+Backend Only
+
+---
+
+Update
+
+Not Allowed
+
+---
+
+Delete
+
+Administrators Only
+
+Old logs may be archived or deleted according to future retention policies.
+
+---
+
+# Validation Rules
+
+Level
+
+Must match ENUM.
+
+Source
+
+Required.
+
+Event
+
+Required.
+
+Details
+
+Must contain valid JSON.
+
+---
+
+# Example Record
+
+```text id="5znwm5"
+id
+
+d9c1...
+
+level
+
+Error
+
+source
+
+GameService
+
+event
+
+API Timeout
+
+details
+
+{
+ "endpoint":"/games/search",
+ "status":504
+}
+
+user_id
+
+NULL
+
+ip_address
+
+192.168.0.15
+
+created_at
+
+2026-06-29
+```
+
+---
+
+# Performance Notes
+
+Expected workload:
+
+* High write frequency
+* Low read frequency
+
+Future versions may archive older logs automatically.
+
+---
+
+# Database ENUM Definitions
+
+Version 1 defines the following ENUMs.
+
+---
+
+## profile_visibility
+
+Allowed values:
+
+```text id="h7kvx5"
+Public
+
+Private
+```
+
+Future:
+
+FriendsOnly
+
+---
+
+## game_status
+
+Allowed values:
+
+```text id="xwqvkk"
+Playing
+
+Completed
+
+On Hold
+
+Dropped
+```
+
+Default
+
+Playing
+
+---
+
+## appearance_mode
+
+Allowed values:
+
+```text id="grtk5m"
+Light
+
+Dark
+
+System
+```
+
+---
+
+## submission_status
+
+Allowed values:
+
+```text id="bhwbpj"
+Pending
+
+Approved
+
+Rejected
+```
+
+---
+
+## log_level
+
+Allowed values:
+
+```text id="mjlwm3"
+Info
+
+Warning
+
+Error
+
+Critical
+```
+
+---
+
+# Global Indexing Strategy
+
+Indexes should prioritize the most common queries.
+
+High Priority
+
+* username
+* slug
+* game title
+* profile_id
+* game_id
+
+Medium Priority
+
+* status
+* visibility
+* created_at
+* updated_at
+
+Low Priority
+
+* release_year
+* platform
+
+Indexes should be reviewed as usage patterns evolve.
+
+---
+
+# Database-Wide Constraints
+
+The following constraints apply across the entire schema.
+
+Profiles
+
+↓
+
+One Profile per User
+
+---
+
+User Games
+
+↓
+
+One Game per User
+
+---
+
+Journal Entries
+
+↓
+
+One Entry per User per Game
+
+---
+
+Collections
+
+↓
+
+Maximum 10 per User
+
+(Backend Enforced)
+
+---
+
+Collection Games
+
+↓
+
+No Duplicate Games
+
+---
+
+Settings
+
+↓
+
+One Settings Record per User
+
+---
+
+Usernames
+
+↓
+
+Unique
+
+Case Insensitive
+
+---
+
+Game Catalog
+
+↓
+
+Unique Slug
+
+Unique External API ID
+
+---
+
+# Cascade Delete Strategy
+
+Deleting a user removes:
+
+Profile
+
+↓
+
+Settings
+
+↓
+
+Library
+
+↓
+
+Journal Entries
+
+↓
+
+Collections
+
+↓
+
+Collection Games
+
+The Game Catalog remains untouched.
+
+---
+
+# Database Storage Strategy
+
+User-generated images
+
+↓
+
+Supabase Storage
+
+---
+
+Default avatars
+
+↓
+
+/public
+
+---
+
+Game covers
+
+↓
+
+External API URLs
+
+---
+
+Journal images
+
+↓
+
+Not supported in Version 1
+
+---
+
+# Database Backup Philosophy
+
+Future production deployments should support:
+
+* Automated Backups
+* Point-in-Time Recovery
+* Migration History
+* Versioned Schema
+
+These are deployment concerns and are outside Version 1 implementation.
+
+---
+
+End of Part 7

@@ -1,0 +1,364 @@
+# MyGameBucket
+
+# Document 03 — Database Architecture
+
+## Part 2 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Core Database Structure
+
+Version 1 consists of the following primary tables.
+
+Authentication
+
+* auth.users (Supabase)
+
+Application
+
+* profiles
+* game_catalog
+* user_games
+* journal_entries
+* collections
+* collection_games
+* settings
+* manual_game_submissions
+
+Administration
+
+* admin_logs
+* system_logs
+
+Future tables are documented separately.
+
+---
+
+# Authentication
+
+Authentication is handled entirely by Supabase.
+
+Table:
+
+auth.users
+
+Responsibilities:
+
+* Email
+* Password
+* Authentication
+* Session Management
+
+Application code should never duplicate authentication data.
+
+---
+
+# Profiles
+
+Purpose:
+
+Stores all public and personal profile information.
+
+Each authenticated user owns exactly one profile.
+
+Relationship:
+
+```text
+auth.users
+
+↓
+
+profiles
+```
+
+---
+
+## Profiles Table Philosophy
+
+The Profiles table stores only profile-related information.
+
+Examples:
+
+* Username
+* Avatar
+* Bio
+* Favorite Game
+* Favorite Genre
+* Visibility
+
+It intentionally does NOT store:
+
+* Total Games
+* Total Hours
+* Completed Games
+
+Those values are calculated dynamically from the user's library.
+
+---
+
+# User Games
+
+Purpose:
+
+Represents a user's personal library.
+
+Each record connects:
+
+One User
+
+↓
+
+One Game
+
+Each user may own a game only once.
+
+Database Constraint:
+
+```text
+(user_id, game_id)
+
+UNIQUE
+```
+
+This prevents duplicate library entries.
+
+---
+
+## User Games Stores
+
+Personal information only.
+
+Examples:
+
+* Rating
+* Status
+* Hours Played
+* Started Date
+* Finished Date
+* Date Added
+
+Official game information remains inside the Game Catalog.
+
+---
+
+# Journal Entries
+
+Purpose:
+
+Store the player's personal memories.
+
+One Journal Entry belongs to:
+
+One User
+
+*
+
+One Game
+
+Only one Journal Entry exists per user per game.
+
+Constraint:
+
+```text
+(user_id, game_id)
+
+UNIQUE
+```
+
+Version 1 supports:
+
+* Text only
+
+Images are intentionally excluded.
+
+---
+
+# Collections
+
+Purpose:
+
+Allow users to organize games.
+
+Examples:
+
+* Masterpieces
+* Horror
+* Childhood Favorites
+* Souls Games
+
+Collections contain only metadata.
+
+Games are stored through a relationship table.
+
+---
+
+# Collection Games
+
+Purpose:
+
+Many-to-many relationship.
+
+Example:
+
+Collection
+
+↓
+
+Many Games
+
+Game
+
+↓
+
+Many Collections
+
+Constraint:
+
+```text
+(collection_id, game_id)
+
+UNIQUE
+```
+
+Duplicate entries are not allowed.
+
+---
+
+# Game Catalog
+
+Purpose:
+
+The shared catalog for every game in the application.
+
+Each game exists only once.
+
+Every user references the same catalog entry.
+
+This dramatically reduces duplication.
+
+---
+
+## Stored Information
+
+Minimal metadata only.
+
+Approved fields:
+
+* Internal UUID
+* External API ID
+* Slug
+* Title
+* Cover URL
+* Genre
+* Platform
+* Release Year
+* last_synced_at
+
+Not stored:
+
+* Description
+* Developer
+* Publisher
+* Videos
+* Screenshots
+* Long summaries
+
+These are retrieved from the external Game API when needed.
+
+---
+
+# Manual Game Submissions
+
+Sometimes the external API will not contain a game.
+
+Users may manually submit it.
+
+These entries are placed into:
+
+manual_game_submissions
+
+Status:
+
+Pending
+
+↓
+
+Administrator Review
+
+↓
+
+Approved
+
+↓
+
+Added to Game Catalog
+
+This prevents spam and duplicate records.
+
+---
+
+# Settings
+
+Each user owns one settings record.
+
+Settings include:
+
+* Theme Mode
+* Reduced Motion
+* Performance Mode
+
+Future settings may be added without affecting other tables.
+
+---
+
+# Logging
+
+Version 1 supports backend logging.
+
+Examples:
+
+* User registration
+* Login
+* Account deletion
+* Manual game approval
+* System errors
+
+Logs exist for diagnostics and administration.
+
+They are not user-facing.
+
+---
+
+# Data Ownership
+
+Every table clearly defines ownership.
+
+Game Catalog
+
+Owned by the platform.
+
+Profiles
+
+Owned by the user.
+
+Library
+
+Owned by the user.
+
+Journal Entries
+
+Owned by the user.
+
+Collections
+
+Owned by the user.
+
+This ownership model simplifies permissions and Row Level Security.
+
+---
+
+End of Part 2

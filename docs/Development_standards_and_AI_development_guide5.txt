@@ -1,0 +1,392 @@
+# MyGameBucket
+
+# Document 07 — Development Standards & AI Development Guide
+
+## Part 5 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Engineering Principles Summary
+
+Every technical decision should reinforce these principles.
+
+1. Single Source of Truth
+
+2. Separation of Concerns
+
+3. Service Layer Architecture
+
+4. Feature Independence
+
+5. API Abstraction
+
+6. Backend Owns Business Logic
+
+7. Performance by Default
+
+8. Documentation is Code
+
+9. Configuration Over Hardcoding
+
+10. Convention Over Configuration
+
+11. Fail Fast, Fail Clearly
+
+12. Accessibility by Default
+
+13. Mobile-First Responsive Design
+
+14. Simplicity Over Cleverness
+
+15. Readability Over Brevity
+
+When multiple solutions exist, choose the one that best aligns with these principles.
+
+---
+
+# What Good Code Looks Like
+
+Good code should be:
+
+* Readable
+* Predictable
+* Modular
+* Typed
+* Testable
+* Reusable
+* Consistent
+
+A new developer should understand the codebase without needing verbal explanations.
+
+---
+
+# What to Avoid
+
+Avoid introducing:
+
+* Duplicate logic
+* Giant components
+* God services
+* Magic numbers
+* Deeply nested conditionals
+* Circular dependencies
+* Unnecessary abstractions
+* Premature optimization
+
+If something feels difficult to explain, it is probably too complex.
+
+---
+
+# Project Folder Standards
+
+Every folder should have a clear purpose.
+
+Good structure:
+
+```text id="wqj28k"
+features/
+    library/
+    profile/
+    games/
+    journal/
+
+services/
+
+components/
+
+hooks/
+
+types/
+
+lib/
+
+config/
+
+constants/
+```
+
+Avoid creating miscellaneous folders such as:
+
+```text id="z0kmv8"
+misc/
+
+temp/
+
+helpers2/
+
+new/
+
+random/
+```
+
+Folder names should clearly communicate responsibility.
+
+---
+
+# File Organization Standards
+
+Within a file, maintain a predictable order.
+
+React Component Example:
+
+```text id="8l4vta"
+Imports
+
+↓
+
+Constants
+
+↓
+
+Types
+
+↓
+
+Hooks
+
+↓
+
+Component
+
+↓
+
+Helper Functions
+
+↓
+
+Export
+```
+
+This consistency improves readability across the entire project.
+
+---
+
+# Dependency Rules
+
+A feature may depend on:
+
+* Shared Components
+* Shared Hooks
+* Shared Services
+* Shared Types
+* Shared Utilities
+
+A feature should **not** depend on another feature's internal implementation.
+
+Example:
+
+Good
+
+```text id="sdtxf6"
+Library
+
+↓
+
+LibraryService
+
+↓
+
+ProfileService (public interface)
+```
+
+Bad
+
+```text id="6o8sht"
+Library
+
+↓
+
+Profile Internal Components
+```
+
+---
+
+# Code Review Philosophy
+
+A review should focus on:
+
+* Correctness
+* Architecture
+* Maintainability
+* Readability
+* Security
+* Performance
+
+Personal coding style should not dominate reviews if project conventions are followed.
+
+---
+
+# Definition of Done
+
+A task is considered complete only when all of the following are true:
+
+✓ Requirements implemented
+
+✓ Architecture respected
+
+✓ Responsive
+
+✓ Accessible
+
+✓ Error handling completed
+
+✓ Type-safe
+
+✓ Linted
+
+✓ Formatted
+
+✓ Documentation updated
+
+✓ Reviewed
+
+✓ Ready for production
+
+Until every checkbox is complete, the task is considered **in progress**.
+
+---
+
+# AI Prompting Guidelines
+
+When asking an AI assistant to implement a feature:
+
+Always provide:
+
+* Relevant documentation
+* Expected behavior
+* Constraints
+* Existing architecture
+* Acceptance criteria
+
+Avoid vague prompts such as:
+
+> "Build the profile page."
+
+Instead provide context and reference the appropriate project documents.
+
+---
+
+# Documentation Hierarchy
+
+The documentation follows this order of authority:
+
+```text id="8z0whm"
+Project Vision
+
+↓
+
+Product Requirements
+
+↓
+
+Architecture Documents
+
+↓
+
+Database Schema
+
+↓
+
+Decision Log
+
+↓
+
+Implementation
+```
+
+If implementation conflicts with documentation,
+
+documentation takes precedence until an approved architectural change is made.
+
+---
+
+# Project Quality Goals
+
+MyGameBucket should aim for:
+
+Maintainability
+
+★★★★★
+
+Scalability
+
+★★★★★
+
+Readability
+
+★★★★★
+
+Performance
+
+★★★★★
+
+Accessibility
+
+★★★★★
+
+Responsiveness
+
+★★★★★
+
+Developer Experience
+
+★★★★★
+
+AI Compatibility
+
+★★★★★
+
+These qualities are considered first-class project requirements.
+
+---
+
+# Final Development Philosophy
+
+The goal is not simply to build a website.
+
+The goal is to build a software project that remains:
+
+* Easy to understand
+* Easy to extend
+* Easy to maintain
+* Easy to test
+* Easy to document
+
+Years after Version 1 is complete.
+
+Every line of code should move the project closer to that goal.
+
+---
+
+# Document Status
+
+Document:
+
+07_Development_Standards.md
+
+Version:
+
+0.1
+
+Status:
+
+Approved
+
+Related Documents:
+
+* 01_Project_Vision.md
+* 02_Product_Requirements.md
+* 03_Database_Architecture.md
+* 04_Frontend_Architecture.md
+* 05_Backend_Architecture.md
+* 06_Database_Schema.md
+* 08_UI_UX_Design_System.md
+* 09_Development_Roadmap.md
+
+---
+
+End of Document 07

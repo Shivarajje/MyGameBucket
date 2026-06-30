@@ -1,0 +1,356 @@
+# MyGameBucket
+
+# Document 09 — Development Roadmap
+
+## Part 2 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Phase 8 — Search
+
+## Goal
+
+Make discovering games and users effortless.
+
+---
+
+## Game Search
+
+Features
+
+✓ Instant Search
+
+✓ Debounced Search
+
+✓ Infinite Scrolling
+
+✓ Search Suggestions
+
+✓ Genre Filtering
+
+✓ Open Game Page
+
+Game searches should first query the local Game Catalog before contacting the external Game API.
+
+---
+
+## User Search
+
+Features
+
+✓ Search by Username
+
+✓ User Cards
+
+✓ Open Public Profile
+
+✓ Infinite Scrolling
+
+Only public information should be visible.
+
+---
+
+## Search Performance
+
+Requirements
+
+✓ Debounced Requests
+
+✓ Skeleton Loading
+
+✓ Cached Results
+
+✓ Pagination
+
+✓ Optimized Queries
+
+Searching should feel immediate.
+
+---
+
+# Phase 9 — Administration
+
+## Goal
+
+Provide the minimum tools required to manage the platform.
+
+---
+
+## Admin Dashboard
+
+Features
+
+✓ Dashboard
+
+✓ User Overview
+
+✓ Manual Game Queue
+
+✓ System Logs
+
+✓ Admin Logs
+
+---
+
+## Manual Game Approval
+
+Workflow
+
+```text id="roadmap02"
+Pending
+
+↓
+
+Review
+
+↓
+
+Approve
+
+↓
+
+Game Catalog
+
+OR
+
+↓
+
+Reject
+```
+
+Administrators should never edit a user's personal library.
+
+---
+
+## Moderation
+
+Version 1 moderation includes:
+
+✓ Remove Journal Entry
+
+✓ Remove Collection
+
+✓ Remove Profile
+
+✓ Review Manual Games
+
+Advanced moderation tools are postponed.
+
+---
+
+# Phase 10 — Polish & Release
+
+## Goal
+
+Prepare Version 1 for production.
+
+---
+
+## Performance
+
+Tasks
+
+✓ Optimize Images
+
+✓ Lazy Loading
+
+✓ Bundle Analysis
+
+✓ Query Optimization
+
+✓ Cache Verification
+
+✓ Responsive Testing
+
+---
+
+## Accessibility
+
+Tasks
+
+✓ Keyboard Navigation
+
+✓ Screen Readers
+
+✓ Reduced Motion
+
+✓ Focus Indicators
+
+✓ Mobile Accessibility
+
+---
+
+## Quality Assurance
+
+Tasks
+
+✓ Manual Testing
+
+✓ Fix Bugs
+
+✓ UI Polish
+
+✓ Error Handling
+
+✓ Documentation Review
+
+✓ Security Review
+
+---
+
+## Deployment
+
+Tasks
+
+✓ Production Environment
+
+✓ Database Migration
+
+✓ Environment Variables
+
+✓ Domain
+
+✓ SSL
+
+✓ Monitoring
+
+✓ Backup Strategy
+
+---
+
+# MVP Definition
+
+Version 1 is considered complete when the following features are available.
+
+Authentication
+
+✓
+
+Game Search
+
+✓
+
+Game Pages
+
+✓
+
+Personal Library
+
+✓
+
+Hours Played
+
+✓
+
+Ratings
+
+✓
+
+Status Tracking
+
+✓
+
+Profiles
+
+✓
+
+Journal Entries
+
+✓
+
+Collections
+
+✓
+
+User Search
+
+✓
+
+Administration
+
+✓
+
+Responsive Design
+
+✓
+
+Accessibility
+
+✓
+
+Dark Mode
+
+✓
+
+Light Mode
+
+---
+
+# Version 1 Exclusions
+
+The following ideas are intentionally excluded from Version 1.
+
+* Friends
+* Followers
+* Notifications
+* Comments
+* Likes
+* Activity Feed
+* Steam Integration
+* Achievement Sync
+* Playtime Sync
+* Game Recommendations
+* AI Features
+* Journal Images
+* Seasonal Events
+* Social Messaging
+
+These ideas remain documented for future versions.
+
+---
+
+# Release Criteria
+
+Version 1 should satisfy:
+
+Architecture
+
+✓
+
+Performance
+
+✓
+
+Security
+
+✓
+
+Accessibility
+
+✓
+
+Responsive Design
+
+✓
+
+Documentation
+
+✓
+
+Testing
+
+✓
+
+No critical bugs
+
+✓
+
+Only then should Version 1 be released.
+
+---
+
+End of Part 2

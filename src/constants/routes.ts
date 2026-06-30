@@ -1,0 +1,18 @@
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  RESET_PASSWORD: '/reset-password',
+  LIBRARY: '/library',
+  COLLECTIONS: '/collections',
+  SEARCH: '/search',
+  SETTINGS: '/settings',
+  ADMIN_DASHBOARD: '/admin',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_GAMES: '/admin/games',
+  ADMIN_LOGS: '/admin/logs',
+  
+  game: (slug: string) => `/game/${slug}`,
+  profile: (username: string) => `/profile/${username}`,
+  collection: (id: string) => `/collections/${id}`,
+};

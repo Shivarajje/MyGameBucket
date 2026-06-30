@@ -1,0 +1,314 @@
+# MyGameBucket
+
+# Document 05 — Backend Architecture
+
+## Part 1 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Purpose
+
+This document defines the backend architecture of MyGameBucket.
+
+The backend is responsible for:
+
+* Business Logic
+* Authentication
+* Authorization
+* Database Access
+* External API Communication
+* Validation
+* Security
+* Logging
+* Transactions
+
+The backend should remain independent from the frontend.
+
+Future clients (mobile apps, public APIs, desktop applications) should be able to reuse the same backend services.
+
+---
+
+# Backend Philosophy
+
+The backend is the brain of the application.
+
+It decides:
+
+* What is allowed
+* What is rejected
+* What is stored
+* What is returned
+
+The frontend should never make business decisions.
+
+---
+
+# Architecture Overview
+
+```text
+Frontend
+
+↓
+
+API Routes
+
+↓
+
+Feature Services
+
+↓
+
+Repositories / Database Layer
+
+↓
+
+Supabase Database
+
+↓
+
+External Services
+```
+
+Each layer has a single responsibility.
+
+---
+
+# Layer Responsibilities
+
+## Frontend
+
+Responsible for:
+
+* Displaying UI
+* Collecting user input
+* Client-side validation
+* Showing feedback
+
+Not responsible for:
+
+* Business rules
+* Database validation
+* Authorization
+
+---
+
+## API Routes
+
+Responsibilities:
+
+* Authenticate requests
+* Validate request format
+* Call the correct service
+* Return standardized responses
+
+API routes should contain almost no business logic.
+
+---
+
+## Services
+
+The Service Layer contains nearly all business logic.
+
+Examples:
+
+LibraryService
+
+GameService
+
+JournalService
+
+CollectionService
+
+ProfileService
+
+SearchService
+
+AdminService
+
+This is the heart of the backend.
+
+---
+
+## Repository Layer
+
+Repositories communicate with the database.
+
+Responsibilities:
+
+* Read data
+* Write data
+* Execute queries
+* Hide SQL details from services
+
+Services should never directly construct database queries.
+
+---
+
+## Database
+
+The database enforces:
+
+* Constraints
+* Relationships
+* Foreign Keys
+* ENUMs
+* Transactions
+* Row Level Security
+
+The database is the final source of truth.
+
+---
+
+# Feature Services
+
+Every feature owns one service.
+
+Example:
+
+```text
+GameService
+
+↓
+
+Search
+
+↓
+
+API
+
+↓
+
+Cache
+
+↓
+
+Catalog
+```
+
+Each service owns its own business rules.
+
+---
+
+# GameService
+
+Responsibilities:
+
+* Search games
+* Fetch game details
+* Communicate with Game API
+* Maintain cache
+* Synchronize Game Catalog
+
+GameService is the only service allowed to communicate with the external game provider.
+
+---
+
+# LibraryService
+
+Responsibilities:
+
+* Add game
+* Remove game
+* Update rating
+* Update hours
+* Update status
+* Validate duplicate entries
+
+LibraryService should never know how the external Game API works.
+
+---
+
+# JournalService
+
+Responsibilities:
+
+* Create journal entry
+* Edit journal entry
+* Delete journal entry
+* Validate journal limits
+
+One journal entry exists per user per game.
+
+---
+
+# CollectionService
+
+Responsibilities:
+
+* Create collection
+* Rename collection
+* Delete collection
+* Add game
+* Remove game
+
+CollectionService owns every collection rule.
+
+---
+
+# ProfileService
+
+Responsibilities:
+
+* Update profile
+* Update avatar
+* Update bio
+* Update favorite game
+* Update favorite genre
+
+ProfileService should not manipulate library data.
+
+---
+
+# SearchService
+
+Responsibilities:
+
+* User search
+* Search suggestions
+* Search filtering
+
+SearchService should remain independent from GameService.
+
+---
+
+# AdminService
+
+Responsibilities:
+
+* Review manual games
+* Manage users
+* View logs
+* Moderate content
+* System analytics
+
+All administrator functionality belongs here.
+
+---
+
+# Service Communication
+
+Services communicate only through public interfaces.
+
+Example:
+
+```text
+LibraryService
+
+↓
+
+GameService
+
+↓
+
+Database
+```
+
+Services should never manipulate another service's internal implementation.
+
+---
+
+End of Part 1

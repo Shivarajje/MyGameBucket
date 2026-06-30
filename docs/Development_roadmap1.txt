@@ -1,0 +1,326 @@
+# MyGameBucket
+
+# Document 09 — Development Roadmap
+
+## Part 1 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Purpose
+
+This document defines the complete development roadmap for MyGameBucket.
+
+Unlike previous documents, this one answers:
+
+* What should be built first?
+* What depends on what?
+* What belongs in Version 1?
+* What can wait?
+
+The objective is to build the project incrementally while always maintaining a working application.
+
+---
+
+# Development Philosophy
+
+The project should never become a collection of unfinished features.
+
+Instead:
+
+Build
+
+↓
+
+Finish
+
+↓
+
+Polish
+
+↓
+
+Move On
+
+Every milestone should leave the project in a usable state.
+
+---
+
+# Overall Timeline
+
+Development is divided into logical phases.
+
+```text id="roadmap01"
+Phase 1
+
+Foundation
+
+↓
+
+Phase 2
+
+Authentication
+
+↓
+
+Phase 3
+
+Game System
+
+↓
+
+Phase 4
+
+Library
+
+↓
+
+Phase 5
+
+Profiles
+
+↓
+
+Phase 6
+
+Journal
+
+↓
+
+Phase 7
+
+Collections
+
+↓
+
+Phase 8
+
+Search
+
+↓
+
+Phase 9
+
+Administration
+
+↓
+
+Phase 10
+
+Polish & Release
+```
+
+Every phase builds upon the previous one.
+
+---
+
+# Phase 1 — Foundation
+
+Goal
+
+Create the project infrastructure.
+
+Deliverables
+
+✓ Next.js Project
+
+✓ TypeScript
+
+✓ Tailwind CSS
+
+✓ shadcn/ui
+
+✓ Lucide React
+
+✓ ESLint
+
+✓ Prettier
+
+✓ Git Repository
+
+✓ Folder Structure
+
+✓ Environment Variables
+
+✓ Basic Layout
+
+✓ Theme Support
+
+✓ Dark Mode
+
+✓ Light Mode
+
+Nothing feature-specific should be implemented during this phase.
+
+---
+
+# Phase 2 — Authentication
+
+Goal
+
+Allow users to create and access accounts.
+
+Features
+
+✓ Registration
+
+✓ Login
+
+✓ Logout
+
+✓ Protected Routes
+
+✓ Session Handling
+
+✓ Profile Creation
+
+✓ Basic User Settings
+
+At the end of this phase:
+
+Users should be able to create an account and access the application.
+
+---
+
+# Phase 3 — Game System
+
+Goal
+
+Implement the shared game infrastructure.
+
+Deliverables
+
+✓ GameService
+
+✓ External Game API Integration
+
+✓ API Abstraction Layer
+
+✓ Game Catalog
+
+✓ Game Search
+
+✓ Game Detail Page
+
+✓ Add to Library Button
+
+No personal library exists yet.
+
+Users can only search and view games.
+
+---
+
+# Phase 4 — Library
+
+Goal
+
+Create the user's personal library.
+
+Features
+
+✓ Add Game
+
+✓ Remove Game
+
+✓ Update Status
+
+✓ Update Hours
+
+✓ Update Rating
+
+✓ Sorting
+
+✓ Filtering
+
+✓ Infinite Scroll
+
+At the end of this phase:
+
+The application becomes useful for daily use.
+
+---
+
+# Phase 5 — Profiles
+
+Goal
+
+Allow users to personalize their presence.
+
+Features
+
+✓ Public Profile
+
+✓ Private Profile
+
+✓ Username
+
+✓ Avatar
+
+✓ Bio
+
+✓ Favorite Game
+
+✓ Favorite Genre
+
+✓ Dynamic Theme
+
+✓ Statistics
+
+Everything displayed should be generated from library data whenever possible.
+
+---
+
+# Phase 6 — Journal
+
+Goal
+
+Transform the application into a personal gaming journal.
+
+Features
+
+✓ One Journal Entry per Game
+
+✓ Create
+
+✓ Edit
+
+✓ Delete
+
+✓ Public Display
+
+✓ Private Visibility
+
+This phase delivers the application's defining feature.
+
+---
+
+# Phase 7 — Collections
+
+Goal
+
+Allow users to organize games.
+
+Features
+
+✓ Create Collection
+
+✓ Rename Collection
+
+✓ Delete Collection
+
+✓ Add Games
+
+✓ Remove Games
+
+✓ Collection Page
+
+Maximum:
+
+10 Collections
+
+---
+
+End of Part 1

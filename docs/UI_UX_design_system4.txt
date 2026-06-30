@@ -1,0 +1,392 @@
+# MyGameBucket
+
+# Document 08 — UI/UX Design System
+
+## Part 4 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Component Design Standards
+
+Every component in MyGameBucket should feel like it belongs to the same design language.
+
+Components should prioritize:
+
+* Simplicity
+* Consistency
+* Accessibility
+* Responsiveness
+* Reusability
+
+No component should introduce a completely different interaction style.
+
+---
+
+# Game Cards
+
+Game Cards are the most common component in the application.
+
+Each Game Card contains:
+
+* Cover Image
+* Game Title
+* Genre Badge
+* User Status
+* Personal Rating (if available)
+* Hours Played
+* Date Added (optional depending on context)
+
+Cards should never become overcrowded.
+
+---
+
+# User Cards
+
+User Cards are displayed in search results.
+
+Each card contains:
+
+* Avatar
+* Username
+* Favorite Game
+* Games Played Count
+* Favorite Genre Accent
+
+Do not display unnecessary statistics.
+
+The card should encourage profile exploration.
+
+---
+
+# Collection Cards
+
+Collection Cards display:
+
+* Collection Name
+* Optional Description
+* Number of Games
+* Cover Preview (generated automatically from games)
+
+Hover state:
+
+Slight elevation
+
+↓
+
+Soft shadow increase
+
+↓
+
+Accent border
+
+---
+
+# Journal Cards
+
+Journal Cards contain:
+
+* Game Cover Thumbnail
+* Journal Entry
+* Last Updated Date
+
+The journal text should remain the focal point.
+
+Avoid unnecessary decorative elements.
+
+---
+
+# Buttons
+
+Every button belongs to one of four variants.
+
+Primary
+
+Main actions.
+
+Examples:
+
+* Add Game
+* Save
+* Create Collection
+
+---
+
+Secondary
+
+Supporting actions.
+
+Examples:
+
+* Edit
+* View
+* Filter
+
+---
+
+Ghost
+
+Low-priority actions.
+
+Examples:
+
+* Cancel
+* Close
+* Back
+
+---
+
+Danger
+
+Destructive actions.
+
+Examples:
+
+* Delete
+* Remove
+* Reset
+
+Danger buttons should only appear when necessary.
+
+---
+
+# Badges
+
+Badges communicate lightweight metadata.
+
+Examples:
+
+Genre
+
+↓
+
+Soulslike
+
+Status
+
+↓
+
+Completed
+
+Platform
+
+↓
+
+PC
+
+Badges should remain small and unobtrusive.
+
+---
+
+# Avatars
+
+Default avatar
+
+↓
+
+Placeholder Image
+
+Uploaded avatar
+
+↓
+
+Supabase Storage
+
+Avatar shape:
+
+Circular
+
+Consistent across the application.
+
+---
+
+# Progress Indicators
+
+Version 1 uses progress indicators sparingly.
+
+Examples:
+
+Search Loading
+
+↓
+
+Skeleton
+
+Saving Profile
+
+↓
+
+Inline Spinner
+
+Long-running tasks
+
+↓
+
+Progress Bar
+
+Avoid full-screen loading overlays whenever possible.
+
+---
+
+# Search Bar
+
+Search is one of the application's primary interactions.
+
+Behavior:
+
+User Types
+
+↓
+
+Debounce
+
+↓
+
+API Request
+
+↓
+
+Skeleton
+
+↓
+
+Results
+
+Search should feel immediate.
+
+---
+
+# Pagination
+
+Version 1 uses:
+
+Infinite Scrolling
+
+Traditional pagination is intentionally avoided for:
+
+* Libraries
+* Search Results
+* User Search
+
+Future administrative dashboards may use standard pagination.
+
+---
+
+# Tooltips
+
+Tooltips should be used only when:
+
+* An icon lacks sufficient context.
+* A shortened label needs clarification.
+* Additional information improves usability.
+
+Tooltips should not replace good interface design.
+
+---
+
+# Dropdown Menus
+
+Dropdowns should:
+
+* Open smoothly.
+* Close when clicking outside.
+* Support keyboard navigation.
+* Maintain focus order.
+
+Nested dropdowns should be avoided.
+
+---
+
+# Modal Windows
+
+Modals should be reserved for:
+
+* Confirmations
+* Short forms
+* Important decisions
+
+Large workflows should use dedicated pages instead.
+
+---
+
+# Tables
+
+Version 1 uses tables only for:
+
+* Administration
+* System Logs
+
+End-user experiences should primarily use cards and grids.
+
+---
+
+# Design Tokens
+
+All visual values should originate from centralized design tokens.
+
+Examples:
+
+Colors
+
+↓
+
+```text id="jlwm91"
+PRIMARY_COLOR
+```
+
+Spacing
+
+↓
+
+```text id="jlwm92"
+SPACE_MD
+```
+
+Border Radius
+
+↓
+
+```text id="jlwm93"
+RADIUS_LG
+```
+
+Animation Duration
+
+↓
+
+```text id="jlwm94"
+ANIMATION_STANDARD
+```
+
+No component should hardcode these values.
+
+---
+
+# Visual Consistency Checklist
+
+Every component should use:
+
+✓ Shared Typography
+
+✓ Shared Colors
+
+✓ Shared Border Radius
+
+✓ Shared Shadows
+
+✓ Shared Animation Timing
+
+✓ Shared Spacing
+
+✓ Shared Icon Library
+
+✓ Shared Hover Effects
+
+If any item differs, there should be a documented reason.
+
+---
+
+End of Part 4

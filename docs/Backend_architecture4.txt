@@ -1,0 +1,381 @@
+# MyGameBucket
+
+# Document 05 — Backend Architecture
+
+## Part 4 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Security Philosophy
+
+Security is built into the architecture from the beginning.
+
+The backend should never assume that requests coming from the frontend are trustworthy.
+
+Every request must be validated independently.
+
+---
+
+# Trust Model
+
+The backend trusts only:
+
+* The authenticated user identity
+* Database constraints
+* Verified server-side validation
+
+The backend does **not** trust:
+
+* Client-side validation
+* Hidden form fields
+* Disabled buttons
+* Browser state
+
+All important rules must be enforced server-side.
+
+---
+
+# Input Validation
+
+Every incoming request is validated.
+
+Validation includes:
+
+* Required fields
+* Data types
+* String length
+* Numeric ranges
+* ENUM values
+* Foreign key existence
+* Duplicate detection
+
+Invalid requests are rejected before any database operation occurs.
+
+---
+
+# Input Sanitization
+
+All user-generated text is sanitized before storage.
+
+Applies to:
+
+* Usernames
+* Bios
+* Journal Entries
+* Collection Names
+* Future comments
+
+The application should never trust raw user input.
+
+---
+
+# Rate Limiting
+
+The backend applies rate limits to sensitive endpoints.
+
+Protected endpoints include:
+
+* Login
+* Registration
+* Password Reset
+* Search
+* Manual Game Submission
+* Administrative APIs
+
+Rate limiting helps protect against abuse and automated attacks.
+
+---
+
+# Authorization Rules
+
+Ownership is enforced server-side.
+
+Examples:
+
+Profile
+
+↓
+
+Owner
+
+↓
+
+May Edit
+
+Library
+
+↓
+
+Owner
+
+↓
+
+May Modify
+
+Collections
+
+↓
+
+Owner
+
+↓
+
+May Edit
+
+Journal
+
+↓
+
+Owner
+
+↓
+
+May Edit
+
+Administrators have elevated permissions only where appropriate.
+
+---
+
+# Administrator Permissions
+
+Administrators may:
+
+* View users
+* Review manual game submissions
+* Approve or reject games
+* Remove inappropriate content
+* View system logs
+
+Administrators should avoid modifying personal gameplay information except when required for moderation.
+
+---
+
+# Public vs Private Data
+
+Public Profiles expose:
+
+* Username
+* Avatar
+* Bio
+* Favorite Game
+* Favorite Genre
+* Public Library
+* Public Collections
+* Public Journal Entries
+
+Private Profiles display:
+
+"This profile is private."
+
+No additional information should be exposed.
+
+---
+
+# Logging Strategy
+
+Backend logs should capture:
+
+Authentication Events
+
+↓
+
+User Registration
+
+↓
+
+Login
+
+↓
+
+Logout
+
+↓
+
+Password Reset
+
+---
+
+Administrative Events
+
+↓
+
+Game Approval
+
+↓
+
+Game Rejection
+
+↓
+
+Moderation Actions
+
+---
+
+System Events
+
+↓
+
+Unhandled Exceptions
+
+↓
+
+Database Errors
+
+↓
+
+API Failures
+
+↓
+
+Synchronization Failures
+
+Sensitive information must never be written to logs.
+
+---
+
+# Monitoring
+
+The architecture should remain compatible with future monitoring solutions.
+
+Potential integrations:
+
+* Sentry
+* OpenTelemetry
+* Custom dashboards
+
+Version 1 focuses on structured backend logging.
+
+---
+
+# Transactions
+
+Every multi-step operation should execute atomically.
+
+Example:
+
+Delete Account
+
+↓
+
+Delete Profile
+
+↓
+
+Delete Library
+
+↓
+
+Delete Journal Entries
+
+↓
+
+Delete Collections
+
+↓
+
+Commit
+
+Failure at any point results in a rollback.
+
+Partial completion is not acceptable.
+
+---
+
+# Error Responses
+
+Errors should be:
+
+* Consistent
+* Human-readable
+* Predictable
+
+Examples:
+
+Validation Error
+
+↓
+
+"The rating must be between 1 and 10."
+
+Permission Error
+
+↓
+
+"You do not have permission to perform this action."
+
+API Failure
+
+↓
+
+"Game details are temporarily unavailable."
+
+Unexpected Error
+
+↓
+
+"An unexpected error occurred. Please try again later."
+
+Internal implementation details should never be exposed.
+
+---
+
+# Analytics
+
+Version 1 supports basic administrative analytics.
+
+Examples:
+
+* Total Users
+* Total Games Added
+* Total Collections
+* Most Added Games
+* Most Searched Games
+* Daily Active Users
+* API Usage Statistics
+
+Analytics should be aggregated and anonymous wherever possible.
+
+---
+
+# Backend Performance
+
+The backend should:
+
+* Use efficient database queries
+* Minimize unnecessary joins
+* Paginate large datasets
+* Cache expensive operations
+* Avoid duplicate API requests
+* Reuse database connections
+
+Performance optimizations should be part of normal development rather than post-release fixes.
+
+---
+
+# Backend Checklist
+
+Before deploying a new backend feature:
+
+✓ Validation complete
+
+✓ Authorization implemented
+
+✓ Transactions added where required
+
+✓ Logging added
+
+✓ Rate limiting considered
+
+✓ Errors handled
+
+✓ API response standardized
+
+✓ Documentation updated
+
+---
+
+End of Part 4

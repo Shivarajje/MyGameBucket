@@ -1,0 +1,428 @@
+# MyGameBucket
+
+# Document 05 — Backend Architecture
+
+## Part 2 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# API Architecture
+
+The backend exposes feature-based API routes.
+
+Structure:
+
+```text
+/api/
+
+auth/
+profiles/
+games/
+library/
+journal/
+collections/
+search/
+settings/
+admin/
+system/
+```
+
+Every route belongs to exactly one feature.
+
+Avoid miscellaneous endpoints.
+
+---
+
+# API Design Philosophy
+
+The API should be:
+
+* Predictable
+* Consistent
+* Versionable
+* Easy to test
+* Easy to document
+
+Naming should follow REST conventions whenever practical.
+
+Examples:
+
+GET
+
+Retrieve data
+
+POST
+
+Create data
+
+PATCH
+
+Update data
+
+DELETE
+
+Remove data
+
+---
+
+# API Response Format
+
+Every endpoint returns the same structure.
+
+Successful Response
+
+```json
+{
+    "success": true,
+    "message": "Operation completed successfully.",
+    "data": {}
+}
+```
+
+Error Response
+
+```json
+{
+    "success": false,
+    "message": "Human readable explanation.",
+    "error": {}
+}
+```
+
+Benefits:
+
+* Consistent frontend handling
+* Easier debugging
+* Easier documentation
+
+---
+
+# Request Validation
+
+Every request is validated before entering the Service Layer.
+
+Validation includes:
+
+* Required fields
+* Data types
+* Value ranges
+* Authentication
+* Authorization
+
+Invalid requests are rejected immediately.
+
+---
+
+# Business Validation
+
+After request validation,
+
+the Service Layer performs business validation.
+
+Examples:
+
+Add Game
+
+↓
+
+Already exists?
+
+↓
+
+Reject
+
+---
+
+Collection
+
+↓
+
+Already contains game?
+
+↓
+
+Reject
+
+---
+
+Journal Entry
+
+↓
+
+Too long?
+
+↓
+
+Reject
+
+Business rules belong inside services.
+
+---
+
+# Authentication
+
+Authentication is handled by Supabase.
+
+Backend responsibilities:
+
+* Verify authenticated user
+* Verify session
+* Identify current profile
+* Enforce permissions
+
+Application code never validates passwords manually.
+
+---
+
+# Authorization
+
+Every protected endpoint verifies permissions.
+
+Examples:
+
+Profile Update
+
+↓
+
+Owner?
+
+↓
+
+Allow
+
+↓
+
+Otherwise Reject
+
+---
+
+Delete Collection
+
+↓
+
+Owner?
+
+↓
+
+Allow
+
+↓
+
+Otherwise Reject
+
+Authorization is checked server-side only.
+
+---
+
+# Transactions
+
+Multi-step operations use database transactions.
+
+Example:
+
+Add Game
+
+↓
+
+Validate Request
+
+↓
+
+Insert Library Entry
+
+↓
+
+Create Journal Entry
+
+↓
+
+Commit
+
+Failure at any step:
+
+↓
+
+Rollback
+
+Database consistency is never compromised.
+
+---
+
+# Error Handling
+
+Errors fall into categories.
+
+Validation Error
+
+↓
+
+Return clear message.
+
+Permission Error
+
+↓
+
+403
+
+Authentication Error
+
+↓
+
+401
+
+Not Found
+
+↓
+
+404
+
+Unexpected Error
+
+↓
+
+500
+
+Unexpected errors should always be logged.
+
+---
+
+# Fail Fast
+
+Requests should fail as early as possible.
+
+Example:
+
+Missing Required Field
+
+↓
+
+Reject
+
+Do not continue processing invalid requests.
+
+---
+
+# Logging
+
+Backend logs should include:
+
+* Login
+* Registration
+* Account Deletion
+* Manual Game Submission
+* Admin Approval
+* API Failure
+* Unexpected Exception
+
+Logs assist debugging and monitoring.
+
+---
+
+# Secrets
+
+Sensitive values must never appear in:
+
+* Frontend
+* Browser
+* Client Responses
+* Logs
+
+Secrets remain server-side.
+
+Examples:
+
+* API Keys
+* Service Tokens
+* Admin Credentials
+
+---
+
+# Environment Variables
+
+Configuration belongs in environment variables.
+
+Examples:
+
+SUPABASE_URL
+
+SUPABASE_SERVICE_KEY
+
+GAME_API_KEY
+
+APPLICATION_URL
+
+Environment-specific values should never be hardcoded.
+
+---
+
+# Configuration
+
+Project configuration belongs in dedicated files.
+
+Examples:
+
+Pagination Size
+
+↓
+
+50
+
+Animation Duration
+
+↓
+
+400ms
+
+Bio Length
+
+↓
+
+100
+
+Journal Length
+
+↓
+
+280
+
+Configuration should be centralized.
+
+---
+
+# Exception-First Backend
+
+Every endpoint should define:
+
+Success Path
+
+Failure Path
+
+Examples:
+
+API Timeout
+
+↓
+
+Return cached data
+
+Game Missing
+
+↓
+
+Offer manual submission
+
+Duplicate Game
+
+↓
+
+Return validation error
+
+Every expected failure should have a defined response.
+
+---
+
+End of Part 2

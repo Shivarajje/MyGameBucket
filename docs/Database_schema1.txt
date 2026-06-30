@@ -1,0 +1,474 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 1 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Purpose
+
+This document defines the complete production database schema for MyGameBucket.
+
+Unlike the Database Architecture document, this document specifies the actual database structure that should be implemented inside Supabase.
+
+Every table includes:
+
+* Purpose
+* Columns
+* Constraints
+* Relationships
+* Indexes
+* RLS Policies
+* Validation Rules
+* Future Expansion
+* Performance Notes
+* Example Record
+
+This document acts as the **single source of truth** for the database schema.
+
+Whenever the schema changes:
+
+1. Update this document.
+2. Generate SQL migration.
+3. Apply migration.
+
+Never modify the database without first updating this document.
+
+---
+
+# Database Overview
+
+Version 1 consists of the following tables.
+
+Authentication
+
+* auth.users (Supabase)
+
+Application
+
+* profiles
+* game_catalog
+* user_games
+* journal_entries
+* collections
+* collection_games
+* settings
+* manual_game_submissions
+
+Administration
+
+* admin_logs
+* system_logs
+
+---
+
+# Table 1 — profiles
+
+## Purpose
+
+Stores public profile information for every authenticated user.
+
+Each authenticated user owns exactly one profile.
+
+Authentication information remains inside Supabase Auth.
+
+The profile contains only application-specific information.
+
+---
+
+## Primary Key
+
+```text
+id
+
+UUID
+
+Primary Key
+```
+
+---
+
+## Relationships
+
+```text
+auth.users
+
+1
+
+↓
+
+1
+
+profiles
+```
+
+---
+
+## Columns
+
+### id
+
+Type
+
+UUID
+
+Primary Key
+
+Automatically Generated
+
+---
+
+### user_id
+
+Type
+
+UUID
+
+Foreign Key
+
+References
+
+auth.users.id
+
+Unique
+
+Required
+
+Purpose
+
+Links application profile to authenticated user.
+
+---
+
+### username
+
+Type
+
+TEXT
+
+Required
+
+Unique
+
+Case Insensitive
+
+Purpose
+
+Public identity.
+
+Used in profile URLs.
+
+Example
+
+```text
+shivaraj
+```
+
+---
+
+### avatar_url
+
+Type
+
+TEXT
+
+Nullable
+
+Purpose
+
+Stores the profile picture URL.
+
+Default avatars are served from:
+
+```text
+/public/avatars/
+```
+
+Uploaded avatars are stored inside Supabase Storage.
+
+---
+
+### bio
+
+Type
+
+TEXT
+
+Maximum Length
+
+100 Characters
+
+Nullable
+
+Purpose
+
+Short user description.
+
+---
+
+### favorite_game_id
+
+Type
+
+UUID
+
+Nullable
+
+Foreign Key
+
+game_catalog.id
+
+Purpose
+
+Displays the user's favorite game.
+
+---
+
+### favorite_genre
+
+Type
+
+ENUM
+
+Nullable
+
+Purpose
+
+Used by the Theme Engine.
+
+Approved values:
+
+* RPG
+* Soulslike
+* Horror
+* Racing
+* Strategy
+* Simulation
+* Shooter
+* Adventure
+* Indie
+* Platformer
+
+Expandable.
+
+---
+
+### visibility
+
+Type
+
+ENUM
+
+Required
+
+Default
+
+Public
+
+Values
+
+Public
+
+Private
+
+Purpose
+
+Controls profile visibility.
+
+---
+
+### created_at
+
+TIMESTAMP
+
+Automatically Generated
+
+---
+
+### updated_at
+
+TIMESTAMP
+
+Automatically Updated
+
+---
+
+## Unique Constraints
+
+username
+
+Unique
+
+Case Insensitive
+
+user_id
+
+Unique
+
+Only one profile per authenticated user.
+
+---
+
+## Indexes
+
+Create indexes for:
+
+username
+
+user_id
+
+visibility
+
+These fields are queried frequently.
+
+---
+
+## Row Level Security
+
+Public Profiles
+
+Readable by everyone.
+
+Private Profiles
+
+Readable only by:
+
+Owner
+
+Administrator
+
+Updates
+
+Owner
+
+Administrator
+
+Deletes
+
+Owner
+
+Administrator
+
+---
+
+## Validation Rules
+
+Username
+
+Required
+
+Unique
+
+Case Insensitive
+
+Minimum Length
+
+3
+
+Maximum Length
+
+30
+
+Bio
+
+Maximum
+
+100 Characters
+
+---
+
+## Future Columns
+
+Reserved for future versions.
+
+Examples:
+
+Verified Badge
+
+Country
+
+Steam ID
+
+PlayStation ID
+
+Xbox ID
+
+Discord Username
+
+Banner Image
+
+Custom Theme
+
+Social Links
+
+None of these are included in Version 1.
+
+---
+
+## Example Record
+
+```text
+id
+
+6d91...
+
+user_id
+
+1ae7...
+
+username
+
+shivaraj
+
+avatar_url
+
+avatars/9b27.webp
+
+bio
+
+"Soulslike enjoyer."
+
+favorite_game_id
+
+c3f2...
+
+favorite_genre
+
+Soulslike
+
+visibility
+
+Public
+
+created_at
+
+2026-06-28
+
+updated_at
+
+2026-06-29
+```
+
+---
+
+## Performance Notes
+
+The profiles table is expected to be one of the most frequently queried tables.
+
+Queries include:
+
+* User Search
+* Profile Pages
+* Public Profiles
+* Favorites
+
+Indexes on username and visibility are essential.
+
+---
+
+End of Part 1

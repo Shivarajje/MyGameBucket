@@ -1,0 +1,379 @@
+# MyGameBucket
+
+# Document 08 — UI/UX Design System
+
+## Part 3 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Responsive Design
+
+The application is designed for:
+
+* Desktop
+* Laptop
+* Tablet
+* Mobile
+
+Every feature available on desktop should also be available on mobile.
+
+Layouts adapt.
+
+Functionality does not disappear.
+
+---
+
+# Breakpoints
+
+Recommended breakpoints:
+
+```text id="bjlwm81"
+Mobile
+
+0px
+
+↓
+
+640px
+
+Tablet
+
+641px
+
+↓
+
+1024px
+
+Desktop
+
+1025px+
+```
+
+These values may be adjusted during implementation if needed.
+
+---
+
+# Mobile Philosophy
+
+Mobile is not a simplified version.
+
+It is the same application,
+
+adapted for touch interaction.
+
+Users should be able to:
+
+* Search Games
+* Edit Library
+* Manage Collections
+* Write Journal Entries
+* Edit Profile
+
+without switching to desktop.
+
+---
+
+# Navigation
+
+Desktop
+
+Top Navigation Bar
+
+↓
+
+Profile Menu
+
+↓
+
+Search
+
+---
+
+Mobile
+
+Hamburger Menu
+
+↓
+
+Drawer Navigation
+
+↓
+
+Bottom-safe spacing
+
+Navigation should remain familiar across all pages.
+
+---
+
+# Game Cards
+
+Desktop
+
+Multiple-column grid
+
+↓
+
+Tablet
+
+Two-column grid
+
+↓
+
+Mobile
+
+Single-column list
+
+Game cards should maintain a consistent aspect ratio.
+
+---
+
+# Images
+
+All images should:
+
+* Lazy load
+* Preserve aspect ratio
+* Display placeholders
+* Fade in smoothly
+
+Broken images should automatically display the default placeholder.
+
+---
+
+# Hero Sections
+
+Game pages feature a cinematic hero.
+
+The hero consists of:
+
+* Cover artwork
+* Background gradient
+* Genre accent colors
+* Game title
+* Metadata
+* "Add to Library" button
+
+The animation remains consistent across all games.
+
+Only colors adapt based on genre.
+
+---
+
+# Animation Language
+
+Every page uses the same animation vocabulary.
+
+Page Load
+
+↓
+
+Fade + Slide
+
+Cards
+
+↓
+
+Stagger Fade
+
+Dialogs
+
+↓
+
+Scale + Fade
+
+Dropdowns
+
+↓
+
+Fade + Slide
+
+Search Results
+
+↓
+
+Progressive Reveal
+
+Consistency is more important than uniqueness.
+
+---
+
+# Skeleton Components
+
+Every major screen has a matching skeleton.
+
+Examples:
+
+Profile Skeleton
+
+↓
+
+Avatar
+
+↓
+
+Bio
+
+↓
+
+Library Preview
+
+Game Skeleton
+
+↓
+
+Hero
+
+↓
+
+Metadata
+
+↓
+
+Action Buttons
+
+Library Skeleton
+
+↓
+
+Game Cards
+
+↓
+
+Statistics
+
+Users should immediately understand what is loading.
+
+---
+
+# Search Experience
+
+Typing
+
+↓
+
+Debounced Search
+
+↓
+
+Skeleton Results
+
+↓
+
+Final Results
+
+Avoid loading spinners whenever skeletons are practical.
+
+---
+
+# Scroll Behavior
+
+Infinite scrolling should feel natural.
+
+Additional content loads before the user reaches the end.
+
+Avoid abrupt loading pauses.
+
+Maintain scroll position during navigation whenever possible.
+
+---
+
+# Dialog Design
+
+Dialogs should:
+
+* Focus user attention
+* Dim the background
+* Prevent accidental dismissal during destructive actions
+
+Examples:
+
+Delete Confirmation
+
+↓
+
+Centered Dialog
+
+Mobile
+
+↓
+
+Bottom Sheet or Full-screen Dialog (depending on content)
+
+---
+
+# Notifications
+
+Toast notifications appear:
+
+Top-right (Desktop)
+
+Bottom (Mobile)
+
+Notifications automatically disappear after a few seconds.
+
+Critical errors remain visible until dismissed.
+
+---
+
+# Accessibility
+
+Every page supports:
+
+* Keyboard navigation
+* Visible focus states
+* Screen readers
+* Reduced Motion
+* Touch-friendly controls
+
+Minimum touch target:
+
+```text id="jlwm82"
+44 × 44 px
+```
+
+---
+
+# Reduced Motion
+
+When enabled:
+
+* Decorative animations are removed.
+* Transition durations are shortened.
+* Motion-heavy effects are disabled.
+
+Core interactions remain unchanged.
+
+---
+
+# Performance Mode
+
+When enabled:
+
+Disable:
+
+* Heavy blur
+* Decorative backgrounds
+* Large shadows
+* Expensive visual effects
+
+The application prioritizes responsiveness.
+
+---
+
+# Offline Behavior
+
+Version 1 does not support full offline functionality.
+
+If network connectivity is lost:
+
+* Existing content remains visible where possible.
+* New API requests display friendly error messages.
+* Users can retry once connectivity returns.
+
+---
+
+End of Part 3

@@ -1,0 +1,319 @@
+# MyGameBucket
+
+# Document 03 — Database Architecture
+
+## Part 1 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Purpose
+
+This document defines the complete database philosophy and architecture of MyGameBucket.
+
+The database is designed to be:
+
+* Scalable
+* Maintainable
+* Modular
+* API-independent
+* Performance-oriented
+
+Every architectural decision in this document has been approved during the planning phase.
+
+---
+
+# Database Philosophy
+
+The database is not merely a place to store information.
+
+It is the foundation of the application.
+
+The architecture follows several guiding principles.
+
+---
+
+# Principle 1 — Single Source of Truth
+
+Every piece of information exists in exactly one authoritative location.
+
+Examples:
+
+Username
+
+→ Profiles Table
+
+Game Title
+
+→ Game Catalog
+
+Journal Entry
+
+→ Journal Entries
+
+Hours Played
+
+→ User Games
+
+The same information should never be duplicated unless there is a compelling architectural reason.
+
+---
+
+# Principle 2 — Separation of Data and Presentation
+
+The database stores data.
+
+The frontend decides how that data looks.
+
+Example:
+
+Database stores:
+
+Genre
+
+Frontend determines:
+
+Theme
+
+↓
+
+Typography
+
+↓
+
+Colors
+
+↓
+
+Decorative Elements
+
+The database never stores presentation-specific values such as UI themes.
+
+---
+
+# Principle 3 — API Independence
+
+The application should never depend directly on a third-party API.
+
+Instead:
+
+Frontend
+
+↓
+
+Game Service
+
+↓
+
+External Game API
+
+This abstraction allows the external provider to be replaced without affecting the frontend or database.
+
+---
+
+# Principle 4 — Exception-First Design
+
+Every major workflow must define both:
+
+* Success Path
+* Failure Path
+
+Examples:
+
+API unavailable
+
+↓
+
+Fallback to cached or minimal data
+
+Image unavailable
+
+↓
+
+Placeholder artwork
+
+Duplicate game
+
+↓
+
+Database constraint prevents insertion
+
+Invalid input
+
+↓
+
+Validation error returned
+
+The application should degrade gracefully instead of failing unexpectedly.
+
+---
+
+# Principle 5 — Backend Owns Business Logic
+
+Responsibilities are clearly divided.
+
+Frontend
+
+* User Interface
+* Forms
+* Animations
+* Client-side validation
+
+Backend
+
+* Business rules
+* Permissions
+* Authorization
+* Validation
+
+Database
+
+* Relationships
+* Constraints
+* Integrity
+
+Important rules must never rely solely on frontend validation.
+
+---
+
+# Principle 6 — Service Layer Architecture
+
+Every feature owns a dedicated service.
+
+Examples:
+
+GameService
+
+LibraryService
+
+JournalService
+
+CollectionService
+
+ProfileService
+
+AdminService
+
+Each service encapsulates its own business logic.
+
+Features communicate through services rather than directly accessing each other's implementation.
+
+---
+
+# Principle 7 — Feature Independence
+
+Every feature should evolve independently.
+
+Example:
+
+Library
+
+↓
+
+LibraryService
+
+↓
+
+Database
+
+Library should never manipulate Journal logic directly.
+
+Instead it communicates through clearly defined interfaces.
+
+This minimizes coupling and improves maintainability.
+
+---
+
+# Principle 8 — Performance by Default
+
+Performance is treated as a feature.
+
+Examples:
+
+* Cached API responses
+* Lazy loading
+* Pagination
+* Skeleton loading
+* Optimized queries
+* Efficient indexing
+
+Performance optimizations should be built into the architecture from the beginning.
+
+---
+
+# Principle 9 — Documentation is Code
+
+Architecture documentation is considered part of the software.
+
+Implementation should always follow documentation.
+
+Whenever architecture changes:
+
+1. Documentation is updated.
+2. Code is updated.
+3. Tests are updated if required.
+
+---
+
+# Database Overview
+
+The database is divided into two logical sections.
+
+Global Data
+
+↓
+
+Shared by every user
+
+User Data
+
+↓
+
+Personal information
+
+This separation keeps the database small, scalable and efficient.
+
+---
+
+# Global Data
+
+Global tables contain information shared by every user.
+
+Examples:
+
+Game Catalog
+
+Manual Game Queue
+
+Future Cache Tables
+
+One game exists only once regardless of how many users add it.
+
+---
+
+# User Data
+
+Each user owns their own records.
+
+Examples:
+
+Profile
+
+Library
+
+Journal Entries
+
+Collections
+
+Settings
+
+Deleting a user removes only their personal data.
+
+The Game Catalog remains untouched.
+
+---
+
+End of Part 1

@@ -1,0 +1,646 @@
+# MyGameBucket
+
+# Document 06 — Database Schema
+
+## Part 8 of 8
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Row Level Security Summary
+
+Every application table uses Row Level Security.
+
+Default policy:
+
+```text
+DENY ALL
+```
+
+Access is granted only through explicit policies.
+
+---
+
+## profiles
+
+Read
+
+* Everyone (Public Profiles)
+* Owner
+* Administrator
+
+Insert
+
+* Owner
+
+Update
+
+* Owner
+* Administrator
+
+Delete
+
+* Owner
+* Administrator
+
+---
+
+## game_catalog
+
+Read
+
+* Everyone
+
+Insert
+
+* Backend Services
+* Administrator
+
+Update
+
+* Backend Services
+* Administrator
+
+Delete
+
+* Administrator
+
+---
+
+## user_games
+
+Read
+
+Public Library
+
+↓
+
+Everyone
+
+Private Library
+
+↓
+
+Owner
+
+Administrator
+
+Insert
+
+↓
+
+Owner
+
+Update
+
+↓
+
+Owner
+
+Delete
+
+↓
+
+Owner
+
+---
+
+## journal_entries
+
+Read
+
+Public Profile
+
+↓
+
+Everyone
+
+Private Profile
+
+↓
+
+Owner
+
+Administrator
+
+Insert
+
+↓
+
+Owner
+
+Update
+
+↓
+
+Owner
+
+Delete
+
+↓
+
+Owner
+
+---
+
+## collections
+
+Read
+
+Public Profile
+
+↓
+
+Everyone
+
+Private Profile
+
+↓
+
+Owner
+
+Administrator
+
+Insert
+
+↓
+
+Owner
+
+Update
+
+↓
+
+Owner
+
+Delete
+
+↓
+
+Owner
+
+---
+
+## collection_games
+
+Permissions inherit from their parent collection.
+
+---
+
+## settings
+
+Read
+
+↓
+
+Owner
+
+Update
+
+↓
+
+Owner
+
+Delete
+
+↓
+
+Owner
+
+---
+
+## manual_game_submissions
+
+Read
+
+↓
+
+Owner
+
+Administrator
+
+Insert
+
+↓
+
+Authenticated Users
+
+Update
+
+↓
+
+Administrator
+
+Delete
+
+↓
+
+Administrator
+
+---
+
+## admin_logs
+
+Read
+
+↓
+
+Administrator
+
+Insert
+
+↓
+
+Backend Only
+
+Update
+
+↓
+
+Never
+
+Delete
+
+↓
+
+Never
+
+Administrative logs are immutable.
+
+---
+
+## system_logs
+
+Read
+
+↓
+
+Administrator
+
+Insert
+
+↓
+
+Backend Only
+
+Update
+
+↓
+
+Never
+
+Delete
+
+↓
+
+Administrator (Future retention policy)
+
+---
+
+# Foreign Key Diagram
+
+```text
+auth.users
+     │
+     ▼
+ profiles
+     │
+     ├──────────────┐
+     │              │
+     ▼              ▼
+ user_games     settings
+     │
+     │
+     ▼
+game_catalog
+     ▲
+     │
+journal_entries
+     ▲
+     │
+collection_games
+     ▲
+     │
+collections
+```
+
+---
+
+# Database Growth Strategy
+
+The schema is designed to scale without redesign.
+
+Future tables can be added independently.
+
+Examples:
+
+```text
+friends
+
+followers
+
+notifications
+
+comments
+
+journal_images
+
+recommendations
+
+achievements
+
+game_lists
+
+events
+
+clubs
+
+messages
+```
+
+No existing table requires restructuring to support these additions.
+
+---
+
+# Schema Evolution Rules
+
+Every schema change must follow this workflow:
+
+```text
+Idea
+
+↓
+
+Update Documentation
+
+↓
+
+Architecture Review
+
+↓
+
+Create Migration
+
+↓
+
+Review Migration
+
+↓
+
+Apply Migration
+
+↓
+
+Verify
+
+↓
+
+Deploy
+```
+
+Never modify production tables manually.
+
+All changes must be tracked through migrations.
+
+---
+
+# Migration Philosophy
+
+Every migration should be:
+
+* Atomic
+* Reversible (where practical)
+* Documented
+* Versioned
+
+Migration files should be stored in version control.
+
+Examples:
+
+```text
+001_initial_schema.sql
+
+002_add_settings.sql
+
+003_add_indexes.sql
+
+004_add_notifications.sql
+```
+
+This creates a complete history of schema evolution.
+
+---
+
+# Naming Conventions
+
+Tables
+
+```text
+snake_case
+
+profiles
+
+user_games
+
+journal_entries
+```
+
+Columns
+
+```text
+snake_case
+
+favorite_game_id
+
+hours_played
+
+created_at
+```
+
+Foreign Keys
+
+```text
+<referenced_table>_id
+
+profile_id
+
+game_id
+
+collection_id
+```
+
+Primary Keys
+
+Always:
+
+```text
+id
+```
+
+Timestamp Fields
+
+```text
+created_at
+
+updated_at
+```
+
+Consistency takes priority over abbreviations.
+
+---
+
+# Version 1 Schema Summary
+
+## Core Tables
+
+✓ profiles
+
+✓ game_catalog
+
+✓ user_games
+
+✓ journal_entries
+
+✓ collections
+
+✓ collection_games
+
+✓ settings
+
+✓ manual_game_submissions
+
+✓ admin_logs
+
+✓ system_logs
+
+---
+
+## Core Features Supported
+
+✓ Authentication
+
+✓ Public Profiles
+
+✓ Private Profiles
+
+✓ User Library
+
+✓ Manual Hours
+
+✓ Ratings
+
+✓ Status Tracking
+
+✓ Journal Entries
+
+✓ Collections
+
+✓ Manual Game Submission
+
+✓ Administrative Review
+
+✓ Logging
+
+✓ User Settings
+
+---
+
+## Engineering Features
+
+✓ UUID Primary Keys
+
+✓ Foreign Keys
+
+✓ ENUM Types
+
+✓ Unique Constraints
+
+✓ Row Level Security
+
+✓ Transactions
+
+✓ Standard Naming
+
+✓ API Independence
+
+✓ Service Layer Compatibility
+
+✓ Single Source of Truth
+
+---
+
+# Database Readiness Checklist
+
+Before Version 1 is considered complete:
+
+✓ All tables created
+
+✓ Foreign keys verified
+
+✓ ENUMs created
+
+✓ Constraints verified
+
+✓ Indexes added
+
+✓ RLS enabled
+
+✓ Policies tested
+
+✓ Storage configured
+
+✓ Migrations versioned
+
+✓ Documentation synchronized
+
+---
+
+# Final Database Philosophy
+
+The MyGameBucket database is designed around five fundamental goals:
+
+1. **Correctness** — Data integrity is enforced by constraints, relationships, and validation.
+
+2. **Scalability** — The schema supports growth from hundreds to millions of records without redesign.
+
+3. **Maintainability** — Clear separation of concerns, modular tables, and documented migrations keep long-term maintenance manageable.
+
+4. **Performance** — Shared catalogs, indexing, caching, pagination, and minimal duplication ensure efficient operation.
+
+5. **Extensibility** — New features should be introduced through new tables and services rather than rewriting existing structures.
+
+Every future database decision should reinforce these principles.
+
+---
+
+# Document Status
+
+Document:
+
+06_Database_Schema.md
+
+Version:
+
+0.1
+
+Status:
+
+Approved
+
+Related Documents:
+
+* 01_Project_Vision.md
+* 02_Product_Requirements.md
+* 03_Database_Architecture.md
+* 04_Frontend_Architecture.md
+* 05_Backend_Architecture.md
+* 07_Development_Standards.md
+* 08_UI_UX_Design_System.md
+* 09_Development_Roadmap.md
+
+---
+
+End of Document 06

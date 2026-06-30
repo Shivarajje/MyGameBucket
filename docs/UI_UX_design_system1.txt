@@ -1,0 +1,421 @@
+# MyGameBucket
+
+# Document 08 — UI/UX Design System
+
+## Part 1 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Purpose
+
+This document defines the complete visual language of MyGameBucket.
+
+Its purpose is to ensure every page, component and interaction feels like part of one cohesive application.
+
+The design system should make the website feel:
+
+* Premium
+* Cinematic
+* Modern
+* Elegant
+* Fast
+* Consistent
+
+Every visual decision should follow this document.
+
+---
+
+# Design Philosophy
+
+MyGameBucket is **not** a gaming news website.
+
+It is **not** a game store.
+
+It is **not** a review website.
+
+It is a personal gaming journal.
+
+Everything should reinforce that feeling.
+
+The interface should make players feel like they are browsing their own gaming history.
+
+---
+
+# Design Principles
+
+Every UI decision should follow these principles.
+
+---
+
+## Principle 1 — Content First
+
+Games are the focus.
+
+The interface should support the content,
+
+never compete with it.
+
+---
+
+## Principle 2 — Consistency
+
+Buttons,
+
+Cards,
+
+Spacing,
+
+Typography,
+
+Animations,
+
+Colors,
+
+Interactions
+
+should behave consistently everywhere.
+
+Users should learn the interface once.
+
+---
+
+## Principle 3 — Cinematic
+
+The application should feel premium.
+
+Not flashy.
+
+Not overwhelming.
+
+Subtle lighting,
+
+depth,
+
+motion,
+
+and typography create immersion.
+
+---
+
+## Principle 4 — Fast
+
+Beautiful interfaces should never feel slow.
+
+Animations must support speed,
+
+not reduce it.
+
+---
+
+## Principle 5 — Accessibility
+
+Beauty should never reduce usability.
+
+Everything should remain readable,
+
+navigable,
+
+and responsive.
+
+---
+
+# Visual Identity
+
+Keywords
+
+* Cinematic
+* Premium
+* Minimal
+* Atmospheric
+* Modern
+* Elegant
+
+Avoid
+
+* Neon overload
+* Excessive gradients
+* Visual clutter
+* Cartoon aesthetics
+* Overly flat interfaces
+
+---
+
+# Color Philosophy
+
+Colors are used to create atmosphere.
+
+Not decoration.
+
+Most pages remain neutral.
+
+Accent colors are introduced through:
+
+* Genre
+* Game
+* Profile Theme
+
+---
+
+# Base Theme
+
+Primary Background
+
+Near Black
+
+Secondary Background
+
+Dark Gray
+
+Surface
+
+Slightly Lighter
+
+Borders
+
+Very Low Contrast
+
+Text
+
+High Contrast
+
+Accent
+
+Dynamic
+
+The interface should rely on contrast rather than bright colors.
+
+---
+
+# Theme Engine
+
+Users choose:
+
+Favorite Genre
+
+↓
+
+Theme Engine
+
+↓
+
+Visual Identity
+
+The database never stores colors.
+
+The frontend generates them.
+
+---
+
+# Genre Themes
+
+Each genre receives a dedicated palette.
+
+Examples
+
+Fantasy RPG
+
+↓
+
+Deep Gold
+
+Forest Green
+
+Warm Stone
+
+---
+
+Soulslike
+
+↓
+
+Ash Gray
+
+Dark Bronze
+
+Muted Gold
+
+---
+
+Cyberpunk
+
+↓
+
+Electric Blue
+
+Purple
+
+Dark Navy
+
+---
+
+Horror
+
+↓
+
+Deep Crimson
+
+Black
+
+Desaturated Gray
+
+---
+
+Racing
+
+↓
+
+Bright Orange
+
+Dark Asphalt
+
+Silver
+
+---
+
+Retro
+
+↓
+
+Soft Purple
+
+Pink
+
+Blue
+
+---
+
+Sci-Fi
+
+↓
+
+Blue
+
+White
+
+Steel Gray
+
+---
+
+Adventure
+
+↓
+
+Earth Tones
+
+Sky Blue
+
+Warm Brown
+
+---
+
+Only accent colors change.
+
+Core layout remains identical.
+
+---
+
+# Typography
+
+Primary Font
+
+Google Font
+
+Loaded using
+
+```text id="fhqv5o"
+next/font
+```
+
+Typography hierarchy
+
+Display
+
+↓
+
+Page Title
+
+↓
+
+Section Title
+
+↓
+
+Body
+
+↓
+
+Caption
+
+Typography should emphasize readability.
+
+---
+
+# Font Usage
+
+Display
+
+Large Hero Titles
+
+Headings
+
+Page Sections
+
+Body
+
+Primary Content
+
+Caption
+
+Metadata
+
+Secondary Information
+
+Avoid using more than one font family.
+
+---
+
+# Iconography
+
+Official Library
+
+Lucide React
+
+No additional icon libraries should be mixed.
+
+Icons should remain:
+
+Simple
+
+Minimal
+
+Recognizable
+
+---
+
+# Border Radius
+
+Small
+
+Inputs
+
+Buttons
+
+Medium
+
+Cards
+
+Dialogs
+
+Large
+
+Hero Containers
+
+Consistency is more important than exact values.
+
+---
+
+End of Part 1

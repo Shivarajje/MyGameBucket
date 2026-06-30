@@ -1,0 +1,295 @@
+# MyGameBucket
+
+# Document 02 — Product Requirements
+
+## Part 2 of 4
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Game Discovery
+
+Game discovery is the primary entry point into the user's library.
+
+Users discover games by searching rather than manually entering game information.
+
+---
+
+# Search
+
+The global search bar searches the Game Catalog.
+
+Supported filters:
+
+* Game Name
+* Genre
+* Platform
+* Release Year
+
+Version 1 supports **PC games only**.
+
+---
+
+## Live Suggestions
+
+While typing, suggestions appear instantly.
+
+Example:
+
+```
+eld
+```
+
+Suggestions:
+
+* Elden Ring
+* Elder Scrolls V: Skyrim
+* Elder Scrolls IV: Oblivion
+
+Suggestions update in real time.
+
+---
+
+## Search History
+
+Version 1 does **not** store recent searches.
+
+Every search session starts fresh.
+
+---
+
+# Game Page
+
+Selecting a search result opens the Game Page.
+
+The Game Page combines:
+
+* Official game information
+* User-specific information (if the game is already in the user's library)
+
+---
+
+# Game Page Layout
+
+Every Game Page begins with a cinematic hero section.
+
+Hero contents:
+
+* Hero Banner
+* Cover Art
+* Game Title
+* Genre
+* Release Year
+* Developer
+* Supported Platform
+* Add to Library / In Library Button
+
+Hero height:
+
+Approximately 65% of the viewport.
+
+---
+
+# Theme System
+
+Themes are **genre-based**, not game-based.
+
+Examples:
+
+* Soulslike
+* Fantasy RPG
+* Pixel / Retro
+* Cyberpunk
+* Horror
+* Racing
+
+Each theme changes:
+
+* Color palette
+* Typography
+* Decorative UI
+* Background accents
+
+Animations remain consistent across all themes.
+
+---
+
+# Animation System
+
+The application uses one universal animation language.
+
+Examples:
+
+* Fade
+* Slide
+* Scale
+* Stagger
+* Blur
+
+Animation duration:
+
+Approximately 500–700 milliseconds.
+
+The goal is consistency rather than spectacle.
+
+---
+
+# Background Effects
+
+Background effects remain subtle.
+
+Examples include:
+
+* Soft gradients
+* Gentle glow
+* Light particles
+* Decorative accents
+
+Heavy particle systems and expensive effects are intentionally avoided.
+
+---
+
+# Screenshots
+
+Maximum displayed screenshots:
+
+5
+
+Clicking a screenshot opens a fullscreen lightbox.
+
+---
+
+# Add to Library Flow
+
+If the game is **not** already in the user's library:
+
+Display:
+
+```
+Add to Library
+```
+
+Selecting it prompts the user to enter:
+
+* Rating
+* Status
+* Hours Played
+* Started Date
+* Finished Date
+* Journal Entry
+
+Once saved:
+
+The game becomes part of the user's library.
+
+---
+
+# Existing Games
+
+If a searched game already exists inside the user's library:
+
+The application opens the library version of the Game Page.
+
+The user immediately sees:
+
+* Official Game Information
+* Personal Journal Entry
+* Hours Played
+* Status
+* Rating
+
+This avoids duplicate workflows.
+
+---
+
+# Supported Platforms
+
+Version 1 supports:
+
+* PC
+
+Future versions may support:
+
+* PlayStation
+* Xbox
+* Nintendo
+* Mobile
+
+---
+
+# Missing Games
+
+If a game cannot be found through the external Game API:
+
+Users may manually create a basic game entry.
+
+This ensures support for:
+
+* Indie titles
+* Very old games
+* Mods
+* Newly released games
+
+---
+
+# Duplicate Games
+
+When possible, obvious duplicates should be merged.
+
+Example:
+
+* Elden Ring
+* Elden Ring™
+
+These should point to the same catalog entry where appropriate.
+
+Different editions that genuinely represent separate releases may remain separate.
+
+---
+
+# Missing Cover Images
+
+If the Game API does not provide a cover image:
+
+Display a default placeholder image.
+
+This keeps the interface visually consistent.
+
+---
+
+# Dynamic Loading Messages
+
+Instead of generic loading indicators, the application displays random themed messages.
+
+Examples:
+
+* Looking through thousands of adventures...
+* Opening another chapter...
+* Preparing your next journey...
+* Rolling the dice...
+* Loading another world...
+* Sharpening swords...
+* Traveling between worlds...
+* Unfolding the map...
+* Painting the next adventure...
+* Packing your inventory...
+* Choosing a new destination...
+
+Additional messages may be added over time.
+
+---
+
+# Performance Philosophy
+
+Game pages should prioritize responsiveness.
+
+Heavy animations, large assets, and unnecessary effects should be avoided.
+
+A premium experience should never compromise smooth performance.
+
+---
+
+End of Part 2

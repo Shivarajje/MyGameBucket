@@ -1,0 +1,399 @@
+# MyGameBucket
+
+# Document 07 — Development Standards & AI Development Guide
+
+## Part 2 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# AI Rule 5 — Respect the Service Layer
+
+Business logic belongs only inside Services.
+
+Never place business logic inside:
+
+* React Components
+* API Routes
+* Database Queries
+* Utility Functions
+
+Services own business decisions.
+
+---
+
+# AI Rule 6 — Respect Feature Boundaries
+
+Each feature owns its own implementation.
+
+Examples:
+
+Library
+
+↓
+
+LibraryService
+
+↓
+
+Library Components
+
+↓
+
+Library Hooks
+
+Do not access another feature's internal files directly.
+
+Communication should happen through public services or APIs.
+
+---
+
+# AI Rule 7 — Reuse Before Creating
+
+Before creating anything new:
+
+Search for an existing:
+
+* Component
+* Service
+* Hook
+* Utility
+* Type
+* Constant
+
+If one already exists,
+
+reuse or extend it.
+
+Avoid duplication.
+
+---
+
+# AI Rule 8 — Keep Files Small
+
+Files should have one responsibility.
+
+Preferred size:
+
+200–400 lines.
+
+Avoid files larger than approximately 600 lines.
+
+If a file becomes too large,
+
+split it into logical modules.
+
+---
+
+# AI Rule 9 — Prefer Readability
+
+Readable code is preferred over clever code.
+
+Example
+
+Good
+
+```typescript
+const completedGames = library.filter(
+    game => game.status === "Completed"
+);
+```
+
+Avoid unnecessary abstractions that reduce readability.
+
+Future maintainability is more important than writing fewer lines.
+
+---
+
+# AI Rule 10 — Type Safety
+
+Never bypass TypeScript.
+
+Avoid:
+
+```typescript
+as any
+```
+
+or
+
+```typescript
+// @ts-ignore
+```
+
+unless absolutely unavoidable and properly documented.
+
+Strict typing should be maintained throughout the project.
+
+---
+
+# Coding Standards
+
+---
+
+## Naming Conventions
+
+Variables
+
+camelCase
+
+```text id="uwjlwm"
+favoriteGame
+
+hoursPlayed
+```
+
+---
+
+Functions
+
+camelCase
+
+```text id="ewjlwm"
+addGame()
+
+updateProfile()
+```
+
+---
+
+React Components
+
+PascalCase
+
+```text id="0bjlwm"
+GameCard
+
+ProfileHero
+```
+
+---
+
+Types
+
+PascalCase
+
+```text id="s0jlwm"
+Game
+
+LibraryEntry
+
+Profile
+```
+
+---
+
+Interfaces
+
+PascalCase
+
+```text id="zwjlwm"
+GameResponse
+
+ProfileSettings
+```
+
+---
+
+Enums
+
+PascalCase
+
+```text id="9jlwm"
+GameStatus
+
+Visibility
+```
+
+---
+
+Constants
+
+UPPER_SNAKE_CASE
+
+```text id="jlwm10"
+MAX_BIO_LENGTH
+
+DEFAULT_PAGE_SIZE
+```
+
+---
+
+Folders
+
+kebab-case
+
+```text id="jlwm11"
+game-search
+
+profile-page
+
+library-grid
+```
+
+---
+
+Files
+
+Prefer:
+
+PascalCase for Components
+
+camelCase for utilities
+
+Examples
+
+```text id="jlwm12"
+GameCard.tsx
+
+formatDate.ts
+
+LibraryService.ts
+```
+
+---
+
+# Comments
+
+Comments should explain:
+
+Why
+
+not
+
+What.
+
+Bad
+
+```typescript
+// Increment i
+i++;
+```
+
+Good
+
+```typescript
+// Skip duplicate games already present in the user's library.
+```
+
+Code should be self-explanatory whenever possible.
+
+---
+
+# Function Design
+
+Functions should:
+
+* Perform one task.
+* Return one clear result.
+* Avoid hidden side effects.
+
+Prefer several small functions over one large function.
+
+---
+
+# Component Design
+
+React components should:
+
+* Receive data through props.
+* Avoid direct database access.
+* Delegate business logic to services.
+* Remain focused on presentation.
+
+Components should be predictable and reusable.
+
+---
+
+# Hook Design
+
+Hooks exist to simplify UI logic.
+
+Hooks should:
+
+* Coordinate state.
+* Manage effects.
+* Prepare data for components.
+
+Hooks should not contain complex business rules.
+
+---
+
+# Utility Design
+
+Utilities must be:
+
+* Pure
+* Deterministic
+* Side-effect free
+
+Utilities should never:
+
+* Call APIs
+* Access the database
+* Modify global state
+
+---
+
+# Error Handling
+
+Every asynchronous operation should anticipate failure.
+
+Examples
+
+Network Request
+
+↓
+
+try/catch
+
+↓
+
+Meaningful Error
+
+↓
+
+User Feedback
+
+Unexpected exceptions should always be logged.
+
+---
+
+# Logging Standards
+
+Useful events should be logged.
+
+Examples
+
+* Authentication
+* Administrative Actions
+* API Failures
+* Database Failures
+* Synchronization Failures
+
+Avoid logging sensitive information.
+
+---
+
+# Security Standards
+
+Never expose:
+
+* API Keys
+* Secrets
+* Service Tokens
+
+Never trust:
+
+* Client Input
+* Hidden Fields
+* Browser State
+
+Always validate server-side.
+
+---
+
+End of Part 2

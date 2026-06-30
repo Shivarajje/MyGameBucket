@@ -1,0 +1,383 @@
+# MyGameBucket
+
+# Document 03 — Database Architecture
+
+## Part 4 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Row Level Security (RLS)
+
+Version 1 uses Supabase Row Level Security (RLS) on every application table.
+
+No table should be publicly writable.
+
+Every request is evaluated against the authenticated user.
+
+---
+
+# Security Philosophy
+
+Security follows the principle:
+
+**Default Deny**
+
+If access has not been explicitly granted,
+
+↓
+
+Access is denied.
+
+This minimizes accidental data exposure.
+
+---
+
+# Profiles
+
+## Public Profiles
+
+Anyone may view:
+
+* Username
+* Avatar
+* Bio
+* Favorite Game
+* Favorite Genre
+* Public Library
+* Public Collections
+* Public Journal Entries
+
+provided the profile visibility is set to **Public**.
+
+---
+
+## Private Profiles
+
+Visitors see:
+
+> This profile is private.
+
+No personal data is exposed.
+
+---
+
+## Editing Profiles
+
+Editable by:
+
+* Profile Owner
+* Administrator
+
+No other users may modify profile information.
+
+---
+
+# Library Permissions
+
+Only the owner may:
+
+* Add games
+* Remove games
+* Update hours
+* Update status
+* Update rating
+
+Visitors have read-only access to public libraries.
+
+---
+
+# Journal Entry Permissions
+
+Only the owner may:
+
+* Create
+* Edit
+* Delete
+
+their Journal Entries.
+
+Visitors may only read Journal Entries if the associated profile is public.
+
+---
+
+# Collection Permissions
+
+Only the owner may:
+
+* Create collections
+* Rename collections
+* Delete collections
+* Add games
+* Remove games
+
+Visitors may browse public collections.
+
+---
+
+# Manual Game Submissions
+
+Authenticated users may submit games.
+
+Administrators may:
+
+* Approve
+* Reject
+* Edit metadata before approval
+
+Regular users cannot modify submissions after review.
+
+---
+
+# Administrator Permissions
+
+Administrators may:
+
+* View user accounts
+* Review manual game submissions
+* Remove inappropriate content
+* Access backend logs
+
+Administrators should **not** modify personal gameplay information such as:
+
+* Ratings
+* Hours Played
+* Journal Entries
+
+except when moderation requires removal.
+
+---
+
+# Backend Validation
+
+Every request is validated server-side.
+
+Examples:
+
+* Duplicate library entries
+* Invalid ratings
+* Invalid usernames
+* Invalid visibility values
+* Invalid collection limits
+
+Client-side validation improves user experience.
+
+Backend validation guarantees data integrity.
+
+---
+
+# API Architecture
+
+The frontend never communicates directly with the Game API.
+
+Architecture:
+
+Frontend
+
+↓
+
+API Route
+
+↓
+
+GameService
+
+↓
+
+Cache
+
+↓
+
+External Game API
+
+This allows the application to switch providers without changing frontend code.
+
+---
+
+# API Caching
+
+Every game lookup follows:
+
+Request
+
+↓
+
+Check Cache
+
+↓
+
+Fresh?
+
+↓
+
+Yes → Return Cached Data
+
+↓
+
+No → Fetch API
+
+↓
+
+Update Cache
+
+↓
+
+Return Data
+
+This reduces:
+
+* API calls
+* Response times
+* Rate-limit issues
+
+---
+
+# API Failure Handling
+
+If the external Game API fails:
+
+The application should still display:
+
+* Title
+* Cover
+* Genre
+* Platform
+* Release Year
+
+from the Game Catalog.
+
+A user-friendly message should indicate that additional information is temporarily unavailable.
+
+The application should remain usable.
+
+---
+
+# last_synced_at
+
+Every Game Catalog record includes:
+
+last_synced_at
+
+Purpose:
+
+* Refresh stale data
+* Reduce unnecessary API requests
+* Monitor synchronization health
+* Support future background refresh jobs
+
+---
+
+# Cover Images
+
+Only the cover image URL is stored.
+
+Images remain hosted by the external provider.
+
+Benefits:
+
+* Lower storage costs
+* Automatic artwork updates
+* Simpler infrastructure
+
+If an image cannot be loaded,
+
+↓
+
+display the application's placeholder image.
+
+---
+
+# Exception Handling
+
+The application must define behavior for common failure scenarios.
+
+Examples:
+
+Game already exists
+
+↓
+
+Return friendly validation error.
+
+---
+
+Cover image missing
+
+↓
+
+Display placeholder.
+
+---
+
+API unavailable
+
+↓
+
+Display cached/minimal information.
+
+---
+
+Network timeout
+
+↓
+
+Retry briefly,
+
+then return a meaningful error.
+
+---
+
+Invalid user input
+
+↓
+
+Reject request.
+
+Explain the problem.
+
+---
+
+Unexpected server error
+
+↓
+
+Log the error.
+
+Return a generic user-friendly message.
+
+Never expose internal implementation details.
+
+---
+
+# Logging
+
+Backend logs should include:
+
+* Authentication events
+* Manual game submissions
+* Admin approvals
+* API failures
+* Unexpected exceptions
+
+Sensitive information must never be written to logs.
+
+---
+
+# Monitoring
+
+The architecture should support future integration with monitoring tools.
+
+Examples:
+
+* Sentry
+* OpenTelemetry
+* Custom logging dashboards
+
+Version 1 does not require these services but should remain compatible with them.
+
+---
+
+End of Part 4

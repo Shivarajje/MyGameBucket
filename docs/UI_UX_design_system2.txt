@@ -1,0 +1,413 @@
+# MyGameBucket
+
+# Document 08 — UI/UX Design System
+
+## Part 2 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Spacing System
+
+The entire application follows an **8-point spacing system**.
+
+Approved spacing values:
+
+```text
+4px
+
+8px
+
+16px
+
+24px
+
+32px
+
+40px
+
+48px
+
+64px
+
+80px
+```
+
+Avoid arbitrary spacing values.
+
+Spacing should remain predictable throughout the application.
+
+---
+
+# Grid System
+
+Desktop
+
+12 Columns
+
+---
+
+Tablet
+
+8 Columns
+
+---
+
+Mobile
+
+4 Columns
+
+Layouts should resize naturally while maintaining alignment.
+
+---
+
+# Page Width
+
+Content should remain centered.
+
+Recommended maximum width:
+
+```text
+1440px
+```
+
+Reading-heavy sections should use narrower containers for better readability.
+
+---
+
+# Layout Philosophy
+
+Each page should follow a familiar structure.
+
+```text
+Navigation
+
+↓
+
+Hero
+
+↓
+
+Primary Content
+
+↓
+
+Secondary Sections
+
+↓
+
+Footer
+```
+
+Users should never feel lost while navigating.
+
+---
+
+# Navigation
+
+Desktop
+
+Top Navigation Bar
+
+Contains:
+
+* Logo
+* Search
+* Library
+* Collections
+* Profile
+
+---
+
+Mobile
+
+Drawer Navigation
+
+Accessible using a menu button.
+
+All desktop functionality should remain available.
+
+---
+
+# Search Bar
+
+Search is one of the most frequently used features.
+
+Requirements:
+
+* Always easy to find.
+* Fast.
+* Responsive.
+* Keyboard friendly.
+
+Placeholder example:
+
+```text
+Search games or users...
+```
+
+---
+
+# Cards
+
+Cards are the foundation of the interface.
+
+Examples:
+
+* Game Card
+* Profile Card
+* Collection Card
+* Journal Card
+
+Every card follows the same design language.
+
+---
+
+# Card Layout
+
+Standard structure:
+
+```text
+Cover Image
+
+↓
+
+Title
+
+↓
+
+Metadata
+
+↓
+
+Actions
+```
+
+Spacing and alignment should remain consistent across all cards.
+
+---
+
+# Game Cards
+
+Display:
+
+* Cover Image
+* Game Title
+* Genre
+* User Status (if in library)
+
+Hover effects should remain subtle.
+
+---
+
+# Profile Cards
+
+Display:
+
+* Avatar
+* Username
+* Favorite Game
+* Total Games
+
+Profile cards should feel clean rather than crowded.
+
+---
+
+# Collection Cards
+
+Display:
+
+* Collection Name
+* Number of Games
+* Optional Description
+
+Cover images are not part of Version 1.
+
+---
+
+# Journal Cards
+
+Display:
+
+* Game Cover
+* Entry Preview
+* Last Updated
+
+Entry previews should truncate gracefully.
+
+---
+
+# Buttons
+
+Hierarchy:
+
+Primary
+
+↓
+
+Filled
+
+---
+
+Secondary
+
+↓
+
+Outlined
+
+---
+
+Ghost
+
+↓
+
+Minimal
+
+---
+
+Danger
+
+↓
+
+Filled Red Variant
+
+Button styles should remain identical across the application.
+
+---
+
+# Inputs
+
+All inputs share:
+
+* Height
+* Border Radius
+* Focus Ring
+* Padding
+
+Focus states should always be visible.
+
+---
+
+# Forms
+
+Every form follows the same layout.
+
+```text
+Label
+
+↓
+
+Input
+
+↓
+
+Helper Text
+
+↓
+
+Validation Message
+```
+
+Validation errors should appear below the relevant field.
+
+---
+
+# Dialogs
+
+Dialogs should be used only for important actions.
+
+Examples:
+
+* Delete Game
+* Delete Collection
+* Delete Account
+
+Avoid unnecessary confirmation dialogs.
+
+---
+
+# Empty States
+
+Every feature should have an intentional empty state.
+
+Examples:
+
+Library
+
+```text
+Your journey hasn't begun yet.
+```
+
+Collections
+
+```text
+No collections yet.
+```
+
+Search
+
+```text
+Search for your next adventure.
+```
+
+Settings
+
+```text
+Customize your experience.
+```
+
+Each empty state should encourage the next action.
+
+---
+
+# Loading States
+
+Skeleton loaders are preferred.
+
+Examples:
+
+* Library Skeleton
+* Game Skeleton
+* Profile Skeleton
+* Collection Skeleton
+
+Avoid blank pages.
+
+---
+
+# Toast Notifications
+
+Short messages confirming actions.
+
+Examples:
+
+✓ Game Added
+
+✓ Collection Created
+
+✓ Profile Updated
+
+✓ Journal Saved
+
+Errors should explain what happened in plain language.
+
+---
+
+# Tooltips
+
+Use tooltips sparingly.
+
+Appropriate for:
+
+* Icon-only buttons
+* Less obvious actions
+* Accessibility assistance
+
+Avoid using tooltips to explain essential functionality.
+
+---
+
+End of Part 2

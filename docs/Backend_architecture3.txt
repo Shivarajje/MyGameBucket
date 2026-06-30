@@ -1,0 +1,386 @@
+# MyGameBucket
+
+# Document 05 — Backend Architecture
+
+## Part 3 of 5
+
+### Version 0.1
+
+**Status:** Approved
+
+---
+
+# Game API Integration
+
+The application uses an external Game API as its primary source of official game information.
+
+The backend is solely responsible for interacting with this API.
+
+The frontend must never communicate with the Game API directly.
+
+---
+
+# API Abstraction Layer
+
+Architecture:
+
+```text
+Frontend
+
+↓
+
+API Route
+
+↓
+
+GameService
+
+↓
+
+Game API Provider
+
+(IGDB)
+
+↓
+
+Response
+
+↓
+
+GameService
+
+↓
+
+Frontend
+```
+
+This abstraction allows the provider to be replaced without changing the frontend.
+
+Possible future providers:
+
+* RAWG
+* GiantBomb
+* Steam
+* Custom Game Database
+
+Only the GameService should require modification.
+
+---
+
+# Game Search Flow
+
+User searches for:
+
+"Elden Ring"
+
+↓
+
+Search API
+
+↓
+
+GameService
+
+↓
+
+Check Local Game Catalog
+
+↓
+
+Found?
+
+↓
+
+Yes
+
+↓
+
+Return Local Record
+
+↓
+
+No
+
+↓
+
+Query External Game API
+
+↓
+
+Create Local Catalog Entry
+
+↓
+
+Return Result
+
+The catalog gradually grows as users search for new games.
+
+---
+
+# Game Page Flow
+
+When opening a game page:
+
+User
+
+↓
+
+GameService
+
+↓
+
+Local Game Catalog
+
+↓
+
+Retrieve Basic Metadata
+
+↓
+
+Check Cache
+
+↓
+
+Fresh?
+
+↓
+
+Yes
+
+↓
+
+Return Cached Details
+
+↓
+
+No
+
+↓
+
+Fetch Latest API Data
+
+↓
+
+Update Cache
+
+↓
+
+Update last_synced_at
+
+↓
+
+Return Result
+
+This minimizes unnecessary API calls.
+
+---
+
+# Cache Strategy
+
+Cache exists to improve:
+
+* Speed
+* Reliability
+* API Rate Limits
+
+The cache should expire after a configurable period.
+
+Suggested default:
+
+30 Days
+
+Future background jobs may refresh popular games automatically.
+
+---
+
+# Cache Philosophy
+
+Never fetch external data if:
+
+* Fresh cached data exists.
+
+Always prefer local information whenever possible.
+
+Only communicate with the external API when necessary.
+
+---
+
+# API Failure Strategy
+
+If the external Game API is unavailable:
+
+Display:
+
+* Title
+* Cover
+* Genre
+* Platform
+* Release Year
+
+from the Game Catalog.
+
+Display a friendly message informing the user that additional details are temporarily unavailable.
+
+The application should remain functional.
+
+---
+
+# Placeholder Strategy
+
+Missing Cover
+
+↓
+
+Display Placeholder Artwork
+
+Missing Description
+
+↓
+
+Hide Section
+
+Missing Screenshots
+
+↓
+
+Hide Gallery
+
+The interface should degrade gracefully.
+
+---
+
+# Synchronization
+
+Each catalog entry contains:
+
+last_synced_at
+
+Whenever fresh API data is downloaded:
+
+Update:
+
+last_synced_at
+
+Only outdated entries should be refreshed.
+
+---
+
+# API Rate Limiting
+
+The backend should minimize external requests.
+
+Strategies:
+
+* Local Cache
+* Shared Game Catalog
+* Refresh Only When Needed
+* Batch Requests (Future)
+
+Never query the external API unnecessarily.
+
+---
+
+# Search Suggestions
+
+Search suggestions should come from:
+
+Primary:
+
+Local Game Catalog
+
+Fallback:
+
+External API
+
+This improves speed and reduces API usage.
+
+---
+
+# Manual Games
+
+If a search produces no suitable result:
+
+Offer:
+
+Submit Game
+
+↓
+
+Manual Submission
+
+↓
+
+Admin Review
+
+↓
+
+Approved
+
+↓
+
+Game Catalog
+
+This prevents users from creating public entries immediately.
+
+---
+
+# Search Performance
+
+Search should prioritize:
+
+* Exact Matches
+* Starts With
+* Partial Matches
+
+Future versions may include:
+
+* Fuzzy Search
+* Typo Correction
+* AI Search
+
+These are outside the Version 1 scope.
+
+---
+
+# User Search
+
+Version 1 supports searching users by:
+
+Username Only
+
+Future filters may include:
+
+* Favorite Genre
+* Games Played
+* Join Date
+
+The backend should be designed to accommodate future filters.
+
+---
+
+# Search Pagination
+
+Large search results should be paginated.
+
+Recommended size:
+
+50 results per request.
+
+The frontend implements infinite scrolling using paginated responses.
+
+---
+
+# Search Consistency
+
+Every search endpoint should return:
+
+* Standard API Response
+* Pagination Metadata
+* Success Flag
+* Human-readable Message
+
+This keeps frontend implementation consistent.
+
+---
+
+End of Part 3
