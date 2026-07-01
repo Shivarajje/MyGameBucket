@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { collectionService } from '@/services/collectionService';
+import { profileService } from '@/services/profileService';
 
 // GET /api/collections — Get the current user's collections
 export async function GET() {
@@ -12,7 +13,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const collections = await collectionService.getCollections(user.id);
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
+    const collections = await collectionService.getCollections(profile.id);
     return NextResponse.json(collections);
   } catch (error) {
     console.error('[GET /api/collections]', error);
@@ -30,10 +36,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
     const body = await request.json();
     const { name, description } = body;
 
-    const collection = await collectionService.createCollection(user.id, name, description);
+    const collection = await collectionService.createCollection(profile.id, name, description);
     return NextResponse.json(collection, { status: 201 });
   } catch (error: any) {
     console.error('[POST /api/collections]', error);

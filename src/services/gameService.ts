@@ -13,6 +13,10 @@ export const gameService = {
     return externalGameApi.searchGames(query);
   },
 
+  async getPopularGames(limit = 10): Promise<GameSearchResult[]> {
+    return externalGameApi.getPopularGames(limit);
+  },
+
   async getGame(slug: string): Promise<GameDetail | null> {
     // 1. Check local database first
     const localGame = await gameRepository.getGameBySlug(slug);
@@ -29,9 +33,20 @@ export const gameService = {
       }
     }
 
-    // 2. Return local if valid and not stale
+    // 2. If local data is fresh, use it but still fetch screenshots from IGDB
     if (localGame && !needsSync) {
-      return this.mapDatabaseToGameDetail(localGame);
+      const detail = this.mapDatabaseToGameDetail(localGame);
+      // Screenshots aren't stored in DB, always fetch them live
+      try {
+        const igdbGame = await externalGameApi.getGameBySlug(slug);
+        if (igdbGame) {
+          detail.screenshots = igdbGame.screenshots;
+          detail.genre = igdbGame.genre;
+        }
+      } catch {
+        // If IGDB fails, we just won't have screenshots — not a fatal error
+      }
+      return detail;
     }
 
     // 3. Fetch from IGDB if missing or stale

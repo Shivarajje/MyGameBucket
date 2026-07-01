@@ -14,14 +14,10 @@ export function GameInfo({ game }: GameInfoProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border/40">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border/40">
         <div>
           <span className="text-sm text-muted-foreground block mb-1">Developer</span>
           <span className="font-medium">{game.developer || 'Unknown'}</span>
-        </div>
-        <div>
-          <span className="text-sm text-muted-foreground block mb-1">Platform</span>
-          <span className="font-medium">{game.platform || 'Unknown'}</span>
         </div>
         <div>
           <span className="text-sm text-muted-foreground block mb-1">Release</span>

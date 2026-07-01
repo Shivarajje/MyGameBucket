@@ -23,7 +23,7 @@ export const gameRepository = {
       .upsert({
         ...game,
         last_synced_at: new Date().toISOString(),
-      }, { onConflict: 'slug' })
+      }, { onConflict: 'igdb_id' })
       .select()
       .single();
 

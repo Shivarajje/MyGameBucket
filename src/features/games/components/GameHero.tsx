@@ -49,7 +49,6 @@ export function GameHero({ game }: GameHeroProps) {
           <div className="flex flex-wrap gap-2 mb-2">
             {game.genre && <Badge variant="secondary" className="text-sm bg-white/10 backdrop-blur-md hover:bg-white/20 border-white/10">{game.genre}</Badge>}
             {game.releaseYear && <Badge variant="outline" className="text-sm bg-black/40 backdrop-blur-md border-white/10">{game.releaseYear}</Badge>}
-            {game.platform && <Badge variant="outline" className="text-sm bg-black/40 backdrop-blur-md border-white/10">{game.platform}</Badge>}
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-foreground drop-shadow-md">

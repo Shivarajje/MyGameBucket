@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { libraryService } from '@/services/libraryService';
+import { profileService } from '@/services/profileService';
 
 // GET /api/library — Get the current user's library
 export async function GET(request: NextRequest) {
@@ -12,6 +13,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Look up the profile row to get the actual profile.id
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found. Please sign out and register again.' }, { status: 404 });
+    }
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || undefined;
     const sortBy = searchParams.get('sortBy') || 'added_at';
@@ -19,7 +26,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 
-    const result = await libraryService.getLibrary(user.id, {
+    const result = await libraryService.getLibrary(profile.id, {
       status,
       sortBy,
       sortOrder,
@@ -44,6 +51,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Look up the profile row to get the actual profile.id
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found. Please sign out and register again.' }, { status: 404 });
+    }
+
     const body = await request.json();
     const { gameId, status } = body;
 
@@ -51,7 +64,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'gameId is required' }, { status: 400 });
     }
 
-    const entry = await libraryService.addToLibrary(user.id, gameId, status);
+    const entry = await libraryService.addToLibrary(profile.id, gameId, status);
     return NextResponse.json(entry, { status: 201 });
   } catch (error: any) {
     // Handle unique constraint violation (game already in library)

@@ -64,13 +64,6 @@ export function ProfileHeader({ profile, stats }: ProfileHeaderProps) {
               <span className="font-semibold">{stats.totalHours}h</span>
               <span className="text-muted-foreground">played</span>
             </div>
-            {stats.averageRating != null && (
-              <div className="flex items-center gap-1.5 text-sm">
-                <Star className="w-4 h-4 text-primary fill-primary" />
-                <span className="font-semibold">{stats.averageRating}</span>
-                <span className="text-muted-foreground">avg</span>
-              </div>
-            )}
           </div>
         </div>
       </div>

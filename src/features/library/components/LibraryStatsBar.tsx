@@ -6,19 +6,17 @@ interface LibraryStatsBarProps {
   totalGames: number;
   completedGames: number;
   totalHours: number;
-  averageRating: number | null;
 }
 
-export function LibraryStatsBar({ totalGames, completedGames, totalHours, averageRating }: LibraryStatsBarProps) {
+export function LibraryStatsBar({ totalGames, completedGames, totalHours }: LibraryStatsBarProps) {
   const stats = [
     { icon: Gamepad2, label: 'Total Games', value: String(totalGames) },
     { icon: Trophy, label: 'Completed', value: String(completedGames) },
     { icon: Clock, label: 'Hours Played', value: `${totalHours}h` },
-    { icon: Star, label: 'Avg Rating', value: averageRating != null ? `${averageRating}/10` : '—' },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {stats.map((stat) => (
         <div
           key={stat.label}

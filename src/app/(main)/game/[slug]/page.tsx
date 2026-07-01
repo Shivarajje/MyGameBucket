@@ -9,6 +9,7 @@ import { Container } from '@/components/layout/Container';
 
 import { createClient } from '@/lib/supabase/server';
 import { libraryService } from '@/services/libraryService';
+import { profileService } from '@/services/profileService';
 import { JournalEntryForm } from '@/features/journal/components/JournalEntryForm';
 
 interface GamePageProps {
@@ -42,7 +43,10 @@ export default async function GamePage({ params }: GamePageProps) {
   const { data: { user } } = await supabase.auth.getUser();
   let inLibrary = false;
   if (user) {
-    inLibrary = await libraryService.isGameInLibrary(user.id, game.id);
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (profile) {
+      inLibrary = await libraryService.isGameInLibrary(profile.id, game.id);
+    }
   }
 
   return (

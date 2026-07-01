@@ -59,7 +59,6 @@ export const externalGameApi = {
     const igdbQuery = `
       search "${query}";
       fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date;
-      where category = 0 & (version_parent = null | version_parent = 0);
       limit ${limit};
     `;
 
@@ -82,6 +81,18 @@ export const externalGameApi = {
     }
 
     return formatIgdbGameToDetail(results[0]);
+  },
+
+  async getPopularGames(limit = 10): Promise<GameSearchResult[]> {
+    const igdbQuery = `
+      fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date;
+      where rating_count > 50 & version_parent = null;
+      sort rating_count desc;
+      limit ${limit};
+    `;
+
+    const results = await igdbRequest(IGDB_CONFIG.ENDPOINTS.GAMES, igdbQuery);
+    return results.map(formatIgdbGameToSearchResult);
   }
 };
 
@@ -93,11 +104,11 @@ function formatIgdbGameToSearchResult(igdbGame: any): GameSearchResult {
     : null;
 
   const genre = igdbGame.genres && igdbGame.genres.length > 0 
-    ? igdbGame.genres[0].name 
+    ? igdbGame.genres.slice(0, 2).map((g: any) => g.name).join(', ')
     : null;
 
   const platform = igdbGame.platforms && igdbGame.platforms.length > 0
-    ? igdbGame.platforms[0].name
+    ? igdbGame.platforms.map((p: any) => p.name).join(', ')
     : null;
 
   const releaseYear = igdbGame.first_release_date 
@@ -122,7 +133,7 @@ function formatIgdbGameToDetail(igdbGame: any): GameDetail {
   const developer = developerCompany ? developerCompany.company.name : null;
 
   const screenshots = igdbGame.screenshots
-    ? igdbGame.screenshots.map((s: any) => `https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${s.image_id}.jpg`).slice(0, 5)
+    ? igdbGame.screenshots.map((s: any) => `https://images.igdb.com/igdb/image/upload/t_1080p/${s.image_id}.jpg`).slice(0, 5)
     : [];
 
   return {

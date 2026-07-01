@@ -13,69 +13,68 @@ interface LibraryCardProps {
   entry: UserGameWithCatalog;
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  [GameStatus.Playing]: 'bg-green-500/20 text-green-400 border-green-500/30',
-  [GameStatus.Completed]: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  [GameStatus.OnHold]: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  [GameStatus.Dropped]: 'bg-red-500/20 text-red-400 border-red-500/30',
-};
-
 export function LibraryCard({ entry }: LibraryCardProps) {
   const game = entry.game_catalog;
-  const statusColor = STATUS_COLORS[entry.status] || '';
 
   return (
     <Link href={`/game/${game.slug}`}>
-      <Card className="group flex gap-4 p-4 bg-background/40 backdrop-blur-md border border-white/10 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(202,138,4,0.15)] transition-all duration-300 cursor-pointer">
-        {/* Cover */}
-        <div className="w-16 h-20 sm:w-20 sm:h-28 flex-shrink-0 rounded-lg overflow-hidden bg-muted relative">
+      <div className="group relative aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl transition-all duration-300 hover:border-primary/40 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(202,138,4,0.2)]">
+        {/* Background Image / Cover */}
+        <div className="absolute inset-0 z-0">
           {game.cover_url ? (
             <Image
               src={game.cover_url}
               alt={game.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="(max-width: 640px) 64px, 80px"
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              sizes="(max-width: 640px) 100vw, 250px"
+              priority
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-              No Cover
+            <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground bg-zinc-950 p-4 text-center">
+              <span className="font-bold text-sm">{game.title}</span>
+              <span className="text-xs mt-2 text-zinc-600">No Cover Art</span>
             </div>
           )}
         </div>
 
-        {/* Info */}
-        <div className="flex-1 min-w-0 flex flex-col justify-between">
+        {/* Dark gradient overlay for bottom text contrast */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+        {/* Glassmorphic Info Panel */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 p-4 flex flex-col gap-2.5">
+          {/* Fading Glassmorphism Background layer */}
+          <div 
+            className="absolute inset-0 -z-10 bg-black/70 backdrop-blur-md" 
+            style={{
+              maskImage: 'linear-gradient(to top, black 20%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to top, black 20%, transparent 100%)'
+            }}
+          />
+
           <div>
-            <h3 className="font-semibold text-sm sm:text-base truncate group-hover:text-primary transition-colors">
+            <h3 className="font-bold text-base sm:text-lg leading-snug text-white truncate drop-shadow-md group-hover:text-primary transition-colors">
               {game.title}
             </h3>
-            <p className="text-xs text-muted-foreground truncate mt-0.5">
-              {[game.genre, game.developer, game.release_year].filter(Boolean).join(' · ')}
+            <p className="text-xs text-zinc-300 font-medium truncate mt-0.5">
+              {[game.genre, game.release_year].filter(Boolean).join(' · ')}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 mt-2">
-            <Badge variant="outline" className={`text-[10px] ${statusColor}`}>
+          <div className="flex items-center justify-between gap-2 mt-0.5">
+            <Badge variant="outline" className="text-xs px-2.5 py-0.5 rounded-full bg-black/80 text-white border-zinc-800 font-semibold">
               {STATUS_LABELS[entry.status as GameStatus] || entry.status}
             </Badge>
 
-            {entry.rating != null && (
-              <span className="inline-flex items-center gap-1 text-xs text-primary">
-                <Star className="w-3 h-3 fill-primary" />
-                {entry.rating}
-              </span>
-            )}
-
             {Number(entry.hours_played) > 0 && (
-              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="w-3 h-3" />
+              <span className="inline-flex items-center gap-1.5 text-xs text-zinc-200 font-semibold">
+                <Clock className="w-3.5 h-3.5 text-primary" />
                 {entry.hours_played}h
               </span>
             )}
           </div>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 }

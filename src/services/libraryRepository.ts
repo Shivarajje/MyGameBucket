@@ -40,7 +40,11 @@ export const libraryRepository = {
     // Sorting
     const sortBy = options?.sortBy || 'added_at';
     const sortOrder = options?.sortOrder || 'desc';
-    query = query.order(sortBy, { ascending: sortOrder === 'asc' });
+    if (sortBy === 'title') {
+      query = query.order('title', { foreignTable: 'game_catalog', ascending: sortOrder === 'asc' });
+    } else {
+      query = query.order(sortBy, { ascending: sortOrder === 'asc' });
+    }
 
     // Pagination
     if (options?.limit) {
@@ -85,7 +89,7 @@ export const libraryRepository = {
   async updateGame(
     id: string,
     profileId: string,
-    updates: Partial<Pick<DatabaseUserGame, 'status' | 'hours_played' | 'rating' | 'started_at' | 'finished_at'>>
+    updates: Partial<Pick<DatabaseUserGame, 'status' | 'hours_played' | 'rating' | 'started_at' | 'completed_at'>>
   ): Promise<DatabaseUserGame> {
     const supabase = await createClient();
     const { data, error } = await supabase

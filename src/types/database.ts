@@ -2,6 +2,7 @@ import { GameStatus, Visibility, AppearanceMode, UserRole, SubmissionStatus, Log
 
 export type DatabaseProfile = {
   id: string;
+  user_id: string;
   username: string;
   avatar_url: string | null;
   bio: string | null;
@@ -41,7 +42,7 @@ export type DatabaseUserGame = {
   hours_played: number;
   rating: number | null;
   started_at: string | null;
-  finished_at: string | null;
+  completed_at: string | null;
   created_at: string;
   updated_at: string;
 };

@@ -1,11 +1,14 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -15,6 +18,29 @@ interface MobileDrawerProps {
 
 export function MobileDrawer({ isOpen, onClose, links }: MobileDrawerProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user || null);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    onClose();
+    router.refresh();
+  };
 
   if (!isOpen) return null;
 
@@ -47,14 +73,24 @@ export function MobileDrawer({ isOpen, onClose, links }: MobileDrawerProps) {
         </nav>
 
         <div className="mt-auto flex flex-col gap-4">
-          <Button variant="outline" className="w-full justify-center" asChild onClick={onClose}>
-            <Link href={ROUTES.LOGIN}>Log in</Link>
-          </Button>
-          <Button className="w-full justify-center" asChild onClick={onClose}>
-            <Link href={ROUTES.REGISTER}>Sign up</Link>
-          </Button>
+          {user ? (
+            <Button variant="outline" className="w-full justify-center" onClick={handleLogout}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Log out
+            </Button>
+          ) : (
+            <>
+              <Button variant="outline" className="w-full justify-center" asChild onClick={onClose}>
+                <Link href={ROUTES.LOGIN}>Log in</Link>
+              </Button>
+              <Button className="w-full justify-center" asChild onClick={onClose}>
+                <Link href={ROUTES.REGISTER}>Sign up</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
 }
+

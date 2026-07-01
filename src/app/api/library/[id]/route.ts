@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { libraryService } from '@/services/libraryService';
+import { profileService } from '@/services/profileService';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -16,10 +17,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
     const { id } = await params;
     const body = await request.json();
 
-    const updated = await libraryService.updateEntry(id, user.id, body);
+    const updated = await libraryService.updateEntry(id, profile.id, body);
     return NextResponse.json(updated);
   } catch (error) {
     console.error('[PATCH /api/library/[id]]', error);
@@ -37,11 +43,17 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
     const { id } = await params;
-    await libraryService.removeFromLibrary(id, user.id);
+    await libraryService.removeFromLibrary(id, profile.id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('[DELETE /api/library/[id]]', error);
     return NextResponse.json({ error: 'Failed to remove entry' }, { status: 500 });
   }
 }
+

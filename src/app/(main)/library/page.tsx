@@ -29,14 +29,14 @@ export default function LibraryPage() {
       <Container>
         <PageHeader
           title="My Library"
-          subtitle={count > 0 ? `${count} games tracked` : 'Your personal game collection'}
+          subtitle="Your personal game collection"
         />
 
         {/* Stats Bar */}
         <div className="mt-8">
           {statsLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[...Array(3)].map((_, i) => (
                 <Skeleton key={i} className="h-20 rounded-2xl" />
               ))}
             </div>
@@ -45,7 +45,6 @@ export default function LibraryPage() {
               totalGames={stats.totalGames}
               completedGames={stats.completedGames}
               totalHours={stats.totalHours}
-              averageRating={stats.averageRating}
             />
           ) : null}
         </div>
@@ -63,19 +62,23 @@ export default function LibraryPage() {
         </div>
 
         {/* Game List */}
-        <div className="mt-8 space-y-3">
+        <div className="mt-8">
           {loading && games.length === 0 ? (
-            [...Array(5)].map((_, i) => (
-              <Skeleton key={i} className="h-28 rounded-2xl" />
-            ))
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              {[...Array(5)].map((_, i) => (
+                <Skeleton key={i} className="aspect-[3/4] rounded-3xl" />
+              ))}
+            </div>
           ) : games.length > 0 ? (
             <>
-              {games.map((entry) => (
-                <LibraryCard key={entry.id} entry={entry} />
-              ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                {games.map((entry) => (
+                  <LibraryCard key={entry.id} entry={entry} />
+                ))}
+              </div>
 
               {hasMore && (
-                <div className="flex justify-center pt-6">
+                <div className="flex justify-center pt-8">
                   <Button
                     variant="outline"
                     onClick={loadMore}

@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { ROUTES } from '@/constants/routes';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { createClient } from '@/lib/supabase/server';
+import { libraryService } from '@/services/libraryService';
+import { DashboardView } from '@/features/dashboard/components/DashboardView';
 
 const StatItem = ({ value, label }: { value: string; label: string }) => (
   <div className="flex flex-col items-center justify-center transition-transform hover:-translate-y-1 cursor-default">
@@ -12,7 +15,36 @@ const StatItem = ({ value, label }: { value: string; label: string }) => (
   </div>
 );
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (session?.user) {
+    // User is logged in, fetch profile and recent games
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('user_id', session.user.id)
+      .single();
+
+    if (profile) {
+      const { data: recentGames } = await libraryService.getLibrary(profile.id, {
+        limit: 5,
+        sortBy: 'added_at',
+        sortOrder: 'desc'
+      });
+
+      return (
+        <>
+          <Navbar />
+          <DashboardView profile={profile} recentGames={recentGames} />
+          <Footer />
+        </>
+      );
+    }
+  }
+
+  // Marketing Splash Page (Logged Out)
   return (
     <>
       <Navbar />

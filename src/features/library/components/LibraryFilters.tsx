@@ -46,10 +46,8 @@ export function LibraryFilters({
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="added_at">Date Added</SelectItem>
-          <SelectItem value="started_at">Started Date</SelectItem>
-          <SelectItem value="hours_played">Hours Played</SelectItem>
-          <SelectItem value="rating">Rating</SelectItem>
+          <SelectItem value="added_at">Date</SelectItem>
+          <SelectItem value="title">Alphabetical</SelectItem>
         </SelectContent>
       </Select>
 

@@ -32,7 +32,7 @@ export const libraryService = {
       hours_played: 0,
       rating: null,
       started_at: null,
-      finished_at: null,
+      completed_at: null,
     });
   },
 
@@ -44,7 +44,7 @@ export const libraryService = {
       hours_played?: number;
       rating?: number | null;
       started_at?: string | null;
-      finished_at?: string | null;
+      completed_at?: string | null;
     }
   ) {
     return libraryRepository.updateGame(id, profileId, updates);

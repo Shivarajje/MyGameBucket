@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { collectionService } from '@/services/collectionService';
+import { profileService } from '@/services/profileService';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -16,6 +17,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { gameId } = body;
@@ -24,7 +30,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'gameId is required' }, { status: 400 });
     }
 
-    const relation = await collectionService.addGameToCollection(user.id, id, gameId);
+    const relation = await collectionService.addGameToCollection(profile.id, id, gameId);
     return NextResponse.json(relation, { status: 201 });
   } catch (error: any) {
     if (error?.code === '23505') {
@@ -45,6 +51,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const profile = await profileService.getProfileByUserId(user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const gameId = searchParams.get('gameId');
@@ -53,7 +64,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'gameId is required' }, { status: 400 });
     }
 
-    await collectionService.removeGameFromCollection(user.id, id, gameId);
+    await collectionService.removeGameFromCollection(profile.id, id, gameId);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('[DELETE /api/collections/[id]/games]', error);
