@@ -16,7 +16,7 @@ import { ROUTES } from '@/constants/routes';
 export default function CollectionsPage() {
   const router = useRouter();
   const [authChecking, setAuthChecking] = useState(true);
-  const { collections, loading, createCollection } = useCollections();
+  const { collections, loading, createCollection } = useCollections({ skip: authChecking });
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   useEffect(() => {

@@ -8,6 +8,7 @@ interface UseLibraryOptions {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
   limit?: number;
+  skip?: boolean;
 }
 
 export function useLibrary(options?: UseLibraryOptions) {
@@ -20,6 +21,7 @@ export function useLibrary(options?: UseLibraryOptions) {
   const limit = options?.limit || 20;
 
   const fetchLibrary = useCallback(async (reset = false) => {
+    if (options?.skip) return;
     setLoading(true);
     try {
       const currentOffset = reset ? 0 : offset;
@@ -50,12 +52,13 @@ export function useLibrary(options?: UseLibraryOptions) {
     } finally {
       setLoading(false);
     }
-  }, [offset, options?.status, options?.sortBy, options?.sortOrder, limit]);
+  }, [offset, options?.status, options?.sortBy, options?.sortOrder, options?.skip, limit]);
 
   useEffect(() => {
+    if (options?.skip) return;
     fetchLibrary(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [options?.status, options?.sortBy, options?.sortOrder]);
+  }, [options?.status, options?.sortBy, options?.sortOrder, options?.skip]);
 
   const loadMore = () => {
     if (!loading && hasMore) {
@@ -121,7 +124,7 @@ export function useLibraryActions() {
   return { addToLibrary, updateEntry, removeFromLibrary, loading };
 }
 
-export function useLibraryStats() {
+export function useLibraryStats(options?: { skip?: boolean }) {
   const [stats, setStats] = useState<{
     totalGames: number;
     completedGames: number;
@@ -131,6 +134,7 @@ export function useLibraryStats() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (options?.skip) return;
     async function fetchStats() {
       try {
         const res = await fetch('/api/library/stats');
@@ -143,7 +147,7 @@ export function useLibraryStats() {
       }
     }
     fetchStats();
-  }, []);
+  }, [options?.skip]);
 
   return { stats, loading };
 }

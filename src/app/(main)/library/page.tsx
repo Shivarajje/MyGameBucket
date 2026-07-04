@@ -36,9 +36,10 @@ export default function LibraryPage() {
     status: status === 'all' ? undefined : status,
     sortBy,
     sortOrder,
+    skip: authChecking,
   });
 
-  const { stats, loading: statsLoading } = useLibraryStats();
+  const { stats, loading: statsLoading } = useLibraryStats({ skip: authChecking });
 
   if (authChecking) {
     return (

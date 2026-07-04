@@ -5,7 +5,7 @@ import { DatabaseCollection, DatabaseGameCatalog } from '@/types/database';
 import { CollectionWithGamesCount } from '@/services/collectionService';
 import { toast } from 'sonner';
 
-export function useCollections() {
+export function useCollections(options?: { skip?: boolean }) {
   const [collections, setCollections] = useState<CollectionWithGamesCount[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,8 +23,9 @@ export function useCollections() {
   };
 
   useEffect(() => {
+    if (options?.skip) return;
     fetchCollections();
-  }, []);
+  }, [options?.skip]);
 
   const createCollection = async (name: string, description: string | null) => {
     try {
@@ -89,13 +90,14 @@ export function useCollections() {
   return { collections, loading, createCollection, updateCollection, deleteCollection, refresh: fetchCollections };
 }
 
-export function useCollection(id: string) {
+export function useCollection(id: string, options?: { skip?: boolean }) {
   const [collection, setCollection] = useState<DatabaseCollection | null>(null);
   const [games, setGames] = useState<DatabaseGameCatalog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (options?.skip) return;
     async function fetchCollection() {
       try {
         const res = await fetch(`/api/collections/${id}`);
@@ -110,7 +112,7 @@ export function useCollection(id: string) {
       }
     }
     if (id) fetchCollection();
-  }, [id]);
+  }, [id, options?.skip]);
 
   return { collection, games, loading, error };
 }

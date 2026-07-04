@@ -24,6 +24,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} font-sans h-full antialiased`}
+      suppressHydrationWarning
     >
       <head>
         <script

@@ -21,8 +21,8 @@ export default function CollectionDetailPage({ params }: CollectionDetailPagePro
   const { id } = use(params);
   const router = useRouter();
   const [authChecking, setAuthChecking] = useState(true);
-  const { collection, games: initialGames, loading, error } = useCollection(id);
-  const { updateCollection, deleteCollection } = useCollections();
+  const { collection, games: initialGames, loading, error } = useCollection(id, { skip: authChecking });
+  const { updateCollection, deleteCollection } = useCollections({ skip: authChecking });
   const { removeGame, loading: actionLoading } = useCollectionActions();
   
   const [games, setGames] = useState(initialGames);
