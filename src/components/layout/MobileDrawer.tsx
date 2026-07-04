@@ -70,6 +70,18 @@ export function MobileDrawer({ isOpen, onClose, links }: MobileDrawerProps) {
               {link.name}
             </Link>
           ))}
+          {user && (
+            <Link
+              href={ROUTES.SETTINGS}
+              onClick={onClose}
+              className={cn(
+                "text-lg font-medium transition-colors hover:text-foreground/80",
+                pathname === ROUTES.SETTINGS ? "text-foreground" : "text-foreground/60"
+              )}
+            >
+              Settings
+            </Link>
+          )}
         </nav>
 
         <div className="mt-auto flex flex-col gap-4">

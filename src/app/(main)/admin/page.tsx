@@ -87,7 +87,6 @@ export default function AdminDashboardPage() {
                     <thead>
                       <tr className="border-b border-white/10 text-muted-foreground font-medium">
                         <th className="py-3 px-4">Title</th>
-                        <th className="py-3 px-4">Platform</th>
                         <th className="py-3 px-4">Year</th>
                         <th className="py-3 px-4">IGDB Link</th>
                         <th className="py-3 px-4">Actions</th>
@@ -97,7 +96,6 @@ export default function AdminDashboardPage() {
                       {submissions.map((sub) => (
                         <tr key={sub.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                           <td className="py-4 px-4 font-semibold">{sub.title}</td>
-                          <td className="py-4 px-4 text-zinc-300">{sub.platform || '—'}</td>
                           <td className="py-4 px-4 text-zinc-300">{sub.release_year || '—'}</td>
                           <td className="py-4 px-4">
                             {sub.igdb_url ? (

@@ -40,9 +40,9 @@ export default function SettingsPage() {
 
   return (
     <main className="flex-1 flex flex-col py-10 pt-28">
-      <Container className="max-w-2xl">
+      <Container className="max-w-5xl">
         <PageHeader title="Settings" subtitle="Manage your profile and preferences" />
-        <div className="mt-8 space-y-8">
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
           <ProfileEditForm profile={profile} onSave={updateProfile} />
           <ThemeSettings />
         </div>

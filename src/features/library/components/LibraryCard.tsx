@@ -8,6 +8,9 @@ import { Star, Clock, Calendar } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { UserGameWithCatalog } from '@/services/libraryRepository';
+import { useMemo } from 'react';
+import { GENRE_THEMES } from '@/config/theme';
+import { getRandomGenreTheme } from '@/lib/theme-utils';
 
 interface LibraryCardProps {
   entry: UserGameWithCatalog;
@@ -15,10 +18,20 @@ interface LibraryCardProps {
 
 export function LibraryCard({ entry }: LibraryCardProps) {
   const game = entry.game_catalog;
+  const activeGenre = useMemo(() => getRandomGenreTheme(game.genre), [game.genre]);
+  const palette = activeGenre ? GENRE_THEMES[activeGenre] : null;
+
+  const style = palette ? {
+    '--hover-border': palette.accent,
+    '--hover-shadow': palette.primary + '33', // adds opacity to shadow glow
+  } as React.CSSProperties : {};
 
   return (
     <Link href={`/game/${game.slug}`}>
-      <div className="group relative aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl transition-all duration-300 hover:border-primary/40 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(202,138,4,0.2)]">
+      <div 
+        style={style}
+        className="group relative aspect-[3/4] rounded-3xl overflow-hidden border border-border bg-zinc-900 shadow-2xl transition-all duration-300 hover:border-[var(--hover-border,oklch(0.7_0.15_270))] hover:scale-[1.02] hover:shadow-[0_0_30px_var(--hover-shadow,rgba(202,138,4,0.2))]"
+      >
         {/* Background Image / Cover */}
         <div className="absolute inset-0 z-0">
           {game.cover_url ? (

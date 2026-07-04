@@ -5,6 +5,7 @@ import { GameHero } from '@/features/games/components/GameHero';
 import { GameInfo } from '@/features/games/components/GameInfo';
 import { GameActions } from '@/features/games/components/GameActions';
 import { ScreenshotGallery } from '@/features/games/components/ScreenshotGallery';
+import { GameThemeManager } from '@/features/games/components/GameThemeManager';
 import { Container } from '@/components/layout/Container';
 
 import { createClient } from '@/lib/supabase/server';
@@ -51,6 +52,7 @@ export default async function GamePage({ params }: GamePageProps) {
 
   return (
     <main className="flex-1 flex flex-col pb-20 pt-28">
+      <GameThemeManager genre={game.genre} />
       <GameHero game={game} />
       
       <Container className="mt-8">

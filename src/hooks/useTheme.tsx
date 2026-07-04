@@ -9,6 +9,8 @@ type ThemeContextType = {
   setTheme: (theme: AppearanceMode) => void;
   genreTheme: GenreCategory | null;
   setGenreTheme: (genre: GenreCategory | null) => void;
+  profileGenre: GenreCategory | null;
+  setProfileGenre: (genre: GenreCategory | null) => void;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -16,6 +18,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<AppearanceMode>(AppearanceMode.Dark);
   const [genreTheme, setGenreTheme] = useState<GenreCategory | null>(null);
+  const [profileGenre, setProfileGenre] = useState<GenreCategory | null>(null);
 
   useEffect(() => {
     // Initial load: dark is default, but check if light is forced elsewhere (e.g. settings)
@@ -37,7 +40,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         if (res.ok) {
           const profile = await res.json();
           if (profile?.favorite_genre) {
-            setGenreTheme(profile.favorite_genre as GenreCategory);
+            const favGenre = profile.favorite_genre as GenreCategory;
+            setGenreTheme(favGenre);
+            setProfileGenre(favGenre);
           }
         }
       } catch {
@@ -73,7 +78,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [genreTheme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, genreTheme, setGenreTheme }}>
+    <ThemeContext.Provider value={{ 
+      theme, 
+      setTheme, 
+      genreTheme, 
+      setGenreTheme, 
+      profileGenre, 
+      setProfileGenre 
+    }}>
       {children}
     </ThemeContext.Provider>
   );

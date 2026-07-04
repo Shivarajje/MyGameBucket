@@ -76,8 +76,10 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-4 shrink-0">
           {user ? (
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="rounded-full bg-white/5 border border-border">
-                <UserIcon className="w-5 h-5" />
+              <Button variant="ghost" size="icon" className="rounded-full bg-white/5 border border-border" asChild>
+                <Link href={ROUTES.SETTINGS} title="Settings">
+                  <UserIcon className="w-5 h-5" />
+                </Link>
               </Button>
               <Button variant="ghost" onClick={handleLogout} className="text-muted-foreground hover:text-foreground">
                 <LogOut className="w-4 h-4 mr-2" />

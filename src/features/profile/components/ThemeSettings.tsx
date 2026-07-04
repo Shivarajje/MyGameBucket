@@ -28,7 +28,7 @@ const THEME_LABELS: Record<GenreCategory, string> = {
 };
 
 export function ThemeSettings() {
-  const { theme, setTheme, genreTheme, setGenreTheme } = useTheme();
+  const { theme, setTheme, genreTheme, setGenreTheme, setProfileGenre } = useTheme();
   const { profile, updateProfile } = useProfile();
   const [savingTheme, setSavingTheme] = useState<string | null>(null);
 
@@ -40,6 +40,7 @@ export function ThemeSettings() {
         favorite_genre: genre,
       });
       setGenreTheme(genre);
+      setProfileGenre(genre);
       toast.success(`${genre ? `${THEME_LABELS[genre]} theme` : 'Default theme'} applied!`);
     } catch (err: any) {
       toast.error(err.message || 'Failed to update favorite theme');
