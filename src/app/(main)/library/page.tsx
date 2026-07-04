@@ -25,7 +25,7 @@ export default function LibraryPage() {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) {
-        router.push(ROUTES.LOGIN);
+        router.replace(ROUTES.LOGIN);
       } else {
         setAuthChecking(false);
       }
