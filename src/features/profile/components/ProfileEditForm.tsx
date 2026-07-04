@@ -41,7 +41,7 @@ export function ProfileEditForm({ profile, onSave }: ProfileEditFormProps) {
   }
 
   return (
-    <Card className="bg-background/40 backdrop-blur-md border border-white/10">
+    <Card className="bg-background/40 backdrop-blur-md border border-border">
       <CardHeader>
         <CardTitle>Edit Profile</CardTitle>
       </CardHeader>

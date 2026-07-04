@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container } from '@/components/layout/Container';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LibraryCard } from '@/features/library/components/LibraryCard';
@@ -10,11 +10,27 @@ import { useLibrary, useLibraryStats } from '@/features/library/hooks/useLibrary
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Library } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { ROUTES } from '@/constants/routes';
 
 export default function LibraryPage() {
+  const router = useRouter();
+  const [authChecking, setAuthChecking] = useState(true);
   const [status, setStatus] = useState('all');
   const [sortBy, setSortBy] = useState('added_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) {
+        router.push(ROUTES.LOGIN);
+      } else {
+        setAuthChecking(false);
+      }
+    });
+  }, [router]);
 
   const { games, count, loading, hasMore, loadMore } = useLibrary({
     status: status === 'all' ? undefined : status,
@@ -23,6 +39,21 @@ export default function LibraryPage() {
   });
 
   const { stats, loading: statsLoading } = useLibraryStats();
+
+  if (authChecking) {
+    return (
+      <main className="flex-1 flex flex-col py-10 pt-28">
+        <Container>
+          <Skeleton className="h-12 w-48 mb-4" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
+            {[...Array(5)].map((_, i) => (
+              <Skeleton key={i} className="aspect-[3/4] rounded-3xl" />
+            ))}
+          </div>
+        </Container>
+      </main>
+    );
+  }
 
   return (
     <main className="flex-1 flex flex-col py-10 pt-28">

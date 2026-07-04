@@ -3,6 +3,7 @@
 import { GameSearchResult } from '@/types/game';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface SearchSuggestionsProps {
   query: string;
@@ -29,10 +30,12 @@ export function SearchSuggestions({ query, results, loading, onSelect }: SearchS
               className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors border-b border-border/40 last:border-0"
             >
               {game.coverUrl ? (
-                <img 
+                <Image 
                   src={game.coverUrl} 
                   alt={game.title} 
-                  className="w-10 h-14 object-cover rounded-sm"
+                  width={40}
+                  height={56}
+                  className="object-cover rounded-sm"
                 />
               ) : (
                 <div className="w-10 h-14 bg-muted rounded-sm flex items-center justify-center">
@@ -57,9 +60,10 @@ export function SearchSuggestions({ query, results, loading, onSelect }: SearchS
         </div>
       ) : (
         <div className="p-4 text-center text-muted-foreground text-sm">
-          No results found for "{query}"
+          No results found for &quot;{query}&quot;
         </div>
       )}
     </div>
   );
 }
+

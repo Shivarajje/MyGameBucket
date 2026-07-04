@@ -8,7 +8,7 @@ export default function NotFound() {
       <h1 className="text-9xl font-bold tracking-tighter text-muted">404</h1>
       <h2 className="text-2xl font-semibold mt-4 mb-2 tracking-tight">Game Not Found</h2>
       <p className="text-muted-foreground max-w-md mb-8">
-        It looks like this path is a dead end. Let's return to the main menu.
+        It looks like this path is a dead end. Let&apos;s return to the main menu.
       </p>
       <Button asChild size="lg">
         <Link href={ROUTES.HOME}>Return to Home</Link>

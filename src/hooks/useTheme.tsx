@@ -21,11 +21,30 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Initial load: dark is default, but check if light is forced elsewhere (e.g. settings)
     const stored = localStorage.getItem('theme') as AppearanceMode | null;
     if (stored === AppearanceMode.Light) {
-      setThemeState(AppearanceMode.Light);
+      setTimeout(() => {
+        setThemeState(AppearanceMode.Light);
+      }, 0);
       document.documentElement.classList.remove('dark');
     } else {
       document.documentElement.classList.add('dark');
     }
+  }, []);
+
+  useEffect(() => {
+    async function loadFavoriteGenre() {
+      try {
+        const res = await fetch('/api/profile');
+        if (res.ok) {
+          const profile = await res.json();
+          if (profile?.favorite_genre) {
+            setGenreTheme(profile.favorite_genre as GenreCategory);
+          }
+        }
+      } catch {
+        // Guest user or error, do nothing
+      }
+    }
+    loadFavoriteGenre();
   }, []);
 
   const setTheme = (newTheme: AppearanceMode) => {

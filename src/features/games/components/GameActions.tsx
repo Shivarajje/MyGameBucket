@@ -17,10 +17,15 @@ import { toast } from 'sonner';
 
 import { AddGameToCollectionDialog } from '@/features/collections/components/AddGameToCollectionDialog';
 
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/routes';
+
 export function GameActions({ gameId }: { gameId: string }) {
+  const router = useRouter();
   const [entryId, setEntryId] = useState<string | null>(null);
   const [status, setStatus] = useState<GameStatus>(GameStatus.Playing);
   const [checking, setChecking] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { addToLibrary, updateEntry, removeFromLibrary, loading } = useLibraryActions();
 
   // Check if game is already in library
@@ -28,7 +33,9 @@ export function GameActions({ gameId }: { gameId: string }) {
     async function checkLibrary() {
       try {
         const res = await fetch(`/api/library?gameId=${gameId}`);
-        if (res.ok) {
+        if (res.status === 401) {
+          setIsLoggedIn(false);
+        } else if (res.ok) {
           const result = await res.json();
           const match = result.data?.find((e: any) => e.game_id === gameId);
           if (match) {
@@ -96,7 +103,16 @@ export function GameActions({ gameId }: { gameId: string }) {
       <div className="bg-background/40 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex flex-col gap-3 shadow-sm">
         <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wider">Library</h4>
 
-        {!entryId ? (
+        {!isLoggedIn ? (
+          <Button
+            className="w-full justify-start rounded-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30"
+            size="lg"
+            onClick={() => router.push(ROUTES.LOGIN)}
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Log in to Track
+          </Button>
+        ) : !entryId ? (
           <Button
             className="w-full justify-start rounded-full"
             size="lg"

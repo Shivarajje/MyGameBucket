@@ -46,7 +46,7 @@ export function Navbar() {
   ];
 
   return (
-    <header className="fixed top-4 left-4 right-4 z-50 flex h-16 items-center justify-between rounded-full bg-background/60 backdrop-blur-xl border border-white/10 px-6 shadow-2xl transition-all duration-300">
+    <header className="fixed top-4 left-4 right-4 z-50 flex h-16 items-center justify-between rounded-full bg-background/60 backdrop-blur-xl border border-border px-6 shadow-2xl transition-all duration-300">
       <div className="flex items-center gap-6 w-full">
         
         {/* Logo and Desktop Links */}
@@ -76,7 +76,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-4 shrink-0">
           {user ? (
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="rounded-full bg-white/5 border border-white/10">
+              <Button variant="ghost" size="icon" className="rounded-full bg-white/5 border border-border">
                 <UserIcon className="w-5 h-5" />
               </Button>
               <Button variant="ghost" onClick={handleLogout} className="text-muted-foreground hover:text-foreground">

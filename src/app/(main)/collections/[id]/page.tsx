@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Edit3, Trash2, X, FolderHeart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/routes';
+import { createClient } from '@/lib/supabase/client';
 
 interface CollectionDetailPageProps {
   params: Promise<{ id: string }>;
@@ -19,12 +20,24 @@ interface CollectionDetailPageProps {
 export default function CollectionDetailPage({ params }: CollectionDetailPageProps) {
   const { id } = use(params);
   const router = useRouter();
+  const [authChecking, setAuthChecking] = useState(true);
   const { collection, games: initialGames, loading, error } = useCollection(id);
   const { updateCollection, deleteCollection } = useCollections();
   const { removeGame, loading: actionLoading } = useCollectionActions();
   
   const [games, setGames] = useState(initialGames);
   const [isEditOpen, setIsEditOpen] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) {
+        router.push(ROUTES.LOGIN);
+      } else {
+        setAuthChecking(false);
+      }
+    });
+  }, [router]);
 
   useEffect(() => {
     if (initialGames) {
@@ -54,7 +67,7 @@ export default function CollectionDetailPage({ params }: CollectionDetailPagePro
     }
   };
 
-  if (loading) {
+  if (authChecking || loading) {
     return (
       <main className="flex-1 flex flex-col py-10 pt-28">
         <Container>
