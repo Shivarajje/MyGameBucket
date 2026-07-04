@@ -27,7 +27,7 @@ export default function SettingsPage() {
     });
   }, [router]);
 
-  if (authChecking || loading) {
+  if (authChecking || loading || !profile) {
     return (
       <main className="flex-1 flex flex-col py-10 pt-28">
         <Container className="max-w-2xl">
