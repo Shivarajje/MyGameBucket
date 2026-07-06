@@ -31,7 +31,7 @@ export const profileService = {
 
   async updateProfile(
     userId: string,
-    updates: Partial<Pick<DatabaseProfile, 'username' | 'avatar_url' | 'bio' | 'favorite_game_id' | 'favorite_genre'>>
+    updates: Partial<Pick<DatabaseProfile, 'username' | 'avatar_url' | 'bio' | 'favorite_game_id' | 'favorite_genre' | 'visibility'>>
   ) {
     // Validate username length
     if (updates.username) {
@@ -43,6 +43,13 @@ export const profileService = {
     // Validate bio length
     if (updates.bio && updates.bio.length > 100) {
       throw new Error('Bio must be 100 characters or less');
+    }
+
+    // Validate visibility
+    if (updates.visibility) {
+      if (!['Public', 'Private', 'FriendsOnly'].includes(updates.visibility)) {
+        throw new Error('Invalid visibility option');
+      }
     }
 
     return profileRepository.updateProfile(userId, updates);

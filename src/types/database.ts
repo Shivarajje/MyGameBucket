@@ -8,6 +8,7 @@ export type DatabaseProfile = {
   bio: string | null;
   favorite_game_id: string | null;
   favorite_genre: GenreCategory | null;
+  visibility: 'Public' | 'Private' | 'FriendsOnly';
   created_at: string;
   updated_at: string;
 };
@@ -119,6 +120,29 @@ export type DatabaseSystemLog = {
   source: string;
   message: string;
   metadata: any;
+  created_at: string;
+};
+
+export type FriendshipStatus = 'Pending' | 'Accepted' | 'Rejected';
+
+export type DatabaseFriendship = {
+  id: string;
+  requester_id: string;
+  addressee_id: string;
+  status: FriendshipStatus;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DatabaseFriendshipWithProfile = DatabaseFriendship & {
+  requester_profile?: DatabaseProfile;
+  addressee_profile?: DatabaseProfile;
+};
+
+export type DatabaseBlockedUser = {
+  id: string;
+  blocker_id: string;
+  blocked_id: string;
   created_at: string;
 };
 

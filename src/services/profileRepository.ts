@@ -53,7 +53,7 @@ export const profileRepository = {
 
   async updateProfile(
     userId: string,
-    updates: Partial<Pick<DatabaseProfile, 'username' | 'avatar_url' | 'bio' | 'favorite_game_id' | 'favorite_genre'>>
+    updates: Partial<Pick<DatabaseProfile, 'username' | 'avatar_url' | 'bio' | 'favorite_game_id' | 'favorite_genre' | 'visibility'>>
   ): Promise<DatabaseProfile> {
     const supabase = await createClient();
     const { data, error } = await supabase

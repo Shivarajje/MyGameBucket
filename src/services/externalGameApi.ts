@@ -7,15 +7,15 @@ let tokenExpiryTime: number = 0;
 
 async function getAccessToken(): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
-  
+
   if (accessToken && tokenExpiryTime > now + IGDB_CACHE.TOKEN_EXPIRY_BUFFER) {
     return accessToken;
   }
 
   const url = `${IGDB_CONFIG.AUTH_URL}?client_id=${IGDB_CONFIG.CLIENT_ID}&client_secret=${IGDB_CONFIG.CLIENT_SECRET}&grant_type=client_credentials`;
-  
+
   const response = await fetch(url, { method: 'POST', next: { revalidate: 0 } });
-  
+
   if (!response.ok) {
     throw new Error('Failed to fetch IGDB access token');
   }
@@ -29,7 +29,7 @@ async function getAccessToken(): Promise<string> {
 
 async function igdbRequest(endpoint: string, query: string) {
   const token = await getAccessToken();
-  
+
   const response = await fetch(`${IGDB_CONFIG.API_URL}${endpoint}`, {
     method: 'POST',
     headers: {
@@ -40,7 +40,7 @@ async function igdbRequest(endpoint: string, query: string) {
     },
     body: query,
     // IGDB responses change, cache at Next.js fetch level (e.g., 1 hour for search, 1 day for details)
-    next: { revalidate: 3600 } 
+    next: { revalidate: 3600 }
   });
 
   if (!response.ok) {
@@ -51,20 +51,38 @@ async function igdbRequest(endpoint: string, query: string) {
   return response.json();
 }
 
+const EXCLUDE_KEYWORDS = [
+  'deluxe', 'collector', 'launch', 'premium', 'bundle', 'pack', 'package',
+  'goty', 'game of the year', 'anniversary', 'definitive',
+  'director\'s cut', 'directors cut', 'ultimate', 'season pass',
+  'special edition', 'limited edition', 'legendary edition',
+  'digital deluxe', 'complete edition', 'gold edition'
+];
+
 export const externalGameApi = {
   async searchGames(query: string, limit = 10): Promise<GameSearchResult[]> {
     if (!query) return [];
-    
-    // IGDB query syntax
+
+    // Request a larger pool (50) so we can filter out duplicate editions in JS
     const igdbQuery = `
       search "${query}";
-      fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date;
-      limit ${limit};
+      fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date, game_type;
+      where game_type = (0, 4, 8, 9, 10);
+      limit 50;
     `;
 
     const results = await igdbRequest(IGDB_CONFIG.ENDPOINTS.GAMES, igdbQuery);
-    
-    return results.map(formatIgdbGameToSearchResult);
+
+    // Only exclude keywords if they are not part of the user's explicit query
+    const lowerQuery = query.toLowerCase();
+    const activeExclusions = EXCLUDE_KEYWORDS.filter(keyword => !lowerQuery.includes(keyword));
+
+    const filtered = results.filter((igdbGame: any) => {
+      const lowerName = igdbGame.name.toLowerCase();
+      return !activeExclusions.some(keyword => lowerName.includes(keyword));
+    });
+
+    return filtered.slice(0, limit).map(formatIgdbGameToSearchResult);
   },
 
   async getGameBySlug(slug: string): Promise<GameDetail | null> {
@@ -75,7 +93,7 @@ export const externalGameApi = {
     `;
 
     const results = await igdbRequest(IGDB_CONFIG.ENDPOINTS.GAMES, igdbQuery);
-    
+
     if (!results || results.length === 0) {
       return null;
     }
@@ -84,34 +102,41 @@ export const externalGameApi = {
   },
 
   async getPopularGames(limit = 10): Promise<GameSearchResult[]> {
+    // Request a larger pool (50) so we can filter out duplicate editions in JS
     const igdbQuery = `
-      fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date;
-      where rating_count > 50 & version_parent = null;
+      fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date, game_type;
+      where rating_count > 50 & version_parent = null & game_type = (0, 4, 8, 9, 10);
       sort rating_count desc;
-      limit ${limit};
+      limit 50;
     `;
 
     const results = await igdbRequest(IGDB_CONFIG.ENDPOINTS.GAMES, igdbQuery);
-    return results.map(formatIgdbGameToSearchResult);
+
+    const filtered = results.filter((igdbGame: any) => {
+      const lowerName = igdbGame.name.toLowerCase();
+      return !EXCLUDE_KEYWORDS.some(keyword => lowerName.includes(keyword));
+    });
+
+    return filtered.slice(0, limit).map(formatIgdbGameToSearchResult);
   }
 };
 
 // --- Formatters ---
 
 function formatIgdbGameToSearchResult(igdbGame: any): GameSearchResult {
-  const coverUrl = igdbGame.cover?.image_id 
+  const coverUrl = igdbGame.cover?.image_id
     ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${igdbGame.cover.image_id}.jpg`
     : null;
 
-  const genre = igdbGame.genres && igdbGame.genres.length > 0 
-    ? igdbGame.genres.slice(0, 2).map((g: any) => g.name).join(', ')
+  const genre = igdbGame.genres && igdbGame.genres.length > 0
+    ? igdbGame.genres.slice(0, 4).map((g: any) => g.name).join(', ')
     : null;
 
   const platform = igdbGame.platforms && igdbGame.platforms.length > 0
     ? igdbGame.platforms.map((p: any) => p.name).join(', ')
     : null;
 
-  const releaseYear = igdbGame.first_release_date 
+  const releaseYear = igdbGame.first_release_date
     ? new Date(igdbGame.first_release_date * 1000).getFullYear()
     : null;
 
@@ -128,7 +153,7 @@ function formatIgdbGameToSearchResult(igdbGame: any): GameSearchResult {
 
 function formatIgdbGameToDetail(igdbGame: any): GameDetail {
   const searchResult = formatIgdbGameToSearchResult(igdbGame);
-  
+
   const developerCompany = igdbGame.involved_companies?.find((ic: any) => ic.developer);
   const developer = developerCompany ? developerCompany.company.name : null;
 

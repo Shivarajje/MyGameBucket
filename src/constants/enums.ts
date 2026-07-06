@@ -24,6 +24,7 @@ export enum GameStatus {
 export enum Visibility {
   Public = 'Public',
   Private = 'Private',
+  FriendsOnly = 'FriendsOnly',
 }
 
 export enum AppearanceMode {

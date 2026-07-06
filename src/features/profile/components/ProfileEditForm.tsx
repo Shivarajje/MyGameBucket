@@ -21,6 +21,7 @@ export function ProfileEditForm({ profile, onSave }: ProfileEditFormProps) {
   const [username, setUsername] = useState(profile.username);
   const [bio, setBio] = useState(profile.bio || '');
   const [favoriteGenre, setFavoriteGenre] = useState(profile.favorite_genre || '');
+  const [visibility, setVisibility] = useState<string>(profile.visibility || 'Public');
   const [saving, setSaving] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -31,6 +32,7 @@ export function ProfileEditForm({ profile, onSave }: ProfileEditFormProps) {
         username,
         bio: bio || null,
         favorite_genre: (favoriteGenre || null) as any,
+        visibility: visibility as any,
       });
       toast.success('Profile updated!');
     } catch (error: any) {
@@ -91,6 +93,23 @@ export function ProfileEditForm({ profile, onSave }: ProfileEditFormProps) {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="visibility">Profile Visibility</Label>
+            <Select value={visibility} onValueChange={setVisibility}>
+              <SelectTrigger className="rounded-full">
+                <SelectValue placeholder="Select visibility" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Public">Public (Everyone can see)</SelectItem>
+                <SelectItem value="FriendsOnly">Friends Only (Only friends can see)</SelectItem>
+                <SelectItem value="Private">Private (Only you can see)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              Controls who can view your profile, libraries, stats, and journal entries.
+            </p>
           </div>
 
           <Button type="submit" disabled={saving} className="rounded-full">

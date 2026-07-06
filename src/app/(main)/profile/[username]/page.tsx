@@ -38,6 +38,29 @@ export default function ProfilePage({ params }: ProfilePageProps) {
     );
   }
 
+  // Handle restricted profiles (Private or Friends Only when not friends)
+  if ((data as any).restricted) {
+    return (
+      <main className="flex-1 flex flex-col py-10 pt-28">
+        <Container>
+          <ProfileHeader profile={data.profile} stats={null} />
+
+          <div className="text-center py-16 mt-12 bg-background/20 backdrop-blur-md border border-white/10 rounded-3xl">
+            <UserX className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-1">
+              {data.profile.visibility === 'FriendsOnly' ? 'Friends Only Profile' : 'Private Profile'}
+            </h3>
+            <p className="text-sm text-muted-foreground max-w-sm mx-auto px-4">
+              {data.profile.visibility === 'FriendsOnly'
+                ? 'Send a friend request to view their library, stats, and journal memories.'
+                : 'This user has set their profile to private.'}
+            </p>
+          </div>
+        </Container>
+      </main>
+    );
+  }
+
   return (
     <main className="flex-1 flex flex-col py-10 pt-28">
       <Container>

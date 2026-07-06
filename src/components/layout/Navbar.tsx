@@ -10,6 +10,7 @@ import { MobileDrawer } from './MobileDrawer';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
+import { NotificationBell } from '@/features/friends/components/NotificationBell';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -43,6 +44,7 @@ export function Navbar() {
     { name: 'Games', href: ROUTES.SEARCH },
     { name: 'Library', href: ROUTES.LIBRARY },
     { name: 'Collections', href: ROUTES.COLLECTIONS },
+    ...(user ? [{ name: 'Friends', href: ROUTES.FRIENDS }] : []),
   ];
 
   return (
@@ -76,6 +78,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-4 shrink-0">
           {user ? (
             <div className="flex items-center gap-4">
+              <NotificationBell />
               <Button variant="ghost" size="icon" className="rounded-full bg-white/5 border border-border" asChild>
                 <Link href={ROUTES.SETTINGS} title="Settings">
                   <UserIcon className="w-5 h-5" />
