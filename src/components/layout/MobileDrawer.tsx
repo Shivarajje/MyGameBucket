@@ -39,6 +39,7 @@ export function MobileDrawer({ isOpen, onClose, links }: MobileDrawerProps) {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     onClose();
+    router.push(ROUTES.HOME);
     router.refresh();
   };
 
