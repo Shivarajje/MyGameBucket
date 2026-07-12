@@ -175,15 +175,20 @@ export const friendshipService = {
   // --- Visibility check ---
 
   async canViewProfile(viewerUserId: string | null, targetProfile: { id: string; visibility: string }) {
+    const viewerProfile = viewerUserId ? await profileRepository.getByUserId(viewerUserId) : null;
+
+    // Own profile is always visible
+    if (viewerProfile && viewerProfile.id === targetProfile.id) return true;
+
+    // A block in either direction restricts the profile regardless of visibility
+    if (viewerProfile) {
+      const blocked = await friendshipRepository.isBlockedEitherWay(viewerProfile.id, targetProfile.id);
+      if (blocked) return false;
+    }
+
     if (targetProfile.visibility === 'Public') return true;
 
-    if (!viewerUserId) return false;
-
-    const viewerProfile = await profileRepository.getByUserId(viewerUserId);
     if (!viewerProfile) return false;
-
-    // Own profile
-    if (viewerProfile.id === targetProfile.id) return true;
 
     if (targetProfile.visibility === 'Private') return false;
 

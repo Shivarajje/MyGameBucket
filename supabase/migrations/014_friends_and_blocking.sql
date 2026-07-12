@@ -39,6 +39,11 @@ CREATE INDEX IF NOT EXISTS idx_blocked_blocked ON blocked_users(blocked_id);
 -- 4. RLS for friendships
 ALTER TABLE friendships ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own friendships" ON friendships;
+DROP POLICY IF EXISTS "Users can send friend requests" ON friendships;
+DROP POLICY IF EXISTS "Addressee can update friendship status" ON friendships;
+DROP POLICY IF EXISTS "Users can delete own friendships" ON friendships;
+
 CREATE POLICY "Users can view own friendships"
   ON friendships FOR SELECT
   USING (
@@ -67,6 +72,10 @@ CREATE POLICY "Users can delete own friendships"
 
 -- 5. RLS for blocked_users
 ALTER TABLE blocked_users ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can view own blocks" ON blocked_users;
+DROP POLICY IF EXISTS "Users can block others" ON blocked_users;
+DROP POLICY IF EXISTS "Users can unblock others" ON blocked_users;
 
 CREATE POLICY "Users can view own blocks"
   ON blocked_users FOR SELECT
