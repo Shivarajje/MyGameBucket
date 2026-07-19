@@ -1,4 +1,5 @@
 import { libraryRepository, UserGameWithCatalog } from './libraryRepository';
+import { profileRepository } from './profileRepository';
 import { GameStatus } from '@/constants/enums';
 
 export const libraryService = {
@@ -56,5 +57,30 @@ export const libraryService = {
 
   async getStats(profileId: string) {
     return libraryRepository.getLibraryStats(profileId);
+  },
+
+  // Another user's library, as seen by the (optionally anonymous) viewer.
+  // Visibility gating happens in the API route via friendshipService.canViewProfile;
+  // RLS enforces it again at the database level. commonGameIds marks games the
+  // viewer also has in their own library ("Games in Common").
+  async getProfileLibrary(viewerUserId: string | null, profileId: string) {
+    const { data: entries, count } = await libraryRepository.getUserGames(profileId, {
+      sortBy: 'updated_at',
+      sortOrder: 'desc',
+    });
+
+    let commonGameIds: string[] = [];
+    if (viewerUserId) {
+      const viewerProfile = await profileRepository.getByUserId(viewerUserId);
+      if (viewerProfile && viewerProfile.id !== profileId) {
+        const { data: viewerEntries } = await libraryRepository.getUserGames(viewerProfile.id);
+        const viewerGameIds = new Set(viewerEntries.map((e) => e.game_id));
+        commonGameIds = entries
+          .filter((e) => viewerGameIds.has(e.game_id))
+          .map((e) => e.game_id);
+      }
+    }
+
+    return { entries, count, commonGameIds };
   },
 };

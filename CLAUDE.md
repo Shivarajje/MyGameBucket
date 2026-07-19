@@ -78,6 +78,13 @@ The **Friendship and Blocking System** is now complete (2026-07-12):
    - `api/journal/profile/[username]/route.ts` now enforces `canViewProfile` (previously leaked journal entries of Private/FriendsOnly profiles).
    - New migration `015_fix_blocked_users_select_rls.sql`: the `blocked_users` SELECT policy now covers both directions so "blocked by them" checks (friendship status, discovery filtering, visibility) work under RLS.
 
+**Friend Profile Viewing** is complete (2026-07-19):
+- **Visibility settings**: the Public/FriendsOnly/Private selector in Settings (`ProfileEditForm`) is wired end-to-end via `PATCH /api/profile`.
+- **Migration `016_visibility_aware_read_policies.sql`**: SQL helper `can_view_profile_content()` (SECURITY DEFINER) enforces owner/block/Public/FriendsOnly/Private rules; SELECT policies on `user_games`, `journal_entries`, `collections`, `collection_games` all use it. Side effect: profile/discover stats for other users are now real (previously 0 under owner-only RLS).
+- **New APIs**: `GET /api/library/profile/[username]` (returns `{ entries, count, commonGameIds }`) and `GET /api/collections/profile/[username]`, both gated by `friendshipService.canViewProfile`.
+- **Profile page** (`/profile/[username]`): tabbed Library / Collections / Journal views with a "Games in Common" banner and "Both played" badges on games shared with the viewer's library.
+- **Collection detail page** (`/collections/[id]`): viewable by non-owners (RLS-gated); Edit/Delete/remove-game controls are owner-only.
+
 Remaining active work — **Journaling/UI Polishing** (see Milestone 10 in `implementation_plan.md`): performance, accessibility, error states, and documentation checklists.
 
 ---

@@ -151,3 +151,38 @@ export function useLibraryStats(options?: { skip?: boolean }) {
 
   return { stats, loading };
 }
+
+// Fetch another user's library by username (visibility-gated server-side).
+// commonGameIds marks games the current viewer also has in their library.
+export function useUserLibrary(username: string) {
+  const [entries, setEntries] = useState<UserGameWithCatalog[]>([]);
+  const [count, setCount] = useState(0);
+  const [commonGameIds, setCommonGameIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchUserLibrary() {
+      try {
+        const res = await fetch(`/api/library/profile/${encodeURIComponent(username)}`);
+        if (!res.ok) {
+          throw new Error('Failed to load library');
+        }
+        const data = await res.json();
+        setEntries(data.entries || []);
+        setCount(data.count || 0);
+        setCommonGameIds(data.commonGameIds || []);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load library');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (username) {
+      fetchUserLibrary();
+    }
+  }, [username]);
+
+  return { entries, count, commonGameIds, loading, error };
+}

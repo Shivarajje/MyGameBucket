@@ -6,12 +6,12 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { GameCard } from '@/features/games/components/GameCard';
 import { CollectionDialog } from '@/features/collections/components/CollectionDialog';
 import { useCollection, useCollections, useCollectionActions } from '@/features/collections/hooks/useCollections';
+import { useProfile } from '@/features/profile/hooks/useProfile';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Edit3, Trash2, X, FolderHeart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/routes';
-import { createClient } from '@/lib/supabase/client';
 
 interface CollectionDetailPageProps {
   params: Promise<{ id: string }>;
@@ -20,30 +20,23 @@ interface CollectionDetailPageProps {
 export default function CollectionDetailPage({ params }: CollectionDetailPageProps) {
   const { id } = use(params);
   const router = useRouter();
-  const [authChecking, setAuthChecking] = useState(true);
-  const { collection, games: initialGames, loading, error } = useCollection(id, { skip: authChecking });
-  const { updateCollection, deleteCollection } = useCollections({ skip: authChecking });
+  const { collection, games: initialGames, loading, error } = useCollection(id);
+  const { profile, loading: profileLoading } = useProfile();
+  const { updateCollection, deleteCollection } = useCollections({ skip: true });
   const { removeGame, loading: actionLoading } = useCollectionActions();
-  
+
   const [games, setGames] = useState(initialGames);
   const [isEditOpen, setIsEditOpen] = useState(false);
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) {
-        router.replace(ROUTES.LOGIN);
-      } else {
-        setAuthChecking(false);
-      }
-    });
-  }, [router]);
 
   useEffect(() => {
     if (initialGames) {
       setGames(initialGames);
     }
   }, [initialGames]);
+
+  // Viewing other users' collections is allowed (RLS gates visibility);
+  // management controls are owner-only.
+  const isOwner = !!profile && !!collection && profile.id === collection.profile_id;
 
   const handleRename = async (name: string, description: string | null) => {
     await updateCollection(id, name, description);
@@ -67,7 +60,7 @@ export default function CollectionDetailPage({ params }: CollectionDetailPagePro
     }
   };
 
-  if (authChecking || loading) {
+  if (loading || profileLoading) {
     return (
       <main className="flex-1 flex flex-col py-10 pt-28">
         <Container>
@@ -100,16 +93,18 @@ export default function CollectionDetailPage({ params }: CollectionDetailPagePro
             title={collection.name}
             subtitle={collection.description || 'Custom game list'}
           />
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setIsEditOpen(true)} className="rounded-full">
-              <Edit3 className="w-4 h-4 mr-2" />
-              Edit
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleDelete} className="rounded-full text-red-400 hover:text-red-300 hover:bg-red-500/10">
-              <Trash2 className="w-4 h-4 mr-2" />
-              Delete
-            </Button>
-          </div>
+          {isOwner && (
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={() => setIsEditOpen(true)} className="rounded-full">
+                <Edit3 className="w-4 h-4 mr-2" />
+                Edit
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleDelete} className="rounded-full text-red-400 hover:text-red-300 hover:bg-red-500/10">
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Games Grid */}
@@ -127,33 +122,39 @@ export default function CollectionDetailPage({ params }: CollectionDetailPagePro
                     platform: game.platform,
                     releaseYear: game.release_year,
                   }} />
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="absolute -top-2 -right-2 w-7 h-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-md border border-white/10"
-                    onClick={() => handleRemoveGame(game.id)}
-                    disabled={actionLoading}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
+                  {isOwner && (
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute -top-2 -right-2 w-7 h-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-md border border-white/10"
+                      onClick={() => handleRemoveGame(game.id)}
+                      disabled={actionLoading}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>
           ) : (
             <div className="text-center py-20 text-muted-foreground bg-background/20 backdrop-blur-md border border-white/10 rounded-3xl">
-              No games in this collection yet. Go to a game page to add it!
+              {isOwner
+                ? 'No games in this collection yet. Go to a game page to add it!'
+                : 'No games in this collection yet.'}
             </div>
           )}
         </div>
 
         {/* Edit Dialog */}
-        <CollectionDialog
-          isOpen={isEditOpen}
-          onClose={() => setIsEditOpen(false)}
-          onSave={handleRename}
-          initialData={{ name: collection.name, description: collection.description }}
-          title="Edit Collection"
-        />
+        {isOwner && (
+          <CollectionDialog
+            isOpen={isEditOpen}
+            onClose={() => setIsEditOpen(false)}
+            onSave={handleRename}
+            initialData={{ name: collection.name, description: collection.description }}
+            title="Edit Collection"
+          />
+        )}
       </Container>
     </main>
   );

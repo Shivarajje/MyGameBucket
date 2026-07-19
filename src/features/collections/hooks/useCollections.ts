@@ -167,3 +167,33 @@ export function useCollectionActions(collectionId?: string) {
 
   return { addGame, removeGame, loading };
 }
+
+// Fetch another user's collections by username (visibility-gated server-side).
+export function useUserCollections(username: string) {
+  const [collections, setCollections] = useState<CollectionWithGamesCount[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchUserCollections() {
+      try {
+        const res = await fetch(`/api/collections/profile/${encodeURIComponent(username)}`);
+        if (!res.ok) {
+          throw new Error('Failed to load collections');
+        }
+        const data = await res.json();
+        setCollections(Array.isArray(data) ? data : []);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load collections');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (username) {
+      fetchUserCollections();
+    }
+  }, [username]);
+
+  return { collections, loading, error };
+}
