@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import { gameService } from '@/services/gameService';
-import { GameCard } from '@/features/games/components/GameCard';
 import { Container } from '@/components/layout/Container';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Search, Sparkles } from 'lucide-react';
 import { GameSearchResult } from '@/types/game';
+import { InfiniteGameGrid } from '@/features/games/components/InfiniteGameGrid';
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; genre?: string }>;
@@ -27,19 +27,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   let isDiscoveryMode = false;
 
   if (query) {
-    const rawGames = await gameService.search(query);
-    // Apply basic filters
-    displayGames = rawGames.filter((game) => {
-      const matchGenre = !genre || game.genre?.toLowerCase() === genre.toLowerCase();
-      return matchGenre;
-    });
+    displayGames = await gameService.search(query, 30, 0, genre);
   } else {
     isDiscoveryMode = true;
-    displayGames = await gameService.getPopularGames(12);
+    displayGames = await gameService.getPopularGames(30, 0, genre);
   }
 
-  // Get unique genres from raw search results for filtering
-  const allRawGames = query ? await gameService.search(query) : [];
+  // Get unique genres from current search results for quick-filtering
+  const allRawGames = query ? await gameService.search(query, 50, 0) : [];
   const genres = Array.from(new Set(allRawGames.map((g) => g.genre).filter(Boolean)));
 
   return (
@@ -49,7 +44,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           title={query ? `Search results for "${query}"` : 'Games'}
           subtitle={
             query
-              ? `${displayGames.length} results found`
+              ? 'Browse matches from the global game catalog.'
               : 'Discover popular games and add them to your collection.'
           }
         />
@@ -112,21 +107,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </div>
           )}
 
-          {/* Grid */}
-          {displayGames.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-              {displayGames.map((game) => (
-                <GameCard key={game.igdbId} game={game} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 text-muted-foreground bg-background/20 backdrop-blur-md border border-white/10 rounded-3xl">
-              {isDiscoveryMode 
-                ? "Unable to fetch popular games right now." 
-                : "No games found matching your filters."
-              }
-            </div>
-          )}
+          {/* Infinite Game Grid */}
+          <InfiniteGameGrid
+            initialGames={displayGames}
+            query={query}
+            genre={genre}
+            isDiscoveryMode={isDiscoveryMode}
+          />
         </div>
       </Container>
     </main>

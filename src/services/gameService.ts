@@ -7,14 +7,22 @@ import { DatabaseGameCatalog } from '@/types/database';
 const SYNC_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000;
 
 export const gameService = {
-  async search(query: string): Promise<GameSearchResult[]> {
+  async search(query: string, limit = 30, offset = 0, genre?: string): Promise<GameSearchResult[]> {
     // For search, we always hit IGDB directly to get the broadest results.
     // In the future, we could search the local catalog first, but IGDB is the source of truth.
-    return externalGameApi.searchGames(query);
+    const results = await externalGameApi.searchGames(query, limit, offset);
+    if (!genre) return results;
+    return results.filter(
+      (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
+    );
   },
 
-  async getPopularGames(limit = 10): Promise<GameSearchResult[]> {
-    return externalGameApi.getPopularGames(limit);
+  async getPopularGames(limit = 30, offset = 0, genre?: string): Promise<GameSearchResult[]> {
+    const results = await externalGameApi.getPopularGames(limit, offset);
+    if (!genre) return results;
+    return results.filter(
+      (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
+    );
   },
 
   async getGame(slug: string): Promise<GameDetail | null> {

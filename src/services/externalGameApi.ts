@@ -60,15 +60,17 @@ const EXCLUDE_KEYWORDS = [
 ];
 
 export const externalGameApi = {
-  async searchGames(query: string, limit = 10): Promise<GameSearchResult[]> {
+  async searchGames(query: string, limit = 30, offset = 0): Promise<GameSearchResult[]> {
     if (!query) return [];
 
-    // Request a larger pool (50) so we can filter out duplicate editions in JS
+    // Request a larger pool so we can filter out duplicate editions in JS
+    const fetchLimit = Math.min(Math.max(limit * 2, 40), 100);
     const igdbQuery = `
-      search "${query}";
+      search "${query.replace(/"/g, '')}";
       fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date, game_type;
       where game_type = (0, 4, 8, 9, 10);
-      limit 50;
+      limit ${fetchLimit};
+      offset ${offset};
     `;
 
     const results = await igdbRequest(IGDB_CONFIG.ENDPOINTS.GAMES, igdbQuery);
@@ -101,13 +103,15 @@ export const externalGameApi = {
     return formatIgdbGameToDetail(results[0]);
   },
 
-  async getPopularGames(limit = 10): Promise<GameSearchResult[]> {
-    // Request a larger pool (50) so we can filter out duplicate editions in JS
+  async getPopularGames(limit = 30, offset = 0): Promise<GameSearchResult[]> {
+    // Request a larger pool so we can filter out duplicate editions in JS
+    const fetchLimit = Math.min(Math.max(limit * 2, 40), 100);
     const igdbQuery = `
       fields id, name, slug, cover.image_id, genres.name, platforms.name, first_release_date, game_type;
-      where rating_count > 50 & version_parent = null & game_type = (0, 4, 8, 9, 10);
+      where rating_count > 30 & version_parent = null & game_type = (0, 4, 8, 9, 10);
       sort rating_count desc;
-      limit 50;
+      limit ${fetchLimit};
+      offset ${offset};
     `;
 
     const results = await igdbRequest(IGDB_CONFIG.ENDPOINTS.GAMES, igdbQuery);

@@ -1,4 +1,5 @@
 import { collectionRepository } from './collectionRepository';
+import { gameService } from './gameService';
 
 export const collectionService = {
   async getCollections(profileId: string) {
@@ -67,14 +68,37 @@ export const collectionService = {
     return collectionRepository.delete(collectionId, profileId);
   },
 
-  async addGameToCollection(profileId: string, collectionId: string, gameId: string) {
+  async addGameToCollection(profileId: string, collectionId: string, gameId?: string, slug?: string) {
     // Verify collection ownership
     const collection = await collectionRepository.getById(collectionId);
     if (!collection || collection.profile_id !== profileId) {
       throw new Error('Unauthorized or collection not found');
     }
 
-    return collectionRepository.addGame(collectionId, gameId);
+    let targetGameId = gameId;
+
+    // If slug is provided and targetGameId is missing, resolve or sync via gameService
+    if (!targetGameId && slug) {
+      const gameDetail = await gameService.getGame(slug);
+      if (!gameDetail) {
+        throw new Error('Game not found');
+      }
+      targetGameId = gameDetail.id;
+    }
+
+    if (!targetGameId) {
+      throw new Error('Game ID or slug is required');
+    }
+
+    const alreadyInCollection = await collectionRepository.isGameInCollection(collectionId, targetGameId);
+    if (alreadyInCollection) {
+      throw new Error('Game already in collection');
+    }
+
+    const relation = await collectionRepository.addGame(collectionId, targetGameId);
+    const game = await collectionRepository.getCatalogGameById(targetGameId);
+
+    return { relation, game };
   },
 
   async removeGameFromCollection(profileId: string, collectionId: string, gameId: string) {

@@ -24,16 +24,16 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     const { id } = await params;
     const body = await request.json();
-    const { gameId } = body;
+    const { gameId, slug } = body;
 
-    if (!gameId) {
-      return NextResponse.json({ error: 'gameId is required' }, { status: 400 });
+    if (!gameId && !slug) {
+      return NextResponse.json({ error: 'gameId or slug is required' }, { status: 400 });
     }
 
-    const relation = await collectionService.addGameToCollection(profile.id, id, gameId);
-    return NextResponse.json(relation, { status: 201 });
+    const result = await collectionService.addGameToCollection(profile.id, id, gameId, slug);
+    return NextResponse.json(result, { status: 201 });
   } catch (error: any) {
-    if (error?.code === '23505') {
+    if (error?.code === '23505' || error?.message === 'Game already in collection') {
       return NextResponse.json({ error: 'Game already in collection' }, { status: 409 });
     }
     console.error('[POST /api/collections/[id]/games]', error);

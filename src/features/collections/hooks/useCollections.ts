@@ -120,13 +120,13 @@ export function useCollection(id: string, options?: { skip?: boolean }) {
 export function useCollectionActions(collectionId?: string) {
   const [loading, setLoading] = useState(false);
 
-  const addGame = async (colId: string, gameId: string) => {
+  const addGame = async (colId: string, gameId?: string, slug?: string) => {
     setLoading(true);
     try {
       const res = await fetch(`/api/collections/${colId}/games`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId }),
+        body: JSON.stringify({ gameId, slug }),
       });
 
       if (!res.ok) {

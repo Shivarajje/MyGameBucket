@@ -7,9 +7,10 @@ import { getRandomGenreTheme } from '@/lib/theme-utils';
 
 interface GameCardProps {
   game: GameSearchResult;
+  priority?: boolean;
 }
 
-export function GameCard({ game }: GameCardProps) {
+export function GameCard({ game, priority = false }: GameCardProps) {
   const activeGenre = useMemo(() => getRandomGenreTheme(game.genre), [game.genre]);
   const palette = activeGenre ? GENRE_THEMES[activeGenre] : null;
 
@@ -33,7 +34,7 @@ export function GameCard({ game }: GameCardProps) {
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"
               sizes="(max-width: 640px) 100vw, 250px"
-              priority
+              priority={priority}
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground bg-zinc-950 p-4 text-center">

@@ -5,6 +5,7 @@ import { Container } from '@/components/layout/Container';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { GameCard } from '@/features/games/components/GameCard';
 import { CollectionDialog } from '@/features/collections/components/CollectionDialog';
+import { AddGameDropdown } from '@/features/collections/components/AddGameDropdown';
 import { useCollection, useCollections, useCollectionActions } from '@/features/collections/hooks/useCollections';
 import { useProfile } from '@/features/profile/hooks/useProfile';
 import { Button } from '@/components/ui/button';
@@ -94,7 +95,12 @@ export default function CollectionDetailPage({ params }: CollectionDetailPagePro
             subtitle={collection.description || 'Custom game list'}
           />
           {isOwner && (
-            <div className="flex gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <AddGameDropdown
+                collectionId={id}
+                existingGames={games}
+                onGameAdded={(newGame) => setGames((prev) => [...prev, newGame])}
+              />
               <Button variant="outline" size="sm" onClick={() => setIsEditOpen(true)} className="rounded-full">
                 <Edit3 className="w-4 h-4 mr-2" />
                 Edit
@@ -137,10 +143,27 @@ export default function CollectionDetailPage({ params }: CollectionDetailPagePro
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 text-muted-foreground bg-background/20 backdrop-blur-md border border-white/10 rounded-3xl">
-              {isOwner
-                ? 'No games in this collection yet. Go to a game page to add it!'
-                : 'No games in this collection yet.'}
+            <div className="text-center py-20 text-muted-foreground bg-background/20 backdrop-blur-md border border-white/10 rounded-3xl flex flex-col items-center justify-center gap-4">
+              <FolderHeart className="w-12 h-12 opacity-40 text-primary" />
+              <div>
+                <h3 className="text-base font-semibold text-white mb-1">
+                  {isOwner ? 'Your collection is empty' : 'No games in this collection yet'}
+                </h3>
+                <p className="text-xs max-w-sm text-zinc-400">
+                  {isOwner
+                    ? 'Use the dropdown menu to quickly select games from your library or search the catalog.'
+                    : 'The curator has not added any games to this collection yet.'}
+                </p>
+              </div>
+              {isOwner && (
+                <AddGameDropdown
+                  collectionId={id}
+                  existingGames={games}
+                  onGameAdded={(newGame) => setGames((prev) => [...prev, newGame])}
+                  buttonSize="default"
+                  buttonLabel="Add Games to Collection"
+                />
+              )}
             </div>
           )}
         </div>

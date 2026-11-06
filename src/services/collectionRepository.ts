@@ -161,4 +161,16 @@ export const collectionRepository = {
     if (error) throw error;
     return data !== null;
   },
+
+  async getCatalogGameById(gameId: string): Promise<DatabaseGameCatalog | null> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('game_catalog')
+      .select('*')
+      .eq('id', gameId)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data as DatabaseGameCatalog | null;
+  },
 };
