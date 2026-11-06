@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { AppearanceMode, GenreCategory } from '@/constants/enums';
 import { GENRE_THEMES } from '@/config/theme';
+import { createClient } from '@/lib/supabase/client';
 
 type ThemeContextType = {
   theme: AppearanceMode;
@@ -36,6 +37,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function loadFavoriteGenre() {
       try {
+        const supabase = createClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return; // Guest user, skip profile fetch
+
         const res = await fetch('/api/profile');
         if (res.ok) {
           const profile = await res.json();
@@ -94,7 +99,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    return {
+      theme: AppearanceMode.Dark,
+      setTheme: () => {},
+      genreTheme: null,
+      setGenreTheme: () => {},
+      profileGenre: null,
+      setProfileGenre: () => {},
+    };
   }
   return context;
 }

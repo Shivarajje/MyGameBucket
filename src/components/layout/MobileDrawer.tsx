@@ -23,9 +23,13 @@ export function MobileDrawer({ isOpen, onClose, links }: MobileDrawerProps) {
   const supabase = createClient();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
+    supabase.auth.getUser().then(({ data, error }) => {
+      if (!error && data?.user) {
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
+    }).catch(() => setUser(null));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {

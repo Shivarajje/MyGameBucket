@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useLibraryActions } from '@/features/library/hooks/useLibrary';
 import { GameStatus } from '@/constants/enums';
 import { STATUS_LABELS } from '@/constants/labels';
+import { createClient } from '@/lib/supabase/client';
 import {
   Select,
   SelectContent,
@@ -32,6 +33,14 @@ export function GameActions({ gameId }: { gameId: string }) {
   useEffect(() => {
     async function checkLibrary() {
       try {
+        const supabase = createClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          setIsLoggedIn(false);
+          setChecking(false);
+          return;
+        }
+
         const res = await fetch(`/api/library?gameId=${gameId}`);
         if (res.status === 401) {
           setIsLoggedIn(false);

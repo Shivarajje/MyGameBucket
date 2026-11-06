@@ -25,17 +25,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   let displayGames: GameSearchResult[] = [];
   let isDiscoveryMode = false;
+  let genres: string[] = [];
 
-  if (query) {
-    displayGames = await gameService.search(query, 30, 0, genre);
-  } else {
-    isDiscoveryMode = true;
-    displayGames = await gameService.getPopularGames(30, 0, genre);
+  try {
+    if (query) {
+      displayGames = await gameService.search(query, 30, 0, genre);
+      const allRawGames = await gameService.search(query, 50, 0);
+      genres = Array.from(new Set(allRawGames.map((g) => g.genre).filter(Boolean))) as string[];
+    } else {
+      isDiscoveryMode = true;
+      displayGames = await gameService.getPopularGames(30, 0, genre);
+    }
+  } catch (error) {
+    console.error('Failed to load games:', error);
+    displayGames = [];
   }
-
-  // Get unique genres from current search results for quick-filtering
-  const allRawGames = query ? await gameService.search(query, 50, 0) : [];
-  const genres = Array.from(new Set(allRawGames.map((g) => g.genre).filter(Boolean)));
 
   return (
     <main className="flex-1 flex flex-col py-10 pt-28">

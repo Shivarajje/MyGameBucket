@@ -21,9 +21,13 @@ export function Navbar() {
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
+    supabase.auth.getUser().then(({ data, error }) => {
+      if (!error && data?.user) {
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
+    }).catch(() => setUser(null));
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(

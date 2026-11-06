@@ -14,6 +14,18 @@ export const gameRepository = {
     return data as DatabaseGameCatalog;
   },
 
+  async getCatalogGames(limit = 30, offset = 0): Promise<DatabaseGameCatalog[]> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('game_catalog')
+      .select('*')
+      .range(offset, offset + limit - 1)
+      .order('created_at', { ascending: false });
+
+    if (error || !data) return [];
+    return data as DatabaseGameCatalog[];
+  },
+
   async upsertGame(game: Omit<DatabaseGameCatalog, 'id' | 'created_at' | 'last_synced_at'> & { id?: string }): Promise<DatabaseGameCatalog> {
     const supabase = await createClient();
     

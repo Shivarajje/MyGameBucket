@@ -8,21 +8,58 @@ const SYNC_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000;
 
 export const gameService = {
   async search(query: string, limit = 30, offset = 0, genre?: string): Promise<GameSearchResult[]> {
-    // For search, we always hit IGDB directly to get the broadest results.
-    // In the future, we could search the local catalog first, but IGDB is the source of truth.
-    const results = await externalGameApi.searchGames(query, limit, offset);
-    if (!genre) return results;
-    return results.filter(
-      (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
-    );
+    try {
+      const results = await externalGameApi.searchGames(query, limit, offset);
+      if (!genre) return results;
+      return results.filter(
+        (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
+      );
+    } catch (err) {
+      console.error('Failed to search games from IGDB, falling back to local catalog:', err);
+      const dbGames = await gameRepository.getCatalogGames(limit, offset);
+      const filtered = dbGames.filter((g) =>
+        g.title.toLowerCase().includes(query.toLowerCase())
+      );
+      const results: GameSearchResult[] = filtered.map((g) => ({
+        igdbId: g.igdb_id,
+        title: g.title,
+        slug: g.slug,
+        coverUrl: g.cover_url || '/placeholder.png',
+        releaseYear: g.release_year,
+        genre: g.genre,
+        platform: g.platform,
+      }));
+      if (!genre) return results;
+      return results.filter(
+        (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
+      );
+    }
   },
 
   async getPopularGames(limit = 30, offset = 0, genre?: string): Promise<GameSearchResult[]> {
-    const results = await externalGameApi.getPopularGames(limit, offset);
-    if (!genre) return results;
-    return results.filter(
-      (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
-    );
+    try {
+      const results = await externalGameApi.getPopularGames(limit, offset);
+      if (!genre) return results;
+      return results.filter(
+        (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
+      );
+    } catch (err) {
+      console.error('Failed to get popular games from IGDB, falling back to local catalog:', err);
+      const dbGames = await gameRepository.getCatalogGames(limit, offset);
+      const results: GameSearchResult[] = dbGames.map((g) => ({
+        igdbId: g.igdb_id,
+        title: g.title,
+        slug: g.slug,
+        coverUrl: g.cover_url || '/placeholder.png',
+        releaseYear: g.release_year,
+        genre: g.genre,
+        platform: g.platform,
+      }));
+      if (!genre) return results;
+      return results.filter(
+        (game) => game.genre?.toLowerCase().includes(genre.toLowerCase())
+      );
+    }
   },
 
   async getGame(slug: string): Promise<GameDetail | null> {
